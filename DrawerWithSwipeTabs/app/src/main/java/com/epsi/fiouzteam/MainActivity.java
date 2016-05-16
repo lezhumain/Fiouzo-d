@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
