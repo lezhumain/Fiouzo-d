@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.androidbelieve.drawerwithswipetabs.R;
+import com.epsi.fiouzteam.fiouzoid.R;
 
 /**
  * Created by Ratan on 7/27/2015.

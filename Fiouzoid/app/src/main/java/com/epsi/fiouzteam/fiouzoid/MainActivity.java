@@ -9,7 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.androidbelieve.drawerwithswipetabs.R;
+import com.epsi.fiouzteam.fiouzoid.R;
 
 public class MainActivity extends AppCompatActivity{
     DrawerLayout mDrawerLayout;
