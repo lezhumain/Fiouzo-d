@@ -10,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.dao.Database;
 
 public class MainActivity extends AppCompatActivity{
     DrawerLayout mDrawerLayout;
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
+    private Database mDb;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +70,23 @@ public class MainActivity extends AppCompatActivity{
         /**
          * Setup Drawer Toggle of the Toolbar
          */
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar,R.string.app_name,
+        R.string.app_name);
 
-                android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
-                ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, toolbar,R.string.app_name,
-                R.string.app_name);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-                mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
-                mDrawerToggle.syncState();
-
+        mDb = new Database(this);
+        mDb.open();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mDb.close();
+    }
+
 }

@@ -26,4 +26,9 @@
         android:layout_below="@+id/textView"
         android:textStyle="italic"/>
 
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>
