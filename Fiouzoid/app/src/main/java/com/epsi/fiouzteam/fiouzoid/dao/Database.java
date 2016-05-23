@@ -5,7 +5,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -18,6 +23,7 @@ public class Database
    private static final int DATABASE_VERSION = 1;
    private final Context mContext;
    public static UserDao mUserDao;
+    private static String database_path = "";
 
 
 
@@ -25,12 +31,58 @@ public class Database
        mDbHelper = new DatabaseHelper(mContext);
        SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
 
-       mUserDao = new UserDao(mDb);
+       //database_path = (mContext.getDatabasePath(DATABASE_NAME)).getAbsolutePath();
+       database_path = mDb.getPath();
+       //cpDb();
 
+       mUserDao = new UserDao(mDb);
        return this;
    }
 
-   public void close() {
+    public static void cpDb()
+    {
+        Log.d(TAG, "cpDb: " + database_path + '\n');
+
+        String inPath = database_path;
+        File f=new File(inPath);
+        FileInputStream fis=null;
+        FileOutputStream fos=null;
+
+        try
+        {
+            fis=new FileInputStream(f);
+            fos=new FileOutputStream("/mnt/sdcard/fiouzteam/" + DATABASE_NAME);
+            while(true)
+            {
+                int i=fis.read();
+                if(i!=-1)
+                {fos.write(i);}
+                else
+                {break;}
+            }
+            fos.flush();
+            Log.i(TAG, "DB dump OK");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            Log.i(TAG, "DB dump ERROR");
+        }
+        finally
+        {
+            try
+            {
+                if(fos != null)
+                    fos.close();
+                if(fis != null)
+                    fis.close();
+            }
+            catch(IOException ioe)
+            {}
+        }
+    }
+
+    public void close() {
        mDbHelper.close();
    }
 
