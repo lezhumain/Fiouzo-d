@@ -1,11 +1,8 @@
 package com.epsi.fiouzteam.fiouzoid.http;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -27,14 +23,27 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 public class HttpTestTask extends AsyncTask<String, Void, String>
 {
     private static final String TAG = "HttpTestTask";
-    private static final String URL = "http://jsonplaceholder.typicode.com/posts/1";
+    private String _url = "http://jsonplaceholder.typicode.com/posts/1";
+
+    private TaskDelegate _delegate;
+
+    public HttpTestTask(TaskDelegate delegate)
+    {
+        _delegate = delegate;
+    }
+
+    public HttpTestTask(String url, TaskDelegate delegate)
+    {
+        _url = url;
+        _delegate = delegate;
+    }
 
     @Override
     protected void onPreExecute() {}
 
     @Override
     protected String doInBackground(String... params) {
-        String realUrl = URL.replace("$QUERY$", "Android");
+        String realUrl = _url.replace("$QUERY$", "Android");
         return requestContent(realUrl);
     }
 
@@ -67,6 +76,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
             }
         }
 
+        result = handleJson(result);
         return result;
     }
 
@@ -90,13 +100,13 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         return sb.toString();
     }
 
-    @Override
-    protected void onPostExecute(String res)
+    private static String handleJson(String data)
     {
-        String msg;
+        String msg = "";
+
         try
         {
-            JSONObject json = new JSONObject(res);
+            JSONObject json = new JSONObject(data);
             //int userID = (int)json.get("userId");
 
             int imsg = (int) json.get("userId");
@@ -105,9 +115,20 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         }
         catch (JSONException e)
         {
-            msg = e.getMessage() + '\n';
+            //msg = e.getMessage() + '\n';
         }
 
-        Log.i(TAG, "\t\t" + res + '\n' + msg + '\n');
+        return msg;
     }
+
+    /*
+    @Override
+    protected void onPostExecute(String res)
+    {
+        String msg = handleJson(res);
+
+        Log.i(TAG, "\t\t" + msg + '\n');
+        //_delegate.notifyAll();
+    }
+    */
 }

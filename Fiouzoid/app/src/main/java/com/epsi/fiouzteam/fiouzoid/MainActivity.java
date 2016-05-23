@@ -14,10 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
+import com.epsi.fiouzteam.fiouzoid.http.RestHelper;
+import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.http.Utils;
 
-public class MainActivity extends AppCompatActivity{
+import java.util.concurrent.ExecutionException;
+
+public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private static final String TAG = "MainActivity";
 
     DrawerLayout mDrawerLayout;
@@ -104,7 +109,21 @@ public class MainActivity extends AppCompatActivity{
 
     private void TestHttp()
     {
-        (new HttpTestTask()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        String url = "http://jsonplaceholder.typicode.com/posts/1";
+        //String response = RestHelper.Get(url);
+
+        //Log.i(TAG, '\t' + response);
+
+        HttpTestTask task = new HttpTestTask(url, this);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+            String result = task.get();
+            Log.i(TAG, "\n=====================\n" + result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -119,5 +138,10 @@ public class MainActivity extends AppCompatActivity{
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public void taskCompletionResult(String result) {
+        Log.i(TAG, '\t' + result);
     }
 }
