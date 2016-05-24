@@ -3,6 +3,8 @@ package com.epsi.fiouzteam.fiouzoid.http;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.util.concurrent.ExecutionException;
+
 public class HttpHelper
 {
     private static final String TAG = "HttpHelper";
@@ -18,10 +20,19 @@ public class HttpHelper
         task = new HttpTestTask(url, delegateForGet);
     }
 
-    public void Get()
+    public String Get()
     {
         _result = "";
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String get_result() {

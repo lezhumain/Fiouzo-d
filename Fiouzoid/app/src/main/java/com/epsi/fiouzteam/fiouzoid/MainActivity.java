@@ -16,9 +16,12 @@ import android.view.MenuItem;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
-import com.epsi.fiouzteam.fiouzoid.http.RestHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
-import com.epsi.fiouzteam.fiouzoid.http.Utils;
+import com.epsi.fiouzteam.fiouzoid.model.Test;
+import com.epsi.fiouzteam.fiouzoid.model.User;
+import com.epsi.fiouzteam.fiouzoid.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.ExecutionException;
 
@@ -114,16 +117,44 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         //Log.i(TAG, '\t' + response);
 
+        /*
         HttpTestTask task = new HttpTestTask(url, this);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         try {
             String result = task.get();
-            Log.i(TAG, "\n=====================\n" + result);
+
+            // parse json
+            User u = jsonToUser(result);
+
+            Log.i(TAG, "\n===================== " + result + '\n' + u.toString());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        */
+
+        String jsonResp = UserService.getTestUserById(1);
+        Log.i(TAG, jsonResp);
+        Test u = jsonToTest(jsonResp);
+
+        /*
+        String jsonResp = UserService.getUserById(1);
+        Test u = jsonToTest(jsonResp);
+        */
+
+        Log.i(TAG, "helper's response: " + u.toString());
+    }
+
+    private static User jsonToUser(String response) {
+        Gson gson = new GsonBuilder().create();
+        User user = gson.fromJson(response, User.class);
+        return user;
+    }
+    private static Test jsonToTest(String response) {
+        Gson gson = new GsonBuilder().create();
+        Test testObject = gson.fromJson(response, Test.class);
+        return testObject;
     }
 
     @Override

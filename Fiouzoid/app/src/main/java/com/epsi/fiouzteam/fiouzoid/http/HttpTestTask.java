@@ -44,6 +44,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... params) {
         String realUrl = _url.replace("$QUERY$", "Android");
+        Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
         return requestContent(realUrl);
     }
 
@@ -76,7 +77,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
             }
         }
 
-        result = handleJson(result);
+        //result = handleJson(result);
         return result;
     }
 
@@ -99,6 +100,8 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
 
         return sb.toString();
     }
+
+
 
     private static String handleJson(String data)
     {
