@@ -11,24 +11,22 @@ public class UserService {
     {
         String firstName = "prénom" + id,
                 lastName = "nom" + id,
-                nickName = "nomprénom" + id;
+                nickName = "nomprénom" + id,
+                email = "email" + id;
 
-        return new User(id, firstName, lastName, nickName);
+        return new User(id, firstName, lastName, nickName, email);
     }
 
     public static String getTestUserById(int id)
     {
-        String firstName = "prénom" + id,
-                lastName = "nom" + id,
-                nickName = "nomprénom" + id,
-                json = "{'firstName': '" +
-                        firstName + "', " +
-                        "'lastName': '" +
-                        lastName + "', " +
-                        "'nickName': '" +
-                        nickName + "'}";
-
-
+        String nickName = "nomprénom" + id,
+                email = "email" + id + "@lol.com",
+                json = "{'nickName': '" +
+                        nickName + "', " +
+                        "'email': '" +
+                        email + "', " +
+                        "'id': " +
+                        id + "}";
 
         return json;
     }

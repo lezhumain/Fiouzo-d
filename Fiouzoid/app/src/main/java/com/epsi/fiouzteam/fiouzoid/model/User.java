@@ -1,60 +1,72 @@
 package com.epsi.fiouzteam.fiouzoid.model;
 
-public class User
-{
-
-    public User() {}
-    public User(int id, String firstName, String lastName, String nickName)
-    {
-        _id = id;
-        _firstName = firstName;
-        _lastName = lastName;
-        _nickName = nickName;
+public class User {
+    public User() {
     }
 
-    private String _firstName;
-    private String _lastName;
-    private String _nickName;
-    private int _id;
-
-    public int get_id() {
-        return _id;
+    public User(int id, String firstName, String lastName, String nickName, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = nickName;
+        this.email = email;
     }
 
-    public void set_id(int _id) {
-        this._id = _id;
+    private String firstName;
+    private String lastName;
+    private String nickName;
+    private String email;
+    private int id;
+
+    public int getId() {
+        return id;
     }
 
-    public String get_nickName() {
-        return _nickName;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void set_nickName(String _nickName) {
-        this._nickName = _nickName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String get_lastName() {
-        return _lastName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void set_lastName(String _lastName) {
-        this._lastName = _lastName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public String get_firstName() {
-        return _firstName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public void set_firstName(String _firstName) {this._firstName = _firstName;}
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Override
     public String toString() {
         return "User{" +
-                "_firstName='" + _firstName + '\'' +
-                ", _lastName='" + _lastName + '\'' +
-                ", _nickName='" + _nickName + '\'' +
-                ", _id=" + _id +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", email='" + email + '\'' +
+                ", id=" + id +
                 '}';
-    }
 
+    }
 }

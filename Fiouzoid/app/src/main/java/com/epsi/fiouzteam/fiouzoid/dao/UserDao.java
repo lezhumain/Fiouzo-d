@@ -95,25 +95,18 @@ public class UserDao extends DbContentProvider
         if (cursor != null) {
             if (cursor.getColumnIndex(COLUMN_ID) != -1) {
                 idIndex = cursor.getColumnIndexOrThrow(COLUMN_ID);
-                user.set_id(cursor.getInt(idIndex));
-            }
-            if (cursor.getColumnIndex(COLUMN_FIRST_NAME) != -1) {
-                firstNameIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_FIRST_NAME);
-                user.set_firstName(cursor.getString(firstNameIndex));
-            }
-            if (cursor.getColumnIndex(COLUMN_LAST_NAME) != -1) {
-                lastNameIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_LAST_NAME);
-                user.set_lastName(cursor.getString(lastNameIndex));
+                user.setId(cursor.getInt(idIndex));
             }
             if (cursor.getColumnIndex(COLUMN_NICK_NAME) != -1) {
                 nickNameIndex = cursor.getColumnIndexOrThrow(
                         COLUMN_NICK_NAME);
-                user.set_nickName(cursor.getString(nickNameIndex));
+                user.setNickName(cursor.getString(nickNameIndex));
             }
-
-
+            if (cursor.getColumnIndex(COLUMN_EMAIL) != -1) {
+                lastNameIndex = cursor.getColumnIndexOrThrow(
+                        COLUMN_EMAIL);
+                user.setLastName(cursor.getString(lastNameIndex));
+            }
 
         }
         return user;
@@ -121,10 +114,9 @@ public class UserDao extends DbContentProvider
 
     private void setContentValue(User user) {
         initialValues = new ContentValues();
-        initialValues.put(COLUMN_ID, user.get_id());
-        initialValues.put(COLUMN_FIRST_NAME, user.get_firstName());
-        initialValues.put(COLUMN_LAST_NAME, user.get_lastName());
-        initialValues.put(COLUMN_NICK_NAME, user.get_nickName());
+        initialValues.put(COLUMN_ID, user.getId());
+        initialValues.put(COLUMN_NICK_NAME, user.getNickName());
+        initialValues.put(COLUMN_EMAIL, user.getEmail());
     }
 
     private ContentValues getContentValue() {

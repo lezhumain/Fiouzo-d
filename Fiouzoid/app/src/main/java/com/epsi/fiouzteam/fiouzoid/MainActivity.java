@@ -134,12 +134,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         }
         */
 
+
         String jsonResp = UserService.getTestUserById(1);
         Log.i(TAG, jsonResp);
-        Test u = jsonToTest(jsonResp);
+        User u = jsonToUser(jsonResp);
 
         /*
-        String jsonResp = UserService.getUserById(1);
+        String jsonResp = UserService.getUserByIdTest(1);
         Test u = jsonToTest(jsonResp);
         */
 
