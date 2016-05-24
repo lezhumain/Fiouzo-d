@@ -1,5 +1,8 @@
 package com.epsi.fiouzteam.fiouzoid.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class User {
     public User() {
     }
@@ -68,5 +71,13 @@ public class User {
                 ", id=" + id +
                 '}';
 
+    }
+
+    public String toJson()
+    {
+        Gson gson = new GsonBuilder().create();
+        String str = gson.toJson(this, this.getClass());
+
+        return str;
     }
 }

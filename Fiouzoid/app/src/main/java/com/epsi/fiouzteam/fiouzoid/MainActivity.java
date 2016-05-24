@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Test u = jsonToTest(jsonResp);
         */
 
-        Log.i(TAG, "helper's response: " + u.toString());
+        //Log.i(TAG, "helper's response: " + u.toString());
+        Log.i(TAG, "helper's response: " + u.toJson());
     }
 
     private static User jsonToUser(String response) {
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         User user = gson.fromJson(response, User.class);
         return user;
     }
+
     private static Test jsonToTest(String response) {
         Gson gson = new GsonBuilder().create();
         Test testObject = gson.fromJson(response, Test.class);

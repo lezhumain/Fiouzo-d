@@ -87,10 +87,7 @@ public class UserDao extends DbContentProvider
 
         User user = new User();
 
-        int idIndex;
-        int firstNameIndex;
-        int lastNameIndex;
-        int nickNameIndex;
+        int idIndex, nickNameIndex, emailIndex;
 
         if (cursor != null) {
             if (cursor.getColumnIndex(COLUMN_ID) != -1) {
@@ -103,9 +100,9 @@ public class UserDao extends DbContentProvider
                 user.setNickName(cursor.getString(nickNameIndex));
             }
             if (cursor.getColumnIndex(COLUMN_EMAIL) != -1) {
-                lastNameIndex = cursor.getColumnIndexOrThrow(
+                emailIndex = cursor.getColumnIndexOrThrow(
                         COLUMN_EMAIL);
-                user.setLastName(cursor.getString(lastNameIndex));
+                user.setLastName(cursor.getString(emailIndex));
             }
 
         }
