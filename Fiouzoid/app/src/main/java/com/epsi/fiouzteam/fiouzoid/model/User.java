@@ -73,6 +73,13 @@ public class User {
 
     }
 
+    public static User fromJson(String json)
+    {
+        Gson gson = new GsonBuilder().create();
+        User user = gson.fromJson(json, User.class);
+        return user;
+    }
+
     public String toJson()
     {
         Gson gson = new GsonBuilder().create();

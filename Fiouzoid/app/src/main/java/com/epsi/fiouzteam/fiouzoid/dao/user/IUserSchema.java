@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid.dao;
+package com.epsi.fiouzteam.fiouzoid.dao.user;
 
 import java.util.*;
 

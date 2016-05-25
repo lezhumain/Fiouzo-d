@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid.dao;
+package com.epsi.fiouzteam.fiouzoid.dao.user;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.*;

@@ -5,13 +5,14 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.epsi.fiouzteam.fiouzoid.dao.user.IUserSchema;
+import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.*;
 
 
 public class Database

@@ -113,51 +113,19 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private void TestHttp()
     {
         String url = "http://jsonplaceholder.typicode.com/posts/1";
-        //String response = RestHelper.Get(url);
-
-        //Log.i(TAG, '\t' + response);
-
-        /*
-        HttpTestTask task = new HttpTestTask(url, this);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        try {
-            String result = task.get();
-
-            // parse json
-            User u = jsonToUser(result);
-
-            Log.i(TAG, "\n===================== " + result + '\n' + u.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        */
 
 
         String jsonResp = UserService.getTestUserById(1);
         Log.i(TAG, jsonResp);
-        User u = jsonToUser(jsonResp);
+        User u = User.fromJson(jsonResp);
 
         /*
+        // to test with real url
         String jsonResp = UserService.getUserByIdTest(1);
         Test u = jsonToTest(jsonResp);
         */
 
-        //Log.i(TAG, "helper's response: " + u.toString());
         Log.i(TAG, "helper's response: " + u.toJson());
-    }
-
-    private static User jsonToUser(String response) {
-        Gson gson = new GsonBuilder().create();
-        User user = gson.fromJson(response, User.class);
-        return user;
-    }
-
-    private static Test jsonToTest(String response) {
-        Gson gson = new GsonBuilder().create();
-        Test testObject = gson.fromJson(response, Test.class);
-        return testObject;
     }
 
     @Override
