@@ -113,17 +113,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private void TestHttp()
     {
         String url = "http://jsonplaceholder.typicode.com/posts/1";
-
-
-        String jsonResp = UserService.getTestUserById(1);
-        Log.i(TAG, jsonResp);
-        User u = User.fromJson(jsonResp);
-
-        /*
-        // to test with real url
-        String jsonResp = UserService.getUserByIdTest(1);
-        Test u = jsonToTest(jsonResp);
-        */
+        User u = UserService.getTestUserById(1);
 
         Log.i(TAG, "helper's response: " + u.toJson());
     }

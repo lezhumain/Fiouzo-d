@@ -17,7 +17,7 @@ public class UserService {
         return new User(id, firstName, lastName, nickName, email);
     }
 
-    public static String getTestUserById(int id)
+    public static User getTestUserById(int id)
     {
         String nickName = "nomprénom" + id,
                 email = "email" + id + "@lol.com",
@@ -28,7 +28,7 @@ public class UserService {
                         "'id': " +
                         id + "}";
 
-        return json;
+        return User.fromJson(json);
     }
 
     public static String getUserByIdTest(int id)
