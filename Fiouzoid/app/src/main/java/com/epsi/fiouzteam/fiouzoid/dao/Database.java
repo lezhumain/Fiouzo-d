@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
 import com.epsi.fiouzteam.fiouzoid.dao.group.IGroupSchema;
 import com.epsi.fiouzteam.fiouzoid.dao.user.IUserSchema;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
@@ -25,8 +26,9 @@ public class Database
    private static final int DATABASE_VERSION = 1;
    private final Context mContext;
    public static UserDao mUserDao;
+   public static GroupDao mGroupDao;
     //private static String database_path = "";
-    private static final String database_path = "/mnt/sdcard/fiouzoid";
+    private static final String database_path = "/mnt/sdcard/fiouzoid/";
 
 
 
@@ -40,6 +42,7 @@ public class Database
        //cpDb();
 
        mUserDao = new UserDao(mDb);
+       mGroupDao = new GroupDao(mDb);
        return this;
    }
 
@@ -107,14 +110,14 @@ public class Database
 
    private static class DatabaseHelper extends SQLiteOpenHelper {
        DatabaseHelper(Context context) {
-           super(context, DATABASE_NAME, null, DATABASE_VERSION);
+           super(context, database_path + DATABASE_NAME, null, DATABASE_VERSION);
        }
 
        @Override
        public void onCreate(SQLiteDatabase db)
        {
            db.execSQL(IUserSchema.USER_TABLE_CREATE);
-           db.execSQL(IGroupSchema.GROUP_TABLE_CREATE);
+           //db.execSQL(IGroupSchema.GROUP_TABLE_CREATE);
        }
 
        @Override

@@ -114,7 +114,6 @@ public class UserDao extends DbContentProvider
 
     private void setContentValue(User user) {
         initialValues = new ContentValues();
-        initialValues.put(COLUMN_ID, user.getId());
         initialValues.put(COLUMN_NICK_NAME, user.getNickName());
         initialValues.put(COLUMN_EMAIL, user.getEmail());
     }

@@ -113,7 +113,6 @@ public class GroupDao extends DbContentProvider
 
     private void setContentValue(Group group) {
         initialValues = new ContentValues();
-        initialValues.put(COLUMN_ID, group.getId());
         initialValues.put(COLUMN_NAME, group.getName());
         initialValues.put(COLUMN_DESCRIPTION, group.getDescription());
     }

@@ -1,7 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid.dao.group;
 
 public interface IGroupSchema {
-   String GROUP_TABLE = "GROUPS";
+   String GROUP_TABLE = "Group";
    String COLUMN_ID = "id";
    String COLUMN_NAME = "name";
    String COLUMN_DESCRIPTION = "description";
@@ -11,7 +11,7 @@ public interface IGroupSchema {
        + COLUMN_ID
        + " INTEGER PRIMARY KEY, "
        + COLUMN_NAME
-       + " TEXT NOT NULL"
+       + " VARCHAR NOT NULL, "
         + COLUMN_DESCRIPTION
         + " TEXT NOT NULL"
    + ")";
