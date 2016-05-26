@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.dao.group.IGroupSchema;
 import com.epsi.fiouzteam.fiouzoid.dao.user.IUserSchema;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 
@@ -24,16 +25,18 @@ public class Database
    private static final int DATABASE_VERSION = 1;
    private final Context mContext;
    public static UserDao mUserDao;
-    private static String database_path = "";
+    //private static String database_path = "";
+    private static final String database_path = "/mnt/sdcard/fiouzoid";
 
 
 
    public Database open() throws SQLException {
+       //mDbHelper = new DatabaseHelper(mContext);
        mDbHelper = new DatabaseHelper(mContext);
        SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
 
        //database_path = (mContext.getDatabasePath(DATABASE_NAME)).getAbsolutePath();
-       database_path = mDb.getPath();
+       //database_path = mDb.getPath();
        //cpDb();
 
        mUserDao = new UserDao(mDb);
@@ -45,14 +48,24 @@ public class Database
         Log.d(TAG, "cpDb: " + database_path + '\n');
 
         String inPath = database_path;
-        File f=new File(inPath);
+        String outPath = "/mnt/sdcard/fiouzteam/";
+        File f=new File(inPath), fileO = new File(outPath);
         FileInputStream fis=null;
         FileOutputStream fos=null;
 
         try
         {
             fis=new FileInputStream(f);
-            fos=new FileOutputStream("/mnt/sdcard/fiouzteam/" + DATABASE_NAME);
+            if(fileO.createNewFile() == false) {
+                Log.i(TAG, "Error creating file");
+                //Log.i(TAG, "DB dump ERROR");
+                //return;
+            }
+            fileO.setReadable(true, false);
+            fileO.setWritable(true, false);
+
+            //fos=new FileOutputStream(outPath + DATABASE_NAME);
+            fos=new FileOutputStream(fileO);
             while(true)
             {
                 int i=fis.read();
@@ -101,6 +114,7 @@ public class Database
        public void onCreate(SQLiteDatabase db)
        {
            db.execSQL(IUserSchema.USER_TABLE_CREATE);
+           db.execSQL(IGroupSchema.GROUP_TABLE_CREATE);
        }
 
        @Override
@@ -112,6 +126,8 @@ public class Database
 
            db.execSQL("DROP TABLE IF EXISTS " 
                 + IUserSchema.USER_TABLE);
+           db.execSQL("DROP TABLE IF EXISTS "
+                   + IGroupSchema.GROUP_TABLE);
            onCreate(db);
 
        }

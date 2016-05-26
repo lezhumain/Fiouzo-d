@@ -3,46 +3,20 @@ package com.epsi.fiouzteam.fiouzoid.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class User {
-    public User() {
-    }
-
-    public User(int id, String firstName, String lastName, String nickName, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickName = nickName;
-        this.email = email;
-    }
-
-    private String firstName;
-    private String lastName;
+public class User extends Entity
+{
     private String nickName;
     private String email;
-    private int id;
 
-    public int getId() {
-        return id;
+
+    public User() {
+        super();
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public User(int id, String nickName, String email) {
+        super(id);
+        this.nickName = nickName;
+        this.email = email;
     }
 
     public String getNickName() {
@@ -64,22 +38,27 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", nickName='" + nickName + '\'' +
+                "nickName='" + nickName + '\'' +
                 ", email='" + email + '\'' +
                 ", id=" + id +
                 '}';
 
     }
 
-    public static User fromJson(String json)
+    @Override
+    public User fromJson(String json)
     {
         Gson gson = new GsonBuilder().create();
         User user = gson.fromJson(json, User.class);
-        return user;
+
+        this.id = user.id;
+        this.nickName = user.nickName;
+        this.email = user.email;
+
+        return this;
     }
 
+    @Override
     public String toJson()
     {
         Gson gson = new GsonBuilder().create();

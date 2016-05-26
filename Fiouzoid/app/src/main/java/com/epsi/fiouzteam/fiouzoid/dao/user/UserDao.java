@@ -11,6 +11,8 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.*;
 
+import cz.msebera.android.httpclient.client.entity.EntityBuilder;
+
 public class UserDao extends DbContentProvider
         implements IUserSchema, IUserDao {
 
@@ -21,7 +23,7 @@ public class UserDao extends DbContentProvider
     }
 
     @Override
-    public User fetchUserById(int id) {
+    public User fetchById(int id) {
         final String selectionArgs[] = { String.valueOf(id) };
         final String selection = COLUMN_ID + " = ?";
         User user = new User();
@@ -103,7 +105,7 @@ public class UserDao extends DbContentProvider
             if (cursor.getColumnIndex(COLUMN_EMAIL) != -1) {
                 emailIndex = cursor.getColumnIndexOrThrow(
                         COLUMN_EMAIL);
-                user.setLastName(cursor.getString(emailIndex));
+                user.setEmail(cursor.getString(emailIndex));
             }
 
         }

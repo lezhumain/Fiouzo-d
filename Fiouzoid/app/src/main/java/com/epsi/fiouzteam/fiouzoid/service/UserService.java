@@ -9,12 +9,10 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 public class UserService {
     public static User getUserById(int id)
     {
-        String firstName = "prénom" + id,
-                lastName = "nom" + id,
-                nickName = "nomprénom" + id,
+        String nickName = "nomprénom" + id,
                 email = "email" + id;
 
-        return new User(id, firstName, lastName, nickName, email);
+        return new User(id, nickName, email);
     }
 
     public static User getTestUserById(int id)
@@ -28,7 +26,8 @@ public class UserService {
                         "'id': " +
                         id + "}";
 
-        return User.fromJson(json);
+        User user = new User();
+        return user.fromJson(json);
     }
 
     public static String getUserByIdTest(int id)
