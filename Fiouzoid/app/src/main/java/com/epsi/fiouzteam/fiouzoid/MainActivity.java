@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
@@ -116,9 +117,15 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     {
         String url = "http://jsonplaceholder.typicode.com/posts/1";
         //User u = UserService.getTestUserById(1);
-        Group u = GroupService.getTestGroupById(1);
+        User u = Database.mUserDao.fetchById(1);
+        //Group u = GroupService.getTestGroupById(1);
 
         Log.i(TAG, "helper's response: " + u.toJson());
+
+
+        u.setEmail(u.getEmail() + 1);
+        u.setNickName(u.getNickName() + 1);
+        Database.mUserDao.addUser(u);
     }
 
     @Override
