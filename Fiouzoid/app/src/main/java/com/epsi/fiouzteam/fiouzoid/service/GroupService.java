@@ -2,6 +2,8 @@ package com.epsi.fiouzteam.fiouzoid.service;
 
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dju on 21/05/2016.
@@ -39,4 +41,11 @@ public class GroupService {
         return resp;
     }
 
+    public static List<Group> getAllGroups() {
+        List<Group> u = new ArrayList<>();
+        u.add(getTestGroupById(0));
+        u.add(getTestGroupById(1));
+
+        return u;
+    }
 }
