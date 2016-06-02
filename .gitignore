@@ -5,3 +5,4 @@ test*
 *local.properties
 */.idea/*
 */.gradle/*
+*.sqlite
