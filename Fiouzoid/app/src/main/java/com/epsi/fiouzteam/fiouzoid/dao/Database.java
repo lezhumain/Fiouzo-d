@@ -33,82 +33,24 @@ public class Database
 
 
    public Database open() throws SQLException {
-       //mDbHelper = new DatabaseHelper(mContext);
        mDbHelper = new DatabaseHelper(mContext);
        SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
-
-       //database_path = (mContext.getDatabasePath(DATABASE_NAME)).getAbsolutePath();
-       //database_path = mDb.getPath();
-       //cpDb();
 
        mUserDao = new UserDao(mDb);
        mGroupDao = new GroupDao(mDb);
        return this;
    }
 
-    public static void cpDb()
-    {
-        Log.d(TAG, "cpDb: " + database_path + '\n');
-
-        String inPath = database_path;
-        String outPath = "/mnt/sdcard/fiouzteam/";
-        File f=new File(inPath), fileO = new File(outPath);
-        FileInputStream fis=null;
-        FileOutputStream fos=null;
-
-        try
-        {
-            fis=new FileInputStream(f);
-            if(fileO.createNewFile() == false) {
-                Log.i(TAG, "Error creating file");
-                //Log.i(TAG, "DB dump ERROR");
-                //return;
-            }
-            fileO.setReadable(true, false);
-            fileO.setWritable(true, false);
-
-            //fos=new FileOutputStream(outPath + DATABASE_NAME);
-            fos=new FileOutputStream(fileO);
-            while(true)
-            {
-                int i=fis.read();
-                if(i!=-1)
-                {fos.write(i);}
-                else
-                {break;}
-            }
-            fos.flush();
-            Log.i(TAG, "DB dump OK");
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            Log.i(TAG, "DB dump ERROR");
-        }
-        finally
-        {
-            try
-            {
-                if(fos != null)
-                    fos.close();
-                if(fis != null)
-                    fis.close();
-            }
-            catch(IOException ioe)
-            {}
-        }
-    }
-
     public void close() {
        mDbHelper.close();
    }
 
-   public Database(Context context) {
+    public Database(Context context) {
        this.mContext = context;
    }
 
 
-   private static class DatabaseHelper extends SQLiteOpenHelper {
+    private static class DatabaseHelper extends SQLiteOpenHelper {
        DatabaseHelper(Context context) {
            super(context, database_path + DATABASE_NAME, null, DATABASE_VERSION);
        }

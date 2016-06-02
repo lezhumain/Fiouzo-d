@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         mDb = new Database(this);
         mDb.open();
-        //Database.cpDb(); // TODO: mek it work
     }
 
     private void TestHttp()
@@ -123,9 +122,12 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Log.i(TAG, "helper's response: " + u.toJson());
 
 
-        //u.setEmail(u.getEmail() + 1);
-        //u.setNickName(u.getNickName() + 1);
-        //Database.mUserDao.addUser(u);
+        u.setEmail(u.getEmail() + 1);
+        u.setNickName(u.getNickName() + 1);
+        boolean res = Database.mUserDao.addUser(u);
+
+        if(!res)
+            Log.i(TAG, "User wasn't added");
     }
 
     @Override
