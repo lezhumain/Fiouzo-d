@@ -1,3 +1,7 @@
 *.zip
 test*
 *.orig
+*build*
+*idea*
+*gradle*
+DrawerWithSwipeTabs/local.properties
