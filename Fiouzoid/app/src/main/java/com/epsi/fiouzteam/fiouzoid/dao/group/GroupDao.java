@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid.dao.user;
+package com.epsi.fiouzteam.fiouzoid.dao.group;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -7,63 +7,62 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
-import com.epsi.fiouzteam.fiouzoid.model.User;
+import com.epsi.fiouzteam.fiouzoid.model.Group;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import cz.msebera.android.httpclient.client.entity.EntityBuilder;
-
-public class UserDao extends DbContentProvider
-        implements IUserSchema, IUserDao {
+public class GroupDao extends DbContentProvider
+        implements IGroupSchema, IGroupDao {
 
     private Cursor cursor;
     private ContentValues initialValues;
-    public UserDao(SQLiteDatabase db) {
+    public GroupDao(SQLiteDatabase db) {
         super(db);
     }
 
     @Override
-    public User fetchById(int id) {
+    public Group fetchById(int id) {
         final String selectionArgs[] = { String.valueOf(id) };
         final String selection = COLUMN_ID + " = ?";
-        User user = new User();
-        cursor = super.query(USER_TABLE, USER_COLUMNS, selection,
+        Group group = new Group();
+        cursor = super.query(GROUP_TABLE, GROUP_COLUMNS, selection,
                 selectionArgs, COLUMN_ID);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                user = cursorToEntity(cursor);
+                group = cursorToEntity(cursor);
                 cursor.moveToNext();
             }
             cursor.close();
         }
 
-        return user;
+        return group;
     }
 
-    public List<User> fetchAllUsers() {
-        List<User> userList = new ArrayList<User>();
-        cursor = super.query(USER_TABLE, USER_COLUMNS, null,
+    public List<Group> fetchAllGroups() {
+        List<Group> groupList = new ArrayList<Group>();
+        cursor = super.query(GROUP_TABLE, GROUP_COLUMNS, null,
                 null, COLUMN_ID);
 
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                User user = cursorToEntity(cursor);
-                userList.add(user);
+                Group group = cursorToEntity(cursor);
+                groupList.add(group);
                 cursor.moveToNext();
             }
             cursor.close();
         }
 
-        return userList;
+        return groupList;
     }
 
-    public boolean addUser(User user) {
+    public boolean addGroup(Group group) {
         // set values
-        setContentValue(user);
+        setContentValue(group);
         try {
-            return super.insert(USER_TABLE, getContentValue()) > 0;
+            return super.insert(GROUP_TABLE, getContentValue()) > 0;
         } catch (SQLiteConstraintException ex){
             Log.w("Database", ex.getMessage());
             return false;
@@ -71,51 +70,51 @@ public class UserDao extends DbContentProvider
     }
 
     @Override
-    public boolean addUsers(List<User> users) {
+    public boolean addGroups(List<Group> groups) {
         boolean ret = true;
-        for (User u : users)
+        for (Group u : groups)
         {
-            ret = ret != false && addUser(u);
+            ret = ret != false && addGroup(u);
         }
 
         return ret;
     }
 
     @Override
-    public boolean deleteAllUsers() {
+    public boolean deleteAllGroups() {
         return false;
     }
 
-    protected User cursorToEntity(Cursor cursor) {
+    protected Group cursorToEntity(Cursor cursor) {
 
-        User user = new User();
+        Group group = new Group();
 
         int idIndex, nickNameIndex, emailIndex;
 
         if (cursor != null) {
             if (cursor.getColumnIndex(COLUMN_ID) != -1) {
                 idIndex = cursor.getColumnIndexOrThrow(COLUMN_ID);
-                user.setId(cursor.getInt(idIndex));
+                group.setId(cursor.getInt(idIndex));
             }
-            if (cursor.getColumnIndex(COLUMN_NICK_NAME) != -1) {
+            if (cursor.getColumnIndex(COLUMN_NAME) != -1) {
                 nickNameIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_NICK_NAME);
-                user.setNickName(cursor.getString(nickNameIndex));
+                        COLUMN_NAME);
+                group.setName(cursor.getString(nickNameIndex));
             }
-            if (cursor.getColumnIndex(COLUMN_EMAIL) != -1) {
+            if (cursor.getColumnIndex(COLUMN_DESCRIPTION) != -1) {
                 emailIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_EMAIL);
-                user.setEmail(cursor.getString(emailIndex));
+                        COLUMN_DESCRIPTION);
+                group.setDescription(cursor.getString(emailIndex));
             }
 
         }
-        return user;
+        return group;
     }
 
-    private void setContentValue(User user) {
+    private void setContentValue(Group group) {
         initialValues = new ContentValues();
-        initialValues.put(COLUMN_NICK_NAME, user.getNickName());
-        initialValues.put(COLUMN_EMAIL, user.getEmail());
+        initialValues.put(COLUMN_NAME, group.getName());
+        initialValues.put(COLUMN_DESCRIPTION, group.getDescription());
     }
 
     private ContentValues getContentValue() {

@@ -14,11 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
+import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.Test;
 import com.epsi.fiouzteam.fiouzoid.model.User;
+import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -107,15 +110,24 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         mDb = new Database(this);
         mDb.open();
-        Database.cpDb(); // TODO: mek it work
     }
 
     private void TestHttp()
     {
         String url = "http://jsonplaceholder.typicode.com/posts/1";
-        User u = UserService.getTestUserById(1);
+        //User u = UserService.getTestUserById(1);
+        User u = Database.mUserDao.fetchById(1);
+        //Group u = GroupService.getTestGroupById(1);
 
         Log.i(TAG, "helper's response: " + u.toJson());
+
+
+        u.setEmail(u.getEmail() + 1);
+        u.setNickName(u.getNickName() + 1);
+        boolean res = Database.mUserDao.addUser(u);
+
+        if(!res)
+            Log.i(TAG, "User wasn't added");
     }
 
     @Override
