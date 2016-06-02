@@ -62,12 +62,8 @@ public class UserDao extends DbContentProvider
     public boolean addUser(User user) {
         // set values
         setContentValue(user);
-        try {
-            return super.insert(USER_TABLE, getContentValue()) > 0;
-        } catch (SQLiteConstraintException ex){
-            Log.w("Database", ex.getMessage());
-            return false;
-        }
+
+        return super.insert(USER_TABLE, getContentValue()) > 0;
     }
 
     @Override
