@@ -13,7 +13,7 @@ public interface IUserSchema {
        + COLUMN_ID
        + " INTEGER PRIMARY KEY, "
        + COLUMN_NICK_NAME
-       + " TEXT NOT NULL"
+       + " TEXT NOT NULL,"
         + COLUMN_EMAIL
         + " TEXT NOT NULL"
    + ")";

@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Drawer With Swipe Tabs</string>
+    <string name="app_name">Fiouzoid</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_test">Test</string>
+    <string name="userName">Nom Utilisateur</string>
+    <string name="move_date">Date</string>
 </resources>

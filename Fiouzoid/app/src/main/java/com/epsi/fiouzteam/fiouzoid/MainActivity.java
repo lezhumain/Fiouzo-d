@@ -17,7 +17,7 @@ import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
-import com.epsi.fiouzteam.fiouzoid.model.Test;
+//import com.epsi.fiouzteam.fiouzoid.model.Test;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 import com.google.gson.Gson;
@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
              public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
 
-                 if (menuItem.getItemId() == R.id.nav_item_sent) {
-                     FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                     fragmentTransaction.replace(R.id.containerView,new SentFragment()).commit();
+                // if (menuItem.getItemId() == R.id.nav_item_sent) {
+                //     FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+                 //    fragmentTransaction.replace(R.id.containerView,new SentFragment()).commit();
 
-                 }
-
+                // }
+                //Section non utilise dans le drawer navigator
                 if (menuItem.getItemId() == R.id.nav_item_inbox) {
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();

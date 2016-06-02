@@ -19,7 +19,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@color/orange"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Drawer With Swipe Tabs" >
+        app:title="Fiouzoid">
+
+
 
     </android.support.v7.widget.Toolbar>
 
@@ -38,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/containerView">
-     </FrameLayout>
+
+    </FrameLayout>
 
 
 
