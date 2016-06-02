@@ -123,9 +123,9 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Log.i(TAG, "helper's response: " + u.toJson());
 
 
-        u.setEmail(u.getEmail() + 1);
-        u.setNickName(u.getNickName() + 1);
-        Database.mUserDao.addUser(u);
+        //u.setEmail(u.getEmail() + 1);
+        //u.setNickName(u.getNickName() + 1);
+        //Database.mUserDao.addUser(u);
     }
 
     @Override
