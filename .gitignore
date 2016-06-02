@@ -2,7 +2,7 @@
 test*
 *.orig
 *build*
-*idea*
-*gradle*
-DrawerWithSwipeTabs/local.properties
+*local.properties
+*/.idea/*
+*/.gradle/*
 *.sqlite
