@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private void TestHttp()
     {
         //String url = "http://jsonplaceholder.typicode.com/posts/1";
-        User u = UserService.getUserByIdTest(1);
+        User u = UserService.getUserById(3);
         //User u = Database.mUserDao.fetchById(1);
         //Group u = GroupService.getTestGroupById(1);
 
@@ -128,10 +128,11 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         u.setEmail(u.getEmail() + 1);
         u.setNickName(u.getNickName() + 1);
+        /*
         boolean res = Database.mUserDao.addUser(u);
-
         if(!res)
             Log.i(TAG, "User wasn't added");
+        */
     }
 
     @Override
