@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 
@@ -37,7 +38,30 @@ public class GroupDao extends DbContentProvider
             cursor.close();
         }
 
+        group.setUsers(Database.mUserDao.fetchAllByGroup(group.getId()));
+
         return group;
+    }
+
+    @Override
+    public List<Group> fetchAllByUser(int userId)
+    {
+        List<Group> groupList = new ArrayList<Group>();
+        String  url = "select g.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and u.id = ?";
+        String[] args = { String.valueOf(userId) };
+
+        cursor = super.rawQuery(url, args);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Group group = cursorToEntity(cursor);
+                groupList.add(group);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return groupList;
     }
 
     public List<Group> fetchAllGroups() {
@@ -54,6 +78,9 @@ public class GroupDao extends DbContentProvider
             }
             cursor.close();
         }
+
+        for (Group g : groupList)
+            g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
 
         return groupList;
     }

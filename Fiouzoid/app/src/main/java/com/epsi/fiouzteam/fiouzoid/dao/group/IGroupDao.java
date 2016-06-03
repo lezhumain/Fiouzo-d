@@ -7,6 +7,7 @@ import java.util.List;
 public interface IGroupDao
 {
    Group fetchById(int groupId);
+   List<Group> fetchAllByUser(int userId);
    List<Group> fetchAllGroups();
    // add group
    boolean addGroup(Group group);
