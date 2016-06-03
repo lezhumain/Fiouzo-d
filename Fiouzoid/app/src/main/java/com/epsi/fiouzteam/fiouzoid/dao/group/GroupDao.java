@@ -61,12 +61,8 @@ public class GroupDao extends DbContentProvider
     public boolean addGroup(Group group) {
         // set values
         setContentValue(group);
-        try {
-            return super.insert(GROUP_TABLE, getContentValue()) > 0;
-        } catch (SQLiteConstraintException ex){
-            Log.w("Database", ex.getMessage());
-            return false;
-        }
+
+        return super.insert(GROUP_TABLE, getContentValue()) > 0;
     }
 
     @Override
@@ -113,6 +109,9 @@ public class GroupDao extends DbContentProvider
 
     private void setContentValue(Group group) {
         initialValues = new ContentValues();
+        if(group.getId() > 0)
+            initialValues.put(COLUMN_ID, group.getId());
+
         initialValues.put(COLUMN_NAME, group.getName());
         initialValues.put(COLUMN_DESCRIPTION, group.getDescription());
     }

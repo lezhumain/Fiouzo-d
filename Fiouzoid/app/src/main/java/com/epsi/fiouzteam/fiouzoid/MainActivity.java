@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
@@ -110,13 +111,16 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         mDb = new Database(this);
         mDb.open();
+
+        DataManager.SaveUsers();
+        DataManager.SaveGroups();
     }
 
     private void TestHttp()
     {
-        String url = "http://jsonplaceholder.typicode.com/posts/1";
-        //User u = UserService.getTestUserById(1);
-        User u = Database.mUserDao.fetchById(1);
+        //String url = "http://jsonplaceholder.typicode.com/posts/1";
+        User u = UserService.getUserById(3);
+        //User u = Database.mUserDao.fetchById(1);
         //Group u = GroupService.getTestGroupById(1);
 
         Log.i(TAG, "helper's response: " + u.toJson());
@@ -124,10 +128,11 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         u.setEmail(u.getEmail() + 1);
         u.setNickName(u.getNickName() + 1);
+        /*
         boolean res = Database.mUserDao.addUser(u);
-
         if(!res)
             Log.i(TAG, "User wasn't added");
+        */
     }
 
     @Override
