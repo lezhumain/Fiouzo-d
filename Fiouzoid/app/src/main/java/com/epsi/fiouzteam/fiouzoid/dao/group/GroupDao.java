@@ -9,6 +9,7 @@ import android.util.Log;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,8 @@ public class GroupDao extends DbContentProvider
             cursor.close();
         }
 
-        group.setUsers(Database.mUserDao.fetchAllByGroup(group.getId()));
+        List<User> groupUsers = Database.mUserDao.fetchAllByGroup(group.getId());
+        group.setUsers(groupUsers);
 
         return group;
     }
@@ -79,8 +81,10 @@ public class GroupDao extends DbContentProvider
             cursor.close();
         }
 
+        /*
         for (Group g : groupList)
             g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
+        */
 
         return groupList;
     }
@@ -88,6 +92,23 @@ public class GroupDao extends DbContentProvider
     public boolean addGroup(Group group) {
         // set values
         setContentValue(group);
+
+        List<User> users = group.getUsers();
+        if(users != null) // TODO test
+        {
+            String query = "insert into UserGroup" + " select ";
+            int cpt = 0;
+            for (User u :
+                    users) {
+                if(cpt == 0)
+                    query += u.getId() + " as idUser, " + group.getId() + " as idGroup ";
+                else
+                    query += "union all select " + u.getId() + ", " + group.getId();
+            }
+            query += " ";
+
+            super.rawQuery(query, null);
+        }
 
         return super.insert(GROUP_TABLE, getContentValue()) > 0;
     }
