@@ -1,6 +1,5 @@
 package com.epsi.fiouzteam.fiouzoid;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -15,19 +14,11 @@ import android.view.MenuItem;
 
 import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
-import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
-import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
-import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
-import com.epsi.fiouzteam.fiouzoid.model.Test;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private static final String TAG = "MainActivity";
@@ -119,15 +110,15 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private void TestHttp()
     {
         //String url = "http://jsonplaceholder.typicode.com/posts/1";
-        User u = UserService.getUserById(3);
+//        User u = UserService.getUserById(3);
         //User u = Database.mUserDao.fetchById(1);
-        //Group u = GroupService.getTestGroupById(1);
+        Group u = GroupService.getTestGroupById(1);
 
         Log.i(TAG, "helper's response: " + u.toJson());
 
 
-        u.setEmail(u.getEmail() + 1);
-        u.setNickName(u.getNickName() + 1);
+//        u.setEmail(u.getEmail() + 1);
+//        u.setNickName(u.getNickName() + 1);
         /*
         boolean res = Database.mUserDao.addUser(u);
         if(!res)

@@ -17,6 +17,7 @@ import java.util.List;
 public class GroupDao extends DbContentProvider
         implements IGroupSchema, IGroupDao {
 
+    private static final String TAG = "GroupDao";
     private Cursor cursor;
     private ContentValues initialValues;
     public GroupDao(SQLiteDatabase db) {
@@ -97,16 +98,19 @@ public class GroupDao extends DbContentProvider
         if(users != null) // TODO test
         {
             String query = "insert into UserGroup" + " select ";
-            int cpt = 0;
+            boolean isFirst = true;
             for (User u :
                     users) {
-                if(cpt == 0)
-                    query += u.getId() + " as idUser, " + group.getId() + " as idGroup ";
+                if(isFirst) {
+                    query += u.getId() + " as idUser, " + group.getId() + " as idGroup";
+                    isFirst = false;
+                }
                 else
-                    query += "union all select " + u.getId() + ", " + group.getId();
+                    query += " union all select " + u.getId() + ", " + group.getId();
             }
-            query += " ";
+//            query += " ";
 
+            Log.i(TAG, "raw query: " + query);
             super.rawQuery(query, null);
         }
 
