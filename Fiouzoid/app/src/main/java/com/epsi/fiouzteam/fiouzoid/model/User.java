@@ -10,10 +10,11 @@ public class User extends Entity
 {
     private String nickName;
     private String email;
-    private List<Group> groups;
+    private List<Group> groups = new ArrayList<>();
 
 
-    public User() {
+    public User()
+    {
         super();
     }
 
@@ -73,6 +74,7 @@ public class User extends Entity
     public String toJson()
     {
         Gson gson = new GsonBuilder().create();
+
         String str = gson.toJson(this, this.getClass());
 
         return str;

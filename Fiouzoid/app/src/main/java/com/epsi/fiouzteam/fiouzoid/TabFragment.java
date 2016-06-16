@@ -22,6 +22,13 @@ public class TabFragment extends Fragment {
     public static ViewPager viewPager;
     public static int int_items = 3 ;
 
+    public TabFragment()
+    {
+        super();
+
+        // TODO: parameters and load displayed group infos
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

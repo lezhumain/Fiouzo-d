@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 
 import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
@@ -20,6 +21,9 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private static final String TAG = "MainActivity";
 
@@ -27,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
-    private Database mDb;
 
+    private Database mDb;
+    private List<Group> mGroups = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +55,55 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
          mFragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
 
         /**
-         * Setup click events on the Navigation View Items.
+         * Handle data and bdd
+         */
+        mDb = new Database(this);
+        mDb.open();
+
+        DataManager.SaveUsers();
+        DataManager.SaveGroups();
+        mGroups = Database.mGroupDao.fetchAllGroups();
+
+        /**
+         * Put groups navigation items
+         */
+        this.handleGroupItems();
+
+        /**
+         * Setup click events on the Navigation View Items. (NavigationDrawer)
          */
          mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
          {
              @Override
-             public boolean onNavigationItemSelected(MenuItem menuItem) {
+             public boolean onNavigationItemSelected(MenuItem menuItem)
+             {
                 mDrawerLayout.closeDrawers();
 
-                // if (menuItem.getItemId() == R.id.nav_item_sent) {
-                //     FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                 //    fragmentTransaction.replace(R.id.containerView,new SentFragment()).commit();
 
-                // }
-                //Section non utilise dans le drawer navigator
                 if (menuItem.getItemId() == R.id.nav_item_inbox) {
+                    // TODO: create & use a user fragment
+
+                    Log.i(TAG, "\tClick on 'User Name'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
                 }
+//                else if (menuItem.getItemId() == R.id.nav_item_groups)
+//                {
+//                    // TODO: use correct fragment
+//
+//                    Log.i(TAG, "\tClick on 'Groupes'");
+//                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
+//                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
+//                }
+                else
+                {
+                    // TODO: find out what item and pass params to fragment
+
+                    Log.i(TAG, "\tClick on item");
+                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
+                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
+                }
+
 
                  return false;
             }
@@ -79,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
          */
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
+
+        // click sur un item du menu parametres
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -99,12 +137,27 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
+    }
 
-        mDb = new Database(this);
-        mDb.open();
+    private void handleGroupItems() {
+//        navView = (NavigationView) findViewById(R.id.navView);
 
-        DataManager.SaveUsers();
-        DataManager.SaveGroups();
+        Menu m = mNavigationView.getMenu();
+        SubMenu topChannelMenu = m.addSubMenu("Groupes");
+//        MenuItem groupsItem = m.getItem(R.id.nav_item_groups);
+//        SubMenu topChannelMenu = groupsItem.getSubMenu();
+//        topChannelMenu.clear();
+
+
+        topChannelMenu.add("test");
+        for (Group group :
+                mGroups) {
+            topChannelMenu.add(group.getName());
+        }
+
+        // hack
+        MenuItem mi = m.getItem(m.size()-1);
+        mi.setTitle(mi.getTitle());
     }
 
     private void TestHttp()
@@ -142,6 +195,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     @Override
     public void taskCompletionResult(String result) {
-        Log.i(TAG, '\t' + result);
+        Log.i(TAG, "\ttaskCompletionResult" + result);
     }
 }

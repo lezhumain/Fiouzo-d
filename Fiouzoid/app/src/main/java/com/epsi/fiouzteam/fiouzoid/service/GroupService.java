@@ -66,8 +66,10 @@ public class GroupService {
 
     public static List<Group> getAllGroups() {
         List<Group> u = new ArrayList<>();
-        u.add(getTestGroupById(0));
-        u.add(getTestGroupById(1));
+        final int nbTestGroups = 5;
+
+        for(int i = 0; i < nbTestGroups; ++i)
+            u.add(getTestGroupById(i));
 
         return u;
     }
