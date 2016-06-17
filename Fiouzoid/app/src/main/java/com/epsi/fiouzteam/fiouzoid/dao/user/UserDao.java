@@ -44,7 +44,7 @@ public class UserDao extends DbContentProvider
     public List<User> fetchAllByGroup(int groupId)
     {
         List<User> userList = new ArrayList<User>();
-        String  url = "select g.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = ?";
+        String  url = "select u.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = ?";
         String[] args = { String.valueOf(groupId) };
 
         cursor = super.rawQuery(url, args);

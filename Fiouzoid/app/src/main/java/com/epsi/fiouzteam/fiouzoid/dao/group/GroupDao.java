@@ -82,10 +82,14 @@ public class GroupDao extends DbContentProvider
             cursor.close();
         }
 
-        /*
+
         for (Group g : groupList)
+        {
+            if(g.getId() > 2)
+                break;
+
             g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
-        */
+        }
 
         return groupList;
     }
