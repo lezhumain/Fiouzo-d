@@ -3,10 +3,14 @@ package com.epsi.fiouzteam.fiouzoid.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Group extends Entity
 {
     private String name;
     private String description;
+    private List<User> users;
 
 
     public Group() {
@@ -29,6 +33,13 @@ public class Group extends Entity
         this.id = group.id;
         this.name = group.name;
         this.description = group.description;
+
+        if(this.users == null)
+            this.users = new ArrayList<>();
+        for (User u :
+                group.users) {
+            this.users.add(u);
+        }
 
         return this;
     }
@@ -56,5 +67,13 @@ public class Group extends Entity
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

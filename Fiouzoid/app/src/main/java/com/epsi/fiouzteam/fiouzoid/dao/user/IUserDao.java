@@ -8,6 +8,7 @@ public interface IUserDao
 {
    User fetchById(int userId);
    List<User> fetchAllUsers();
+   List<User> fetchAllByGroup(int groupId);
    // add user
    boolean addUser(User user);
    // add users in bulk

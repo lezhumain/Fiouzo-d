@@ -7,20 +7,38 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.model.Group;
 
 /**
  * Created by Ratan on 7/27/2015.
  */
 public class TabFragment extends Fragment {
 
+    private static final String TAG = "TabFragment";
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
     public static int int_items = 3 ;
+
+    private Group mGroup = null;
+
+    public TabFragment()
+    {
+        super();
+
+        // TODO: parameters and load displayed group infos
+        Bundle args = getArguments()
+        String groupName = args.getString("groupName");
+
+        mGroup = Database.mGroupDao.fetchByName(groupName);
+        Log.i(TAG, mGroup.toString());
+    }
 
     @Nullable
     @Override
@@ -28,9 +46,9 @@ public class TabFragment extends Fragment {
         /**
          *Inflate tab_layout and setup Views.
          */
-            View x =  inflater.inflate(R.layout.tab_layout,null);
-            tabLayout = (TabLayout) x.findViewById(R.id.tabs);
-            viewPager = (ViewPager) x.findViewById(R.id.viewpager);
+        View x =  inflater.inflate(R.layout.tab_layout,null);
+        tabLayout = (TabLayout) x.findViewById(R.id.tabs);
+        viewPager = (ViewPager) x.findViewById(R.id.viewpager);
 
         /**
          *Set an Apater for the View Pager
