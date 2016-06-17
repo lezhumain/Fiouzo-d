@@ -95,7 +95,7 @@ public class GroupDao extends DbContentProvider
         setContentValue(group);
 
         List<User> users = group.getUsers();
-        if(users != null) // TODO test
+        if(users != null && !users.isEmpty()) // TODO test
         {
             String query = "insert into UserGroup" + " select ";
             boolean isFirst = true;
@@ -114,7 +114,9 @@ public class GroupDao extends DbContentProvider
             super.rawQuery(query, null);
         }
 
-        return super.insert(GROUP_TABLE, getContentValue()) > 0;
+        Log.i(TAG, "inserting group '" + group.getName() + "'");
+        long res = super.insert(GROUP_TABLE, getContentValue());
+        return res > 0;
     }
 
     @Override
@@ -122,7 +124,8 @@ public class GroupDao extends DbContentProvider
         boolean ret = true;
         for (Group u : groups)
         {
-            ret = ret != false && addGroup(u);
+            boolean val = addGroup(u);
+            ret = ret != false && val;
         }
 
         return ret;
@@ -172,4 +175,26 @@ public class GroupDao extends DbContentProvider
         return initialValues;
     }
 
+    public Group fetchByName(String groupName) {
+        //TODO: correct here
+        final int id = 0;
+        final String selectionArgs[] = { String.valueOf(groupName) };
+        final String selection = COLUMN_NAME + " = ?";
+        Group group = new Group();
+        cursor = super.query(GROUP_TABLE, GROUP_COLUMNS, selection,
+                selectionArgs, COLUMN_ID);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                group = cursorToEntity(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        List<User> groupUsers = Database.mUserDao.fetchAllByGroup(group.getId());
+        group.setUsers(groupUsers);
+
+        return group;
+    }
 }

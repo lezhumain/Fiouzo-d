@@ -32,11 +32,14 @@ public class GroupService {
                         name + "', " +
                         "'description': '" +
                         description + "', " +
-                        "'id': " +
-                        id + ", ";
-        
-        List<User> users = UserService.getAllUsers();
-        jsonStr = fillWithUsers(users, jsonStr) + "}";
+                        "'id': " + id + ", ";
+
+        List<User> users = null;
+        if(id == 0) {
+            users = UserService.getAllUsers();
+        }
+        jsonStr = fillWithUsers(users, jsonStr) + '}';
+
 
         Log.i(TAG, "jsonStr: " + jsonStr);
 
@@ -45,14 +48,18 @@ public class GroupService {
 //        return (new GsonBuilder().create()).fromJson(jsonStr, Group.class);
     }
 
-    private static String fillWithUsers(List<User> users, String jsonStr)
-    {
+    private static String fillWithUsers(List<User> users, String jsonStr) {
         jsonStr += "'users': [";
-        for (User u :
-                users) {
-            jsonStr += u.toJson() + ',';
+
+        if (users != null)
+        {
+            for (User u : users) {
+                jsonStr += u.toJson() + ',';
+            }
+            jsonStr = jsonStr.substring(0,jsonStr.length() - 1);
         }
-        return jsonStr.substring(0,jsonStr.length() - 1) + ']';
+
+        return  jsonStr + ']';
     }
 
     public static String getGroupByIdTest(int id)

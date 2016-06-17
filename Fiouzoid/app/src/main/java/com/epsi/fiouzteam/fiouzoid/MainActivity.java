@@ -99,9 +99,14 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                 {
                     // TODO: find out what item and pass params to fragment
 
-                    Log.i(TAG, "\tClick on item");
+                    TabFragment fragment = new TabFragment();
+                    Bundle args = new Bundle();
+                    args.putString("groupName", menuItem.getTitle().toString());
+                    fragment.setArguments(args);
+
+                    Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
-                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
+                    xfragmentTransaction.replace(R.id.containerView,fragment).commit();
                 }
 
 
@@ -149,11 +154,9 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 //        topChannelMenu.clear();
 
 
-        topChannelMenu.add("test");
-        for (Group group :
-                mGroups) {
+        //topChannelMenu.add("test");
+        for (Group group : mGroups)
             topChannelMenu.add(group.getName());
-        }
 
         // hack
         MenuItem mi = m.getItem(m.size()-1);
