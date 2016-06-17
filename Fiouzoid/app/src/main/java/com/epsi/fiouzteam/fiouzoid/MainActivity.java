@@ -22,6 +22,7 @@ import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskDelegate{
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     private Database mDb;
     private List<Group> mGroups = new ArrayList<>();
+
+    private Group mCurrentGroup = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         DataManager.SaveUsers();
         DataManager.SaveGroups();
         mGroups = Database.mGroupDao.fetchAllGroups();
+        LoadGroup(1);
 
         /**
          * Put groups navigation items
@@ -97,14 +101,17 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 //                }
                 else
                 {
+                    Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
+
+
                     // TODO: find out what item and pass params to fragment
 
                     TabFragment fragment = new TabFragment();
-                    Bundle args = new Bundle();
-                    args.putString("groupName", menuItem.getTitle().toString());
-                    fragment.setArguments(args);
+//                    Bundle args = new Bundle();
+//                    args.putString("groupName", menuItem.getTitle().toString());
+//                    fragment.setArguments(args);
+                    LoadGroup(menuItem.getTitle().toString());
 
-                    Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,fragment).commit();
                 }
@@ -163,6 +170,18 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mi.setTitle(mi.getTitle());
     }
 
+    public void LoadGroup(String groupName)
+    {
+        mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+        Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
+    }
+
+    public void LoadGroup(int groupId)
+    {
+        mCurrentGroup = Database.mGroupDao.fetchById(groupId);
+        Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
+    }
+
     private void TestHttp()
     {
         //String url = "http://jsonplaceholder.typicode.com/posts/1";
@@ -199,5 +218,27 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     @Override
     public void taskCompletionResult(String result) {
         Log.i(TAG, "\ttaskCompletionResult" + result);
+    }
+
+    public ArrayList<String> GetMembresGroupe() {
+        ArrayList<String> userNames = new ArrayList<>();
+        List<User> users = mCurrentGroup.getUsers();
+
+        for (User user : users)
+        {
+            String nick = user.getNickName();
+
+            if(nick == null)
+                continue;
+
+            userNames.add(nick);
+        }
+
+
+        return userNames;
+    }
+
+    public String GetGroupeName() {
+        return mCurrentGroup != null ? mCurrentGroup.getName() : "-";
     }
 }

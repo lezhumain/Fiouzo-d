@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.epsi.fiouzteam.fiouzoid.R;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 
@@ -26,18 +25,20 @@ public class TabFragment extends Fragment {
     public static ViewPager viewPager;
     public static int int_items = 3 ;
 
-    private Group mGroup = null;
+
 
     public TabFragment()
     {
         super();
 
         // TODO: parameters and load displayed group infos
-        Bundle args = getArguments()
-        String groupName = args.getString("groupName");
-
-        mGroup = Database.mGroupDao.fetchByName(groupName);
-        Log.i(TAG, mGroup.toString());
+//        Bundle args = getArguments();
+//        if(args != null)
+//        {
+//            String groupName = args.getString("groupName");
+//
+//
+//        }
     }
 
     @Nullable
@@ -86,7 +87,7 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
           switch (position){
-              case 0 : return new PrimaryFragment();
+              case 0 : return new MembresFragment();
               case 1 : return new SocialFragment();
               case 2 : return new UpdatesFragment();
           }
