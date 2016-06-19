@@ -21,8 +21,8 @@ public class UserService {
         final int nbTestUser = 10;
 
 
-        for(int i = 0; i < nbTestUser; ++i)
-            u.add(getTestUserById(0));
+        for(int i = 1; i < nbTestUser; ++i)
+            u.add(getTestUserById(i));
 
         return u;
     }

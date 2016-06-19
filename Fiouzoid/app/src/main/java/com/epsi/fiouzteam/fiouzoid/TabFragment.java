@@ -7,13 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.epsi.fiouzteam.fiouzoid.dao.Database;
-import com.epsi.fiouzteam.fiouzoid.model.Group;
 
 /**
  * Created by Ratan on 7/27/2015.
@@ -30,15 +26,6 @@ public class TabFragment extends Fragment {
     public TabFragment()
     {
         super();
-
-        // TODO: parameters and load displayed group infos
-//        Bundle args = getArguments();
-//        if(args != null)
-//        {
-//            String groupName = args.getString("groupName");
-//
-//
-//        }
     }
 
     @Nullable
@@ -89,7 +76,7 @@ public class TabFragment extends Fragment {
           switch (position){
               case 0 : return new MembresFragment();
               case 1 : return new SocialFragment();
-              case 2 : return new UpdatesFragment();
+              case 2 : return new StockFragment();
           }
         return null;
         }

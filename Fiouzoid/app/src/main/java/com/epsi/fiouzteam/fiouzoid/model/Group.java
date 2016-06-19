@@ -4,23 +4,47 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Random;
 
 public class Group extends Entity
 {
+
+
     private String name;
     private String description;
     private List<User> users;
+    private Hashtable<String, Integer> stock = new Hashtable<>();
 
 
     public Group() {
         super();
+        // test
+        String[] categories = new String[]{"Fiouz", "Binouz", "Pepouz"};
+        for(int i = 0; i < categories.length; ++i)
+        {
+            Random r = new Random();
+            int rValue = r.nextInt();
+            stock.put(categories[i], rValue);
+        }
+        // end test
     }
 
     public Group(int id, String name, String description) {
         super(id);
         this.name = name;
         this.description = description;
+
+        // test
+        String[] categories = new String[]{"Fiouz", "Binouz", "Pepouz"};
+        for(int i = 0; i < categories.length; ++i)
+        {
+            Random r = new Random();
+            int rValue = r.nextInt();
+            stock.put(categories[i], rValue);
+        }
+        // end test
     }
 
 
@@ -84,5 +108,13 @@ public class Group extends Entity
                 ", description='" + description + '\'' +
                 ", users=" + users +
                 '}';
+    }
+
+    public Hashtable<String, Integer> getStock() {
+        return stock;
+    }
+
+    public void setStock(Hashtable<String, Integer> stock) {
+        this.stock = stock;
     }
 }

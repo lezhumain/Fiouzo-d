@@ -23,6 +23,7 @@ import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskDelegate{
@@ -240,5 +241,18 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     public String GetGroupeName() {
         return mCurrentGroup != null ? mCurrentGroup.getName() : "-";
+    }
+
+    public ArrayList<String> GetStockGroupe() {
+        ArrayList<String> stock = new ArrayList<>();
+        Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
+//        List<String> keys = actualStock.keys();
+
+        for (String key :
+                actualStock.keySet()) {
+            stock.add(key + ' ' + mCurrentGroup.getId());
+        }
+
+        return stock;
     }
 }
