@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         for (String key :
                 actualStock.keySet()) {
-            stock.add(key + ' ' + mCurrentGroup.getId());
+            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
         }
 
         return stock;

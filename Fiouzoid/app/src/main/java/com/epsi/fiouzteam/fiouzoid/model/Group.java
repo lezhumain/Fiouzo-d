@@ -25,7 +25,7 @@ public class Group extends Entity
         for(int i = 0; i < categories.length; ++i)
         {
             Random r = new Random();
-            int rValue = r.nextInt();
+            int rValue = r.nextInt(20);
             stock.put(categories[i], rValue);
         }
         // end test
