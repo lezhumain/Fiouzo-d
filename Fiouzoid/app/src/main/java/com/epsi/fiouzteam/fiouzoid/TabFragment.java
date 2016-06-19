@@ -33,7 +33,7 @@ public class TabFragment extends Fragment {
         super();
 
         // TODO: parameters and load displayed group infos
-        Bundle args = getArguments()
+        Bundle args = getArguments();
         String groupName = args.getString("groupName");
 
         mGroup = Database.mGroupDao.fetchByName(groupName);
