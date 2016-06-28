@@ -15,6 +15,7 @@ import android.view.SubMenu;
 
 import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
@@ -22,6 +23,8 @@ import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskDelegate{
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     private Database mDb;
     private List<Group> mGroups = new ArrayList<>();
+
+    private Group mCurrentGroup = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         DataManager.SaveUsers();
         DataManager.SaveGroups();
         mGroups = Database.mGroupDao.fetchAllGroups();
+        LoadGroup(1);
 
         /**
          * Put groups navigation items
@@ -97,14 +103,17 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 //                }
                 else
                 {
+                    Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
+
+
                     // TODO: find out what item and pass params to fragment
 
                     TabFragment fragment = new TabFragment();
-                    Bundle args = new Bundle();
-                    args.putString("groupName", menuItem.getTitle().toString());
-                    fragment.setArguments(args);
+//                    Bundle args = new Bundle();
+//                    args.putString("groupName", menuItem.getTitle().toString());
+//                    fragment.setArguments(args);
+                    LoadGroup(menuItem.getTitle().toString());
 
-                    Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,fragment).commit();
                 }
@@ -163,14 +172,33 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mi.setTitle(mi.getTitle());
     }
 
+    public void LoadGroup(String groupName)
+    {
+        mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+        Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
+    }
+
+    public void LoadGroup(int groupId)
+    {
+        mCurrentGroup = Database.mGroupDao.fetchById(groupId);
+        Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
+    }
+
     private void TestHttp()
     {
         //String url = "http://jsonplaceholder.typicode.com/posts/1";
+        String url = "http://posttestserver.com/post.php";
+        HttpHelper help = new HttpHelper(url, null);
+        String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
+            result = help.Post(data);
+            //result = help.Get();
+
+        Log.i(TAG, "\tTEST HTTP: result = " + result);
 //        User u = UserService.getUserById(3);
         //User u = Database.mUserDao.fetchById(1);
-        Group u = GroupService.getTestGroupById(1);
+        //Group u = GroupService.getTestGroupById(1);
 
-        Log.i(TAG, "helper's response: " + u.toJson());
+        //Log.i(TAG, "helper's response: " + u.toJson());
 
 
 //        u.setEmail(u.getEmail() + 1);
@@ -199,5 +227,40 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     @Override
     public void taskCompletionResult(String result) {
         Log.i(TAG, "\ttaskCompletionResult" + result);
+    }
+
+    public ArrayList<String> GetMembresGroupe() {
+        ArrayList<String> userNames = new ArrayList<>();
+        List<User> users = mCurrentGroup.getUsers();
+
+        for (User user : users)
+        {
+            String nick = user.getNickName();
+
+            if(nick == null)
+                continue;
+
+            userNames.add(nick);
+        }
+
+
+        return userNames;
+    }
+
+    public String GetGroupeName() {
+        return mCurrentGroup != null ? mCurrentGroup.getName() : "-";
+    }
+
+    public ArrayList<String> GetStockGroupe() {
+        ArrayList<String> stock = new ArrayList<>();
+        Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
+//        List<String> keys = actualStock.keys();
+
+        for (String key :
+                actualStock.keySet()) {
+            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
+        }
+
+        return stock;
     }
 }

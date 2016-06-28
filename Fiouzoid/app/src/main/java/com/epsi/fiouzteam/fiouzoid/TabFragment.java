@@ -33,11 +33,11 @@ public class TabFragment extends Fragment {
         super();
 
         // TODO: parameters and load displayed group infos
-//        Bundle args = getArguments();
-//        String groupName = args.getString("groupName");
+        Bundle args = getArguments()
+        String groupName = args.getString("groupName");
 
-//        mGroup = Database.mGroupDao.fetchByName(groupName);
-//        Log.i(TAG, mGroup.toString());
+        mGroup = Database.mGroupDao.fetchByName(groupName);
+        Log.i(TAG, mGroup.toString());
     }
 
     @Nullable
@@ -86,9 +86,9 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
           switch (position){
-              case 0 : return new PrimaryFragment();
+              case 0 : return new MembresFragment();
               case 1 : return new SocialFragment();
-              case 2 : return new UpdatesFragment();
+              case 2 : return new StockFragment();
           }
         return null;
         }

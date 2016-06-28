@@ -75,7 +75,7 @@ public class GroupService {
         List<Group> u = new ArrayList<>();
         final int nbTestGroups = 5;
 
-        for(int i = 0; i < nbTestGroups; ++i)
+        for(int i = 1; i < nbTestGroups; ++i)
             u.add(getTestGroupById(i));
 
         return u;
