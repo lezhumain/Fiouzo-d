@@ -6,8 +6,10 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 public class GroupDao extends DbContentProvider
         implements IGroupSchema, IGroupDao {
 
+    private static final String TAG = "GroupDao";
     private Cursor cursor;
     private ContentValues initialValues;
     public GroupDao(SQLiteDatabase db) {
@@ -37,7 +40,31 @@ public class GroupDao extends DbContentProvider
             cursor.close();
         }
 
+        List<User> groupUsers = Database.mUserDao.fetchAllByGroup(group.getId());
+        group.setUsers(groupUsers);
+
         return group;
+    }
+
+    @Override
+    public List<Group> fetchAllByUser(int userId)
+    {
+        List<Group> groupList = new ArrayList<Group>();
+        String  url = "select g.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and u.id = ?";
+        String[] args = { String.valueOf(userId) };
+
+        cursor = super.rawQuery(url, args);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Group group = cursorToEntity(cursor);
+                groupList.add(group);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return groupList;
     }
 
     public List<Group> fetchAllGroups() {
@@ -55,6 +82,15 @@ public class GroupDao extends DbContentProvider
             cursor.close();
         }
 
+
+        for (Group g : groupList)
+        {
+            if(g.getId() > 2)
+                break;
+
+            g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
+        }
+
         return groupList;
     }
 
@@ -62,7 +98,29 @@ public class GroupDao extends DbContentProvider
         // set values
         setContentValue(group);
 
-        return super.insert(GROUP_TABLE, getContentValue()) > 0;
+        List<User> users = group.getUsers();
+        if(users != null && !users.isEmpty()) // TODO test
+        {
+            String query = "insert into UserGroup" + " select ";
+            boolean isFirst = true;
+            for (User u :
+                    users) {
+                if(isFirst) {
+                    query += u.getId() + " as idUser, " + group.getId() + " as idGroup";
+                    isFirst = false;
+                }
+                else
+                    query += " union all select " + u.getId() + ", " + group.getId();
+            }
+//            query += " ";
+
+            Log.i(TAG, "raw query: " + query);
+            super.rawQuery(query, null);
+        }
+
+        Log.i(TAG, "inserting group '" + group.getName() + "'");
+        long res = super.insert(GROUP_TABLE, getContentValue());
+        return res > 0;
     }
 
     @Override
@@ -70,7 +128,8 @@ public class GroupDao extends DbContentProvider
         boolean ret = true;
         for (Group u : groups)
         {
-            ret = ret != false && addGroup(u);
+            boolean val = addGroup(u);
+            ret = ret != false && val;
         }
 
         return ret;
@@ -120,4 +179,26 @@ public class GroupDao extends DbContentProvider
         return initialValues;
     }
 
+    public Group fetchByName(String groupName) {
+        //TODO: correct here
+        final int id = 0;
+        final String selectionArgs[] = { String.valueOf(groupName) };
+        final String selection = COLUMN_NAME + " = ?";
+        Group group = new Group();
+        cursor = super.query(GROUP_TABLE, GROUP_COLUMNS, selection,
+                selectionArgs, COLUMN_ID);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                group = cursorToEntity(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        List<User> groupUsers = Database.mUserDao.fetchAllByGroup(group.getId());
+        group.setUsers(groupUsers);
+
+        return group;
+    }
 }

@@ -41,6 +41,26 @@ public class UserDao extends DbContentProvider
         return user;
     }
 
+    public List<User> fetchAllByGroup(int groupId)
+    {
+        List<User> userList = new ArrayList<User>();
+        String  url = "select u.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = ?";
+        String[] args = { String.valueOf(groupId) };
+
+        cursor = super.rawQuery(url, args);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                User user = cursorToEntity(cursor);
+                userList.add(user);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return userList;
+    }
+
     public List<User> fetchAllUsers() {
         List<User> userList = new ArrayList<User>();
         cursor = super.query(USER_TABLE, USER_COLUMNS, null,

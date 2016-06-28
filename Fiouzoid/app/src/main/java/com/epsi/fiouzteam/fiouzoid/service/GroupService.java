@@ -1,7 +1,12 @@
 package com.epsi.fiouzteam.fiouzoid.service;
 
+import android.util.Log;
+
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.User;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +14,8 @@ import java.util.List;
  * Created by Dju on 21/05/2016.
  */
 public class GroupService {
+    private static final String TAG = "GroupService";
+
     public static Group getGroupById(int id)
     {
         String name = "nomGroupe" + id,
@@ -21,15 +28,38 @@ public class GroupService {
     {
         String name = "groupName" + id,
                 description = "super description " + id,
-                json = "{'name': '" +
+                jsonStr = "{'name': '" +
                         name + "', " +
                         "'description': '" +
                         description + "', " +
-                        "'id': " +
-                        id + "}";
+                        "'id': " + id + ", ";
+
+        List<User> users = null;
+        if(id == 0) {
+            users = UserService.getAllUsers();
+        }
+        jsonStr = fillWithUsers(users, jsonStr) + '}';
+
+
+        Log.i(TAG, "jsonStr: " + jsonStr);
 
         Group group = new Group();
-        return group.fromJson(json);
+        return group.fromJson(jsonStr);
+//        return (new GsonBuilder().create()).fromJson(jsonStr, Group.class);
+    }
+
+    private static String fillWithUsers(List<User> users, String jsonStr) {
+        jsonStr += "'users': [";
+
+        if (users != null)
+        {
+            for (User u : users) {
+                jsonStr += u.toJson() + ',';
+            }
+            jsonStr = jsonStr.substring(0,jsonStr.length() - 1);
+        }
+
+        return  jsonStr + ']';
     }
 
     public static String getGroupByIdTest(int id)
@@ -43,8 +73,10 @@ public class GroupService {
 
     public static List<Group> getAllGroups() {
         List<Group> u = new ArrayList<>();
-        u.add(getTestGroupById(0));
-        u.add(getTestGroupById(1));
+        final int nbTestGroups = 5;
+
+        for(int i = 1; i < nbTestGroups; ++i)
+            u.add(getTestGroupById(i));
 
         return u;
     }

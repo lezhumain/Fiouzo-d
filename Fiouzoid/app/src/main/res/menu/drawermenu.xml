@@ -6,16 +6,17 @@
           android:layout_marginTop="50dp"/>
 
 
-    <item android:title="Groupes">
-        <menu>
-            <item
-                android:title="Groupe1"
-                android:icon="@drawable/sent"/>
-            <item
-                android:title="Groupe2"
-                android:icon="@drawable/sent"/>
-        </menu>
-    </item>
+    <!--<item android:title="Groupes"-->
+        <!--android:id="@+id/nav_item_groups">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:title="Groupe1"-->
+                <!--android:icon="@drawable/sent"/>-->
+            <!--<item-->
+                <!--android:title="Groupe2"-->
+                <!--android:icon="@drawable/sent"/>-->
+        <!--</menu>-->
+    <!--</item>-->
 
 
     <!--<group android:id="@+id/group_settings_id">

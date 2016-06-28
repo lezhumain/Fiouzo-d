@@ -18,8 +18,11 @@ public class UserService {
     public static List<User> getAllUsers()
     {
         List<User> u = new ArrayList<>();
-        u.add(getTestUserById(0));
-        u.add(getTestUserById(1));
+        final int nbTestUser = 10;
+
+
+        for(int i = 1; i < nbTestUser; ++i)
+            u.add(getTestUserById(i));
 
         return u;
     }
