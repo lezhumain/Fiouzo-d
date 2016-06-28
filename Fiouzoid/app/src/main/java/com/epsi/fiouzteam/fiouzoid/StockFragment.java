@@ -1,5 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,11 +24,12 @@ public class StockFragment extends Fragment
 
     private ListView mainListView ;
     private ArrayAdapter<String> listAdapter;
+    private StockClickListener listener;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        ListView mainListView = (ListView)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.stock_layout,null);
         String groupName = ((MainActivity)getContext()).GetGroupeName();
 
@@ -36,7 +39,10 @@ public class StockFragment extends Fragment
             titleView.setText("Stock de " + groupName);
         }
 
+        Context a = getActivity();
+        listener = new StockClickListener(a);
         mainListView = (ListView)view.findViewById(R.id.stock_list);
+        mainListView.setOnItemClickListener(listener);
 
         if(mainListView == null)
             Log.d(TAG, "ERREUR");
@@ -46,6 +52,7 @@ public class StockFragment extends Fragment
             handleListView();
         }
 
+
         return view;
     }
 
@@ -53,7 +60,7 @@ public class StockFragment extends Fragment
     {
         ArrayList<String> stockList = ((MainActivity)getContext()).GetStockGroupe();
 
-        // TODO layout
+        // TODO layout + binding
         listAdapter = new ArrayAdapter<>(getContext(), R.layout.simplerow, stockList);
         mainListView.setAdapter( listAdapter );
     }
