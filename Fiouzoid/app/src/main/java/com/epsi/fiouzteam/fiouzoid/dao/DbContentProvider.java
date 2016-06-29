@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.epsi.fiouzteam.fiouzoid.dao.joints.GroupUsers;
+
+import java.util.List;
+
 
 public abstract class DbContentProvider {
     public SQLiteDatabase mDb;
@@ -57,4 +61,7 @@ public abstract class DbContentProvider {
     public Cursor rawQuery(String sql, String[] selectionArgs) {
         return mDb.rawQuery(sql, selectionArgs);
     }
+
+
+
 }

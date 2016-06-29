@@ -1,5 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid.model;
 
+import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,6 +23,7 @@ public class Group extends Entity
     public Group() {
         super();
         // test
+        /*
         String[] categories = new String[]{"Fiouz", "Binouz", "Pepouz"};
         for(int i = 0; i < categories.length; ++i)
         {
@@ -28,7 +31,15 @@ public class Group extends Entity
             int rValue = r.nextInt(20);
             stock.put(categories[i], rValue);
         }
+        */
+        LoadStock();
         // end test
+    }
+
+    public void LoadStock()
+    {
+        // TODO get it from db AFTER HAVING loaded every stocks
+        stock = GroupService.getStock();
     }
 
     public Group(int id, String name, String description) {
@@ -37,13 +48,16 @@ public class Group extends Entity
         this.description = description;
 
         // test
+        /*
         String[] categories = new String[]{"Fiouz", "Binouz", "Pepouz"};
         for(int i = 0; i < categories.length; ++i)
         {
             Random r = new Random();
-            int rValue = r.nextInt();
+            int rValue = r.nextInt(20);
             stock.put(categories[i], rValue);
         }
+        */
+        LoadStock();
         // end test
     }
 
@@ -103,18 +117,32 @@ public class Group extends Entity
 
     @Override
     public String toString() {
+        /*
         return "Group{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", users=" + users +
                 '}';
+                */
+        return toJson();
     }
 
     public Hashtable<String, Integer> getStock() {
+        if(stock == null || stock.size() == 0)
+            LoadStock();
+
         return stock;
     }
 
     public void setStock(Hashtable<String, Integer> stock) {
         this.stock = stock;
+    }
+
+    public void SetStockAt(String typeRessourceName, int stock) {
+        if(!this.stock.containsKey(typeRessourceName))
+            return;
+
+        this.stock.remove(typeRessourceName);
+        this.stock.put(typeRessourceName, stock);
     }
 }

@@ -19,11 +19,8 @@ import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.epsi.fiouzteam.fiouzoid.service.GroupService;
-import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -65,9 +62,12 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDb = new Database(this);
         mDb.open();
 
-        DataManager.SaveUsers();
-        DataManager.SaveGroups();
+        //DataManager.SaveUsers(helper);
+        //DataManager.SaveGroups(helper);
+        DataManager.Manage();
         mGroups = Database.mGroupDao.fetchAllGroups();
+
+
         LoadGroup(1);
 
         /**
@@ -105,13 +105,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                 {
                     Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
 
-
-                    // TODO: find out what item and pass params to fragment
-
                     TabFragment fragment = new TabFragment();
-//                    Bundle args = new Bundle();
-//                    args.putString("groupName", menuItem.getTitle().toString());
-//                    fragment.setArguments(args);
                     LoadGroup(menuItem.getTitle().toString());
 
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
@@ -181,6 +175,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void LoadGroup(int groupId)
     {
         mCurrentGroup = Database.mGroupDao.fetchById(groupId);
+        mCurrentGroup.setUsers( Database.mUserDao.fetchAllByGroup(mCurrentGroup.getId()) );
+        mCurrentGroup.LoadStock();
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
 
@@ -194,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
             //result = help.Get();
 
         Log.i(TAG, "\tTEST HTTP: result = " + result);
+        Log.i(TAG, "\tTEST : group =\n\t" + mCurrentGroup.toString());
 //        User u = UserService.getUserById(3);
         //User u = Database.mUserDao.fetchById(1);
         //Group u = GroupService.getTestGroupById(1);
@@ -254,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public ArrayList<String> GetStockGroupe() {
         ArrayList<String> stock = new ArrayList<>();
         Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
-//        List<String> keys = actualStock.keys();
 
         for (String key :
                 actualStock.keySet()) {
@@ -262,5 +258,9 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         }
 
         return stock;
+    }
+
+    public void SetStock(String typeRessourceName, int stock) {
+        mCurrentGroup.SetStockAt(typeRessourceName, stock);
     }
 }

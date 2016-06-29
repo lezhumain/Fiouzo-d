@@ -1,6 +1,9 @@
 package com.epsi.fiouzteam.fiouzoid.dao;
 
 import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
+import com.epsi.fiouzteam.fiouzoid.dao.group.IGroupDao;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.GroupRessources;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.GroupUsers;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
@@ -14,19 +17,61 @@ import java.util.List;
  */
 public class DataManager
 {
-    public static void SaveUsers()
+    public static void Manage()
     {
-        UserDao helper = Database.mUserDao;
-        List<User> users = UserService.getAllUsers();
+        UserDao userHelper = Database.mUserDao;
+        GroupDao groupHelper = Database.mGroupDao;
 
+        DeleteUsers(userHelper);
+        SaveUsers(userHelper);
+
+        DeleteGroups(groupHelper);
+        SaveGroups(groupHelper);
+
+        DeleteGroupUsers(groupHelper);
+        SaveGroupUsers(groupHelper);
+
+        DeleteGroupRessources(groupHelper);
+        SaveGroupRessources(groupHelper);
+    }
+
+    private static void DeleteGroupRessources(GroupDao groupHelper) {
+        groupHelper.deleteAllGroupRessources();
+    }
+
+    private static void DeleteGroupUsers(GroupDao groupHelper) {
+        groupHelper.deleteAllGroupUsers();
+    }
+
+    private static void DeleteGroups(GroupDao helper)
+    {
+        helper.deleteAllGroups();
+    }
+
+    private static void DeleteUsers(UserDao helper)
+    {
+        helper.deleteUsers();
+    }
+
+    private static void SaveUsers(UserDao helper)
+    {
+        List<User> users = UserService.getAllUsers();
         helper.addUsers(users);
     }
 
-    public static void SaveGroups()
+    private static void SaveGroups(GroupDao helper)
     {
-        GroupDao helper = Database.mGroupDao;
         List<Group> groups = GroupService.getAllGroups();
-
         helper.addGroups(groups);
+    }
+
+    private static void SaveGroupRessources(GroupDao groupHelper) {
+        List<GroupRessources> groups = GroupService.getGroupRessources();
+        groupHelper.addGroupRessources(groups);
+    }
+
+    private static void SaveGroupUsers(GroupDao groupHelper) {
+        List<GroupUsers> groups = GroupService.getGroupUsers();
+        groupHelper.addGroupUsers(groups);
     }
 }

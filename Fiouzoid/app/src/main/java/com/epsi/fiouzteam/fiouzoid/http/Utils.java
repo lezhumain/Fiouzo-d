@@ -1,6 +1,9 @@
 package com.epsi.fiouzteam.fiouzoid.http;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -87,5 +90,29 @@ public class Utils {
             }
         }
         return str.toString();
+    }
+
+    public static AlertDialog CreateAlertDialog(Context contexts, String msg) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(contexts);
+        builder1.setMessage(msg);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        return builder1.create();
     }
 }

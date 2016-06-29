@@ -140,4 +140,7 @@ public class UserDao extends DbContentProvider
         return initialValues;
     }
 
+    public void deleteUsers() {
+        cursor = super.rawQuery("delete from " + USER_TABLE, null);
+    }
 }

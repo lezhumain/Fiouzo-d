@@ -8,6 +8,10 @@ import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.GroupRessources;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.GroupUsers;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.IGroupRessourceSchema;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.IGroupUser;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
@@ -124,20 +128,24 @@ public class GroupDao extends DbContentProvider
     }
 
     @Override
+    public boolean deleteAllGroups() {
+        String query = "delete from " + GROUP_TABLE;
+        cursor = super.rawQuery(query, null);
+
+        // TODO handle return value
+        return true;
+    }
+
+    @Override
     public boolean addGroups(List<Group> groups) {
         boolean ret = true;
-        for (Group u : groups)
+            for (Group u : groups)
         {
             boolean val = addGroup(u);
             ret = ret != false && val;
         }
 
         return ret;
-    }
-
-    @Override
-    public boolean deleteAllGroups() {
-        return false;
     }
 
     protected Group cursorToEntity(Cursor cursor) {
@@ -160,6 +168,32 @@ public class GroupDao extends DbContentProvider
                 emailIndex = cursor.getColumnIndexOrThrow(
                         COLUMN_DESCRIPTION);
                 group.setDescription(cursor.getString(emailIndex));
+            }
+
+        }
+        return group;
+    }
+
+    protected GroupRessources cursorToGroupRessources(Cursor cursor) {
+
+        GroupRessources group = new GroupRessources();
+
+        int idGroup, idType, qte;
+
+        if (cursor != null) {
+            if (cursor.getColumnIndex(IGroupRessourceSchema.COLUMN_GROUP) != -1) {
+                idGroup = cursor.getColumnIndexOrThrow(IGroupRessourceSchema.COLUMN_GROUP);
+                group.setIdGroup(cursor.getInt(idGroup));
+            }
+            if (cursor.getColumnIndex(IGroupRessourceSchema.COLUMN_TYPE) != -1) {
+                idType = cursor.getColumnIndexOrThrow(
+                        IGroupRessourceSchema.COLUMN_TYPE);
+                group.setIdTypeRessource(cursor.getInt(idType));
+            }
+            if (cursor.getColumnIndex(IGroupRessourceSchema.COLUMN_QTE) != -1) {
+                qte = cursor.getColumnIndexOrThrow(
+                        IGroupRessourceSchema.COLUMN_QTE);
+                group.setQuantite(cursor.getInt(qte));
             }
 
         }
@@ -200,5 +234,90 @@ public class GroupDao extends DbContentProvider
         group.setUsers(groupUsers);
 
         return group;
+    }
+
+    public void deleteAllGroupRessources() {
+        int count = mDb.delete(IGroupRessourceSchema.GROUP_RESSOURCE_TABLE, "1", null);
+        Log.i(TAG, "Deleted " + String.valueOf(count) + " entries in table " + IGroupRessourceSchema.GROUP_RESSOURCE_TABLE);
+    }
+
+    public void deleteAllGroupUsers() {
+        int count = mDb.delete(IGroupUser.GROUP_USER_TABLE, "1", null);
+        Log.i(TAG, "Deleted " + String.valueOf(count) + " entries in table " + IGroupUser.GROUP_USER_TABLE);
+    }
+
+    public List<GroupRessources> fetchGroupRessources(int groupId) {
+        /*
+        String query = "select * from " + IGroupRessourceSchema.GROUP_RESSOURCE_TABLE +
+                " where " + IGroupRessourceSchema.COLUMN_GROUP + " = " + String.valueOf(groupId);
+        */
+
+        // TODO finish
+        List<GroupRessources> groupList = new ArrayList<>();
+        final String selectionArgs[] = { String.valueOf(groupId) };
+        final String selection = IGroupRessourceSchema.COLUMN_GROUP + " = ?";
+        cursor = super.query(IGroupRessourceSchema.GROUP_RESSOURCE_TABLE , IGroupRessourceSchema.GROUP_COLUMNS, selection,
+                selectionArgs, IGroupRessourceSchema.COLUMN_TYPE);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                GroupRessources group = cursorToGroupRessources(cursor);
+                groupList.add(group);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return groupList;
+    }
+
+    public void addGroupRessources(List<GroupRessources> groups)
+    {
+        String query = "insert into " + IGroupRessourceSchema.GROUP_RESSOURCE_TABLE +
+                    " select " + groups.get(0).getIdGroup() + " AS " + IGroupRessourceSchema.COLUMN_GROUP +
+                    ", " + groups.get(0).getIdTypeRessource() + " AS " + IGroupRessourceSchema.COLUMN_TYPE +
+                    ", " + groups.get(0).getQuantite() + " AS " + IGroupRessourceSchema.COLUMN_QTE + " ";
+
+        boolean isFirst = true;
+        for (GroupRessources gr : groups)
+        {
+            if(isFirst)
+            {
+                isFirst = false;
+                continue;
+            }
+
+            query += "union all select " + gr.getIdGroup() + ", " +
+                    gr.getIdTypeRessource() + ", " +
+                    gr.getQuantite() + " ";
+        }
+
+
+        Log.i(TAG, "groupRessource query:\n" + query);
+        super.rawQuery(query, null);
+    }
+
+    public void addGroupUsers(List<GroupUsers> groupUsers)
+    {
+        String query = "insert into " + IGroupUser.GROUP_USER_TABLE +
+                " select " + groupUsers.get(0).getIdGroup() + " AS " + IGroupUser.COLUMN_GROUP +
+                ", " + groupUsers.get(0).getIdUser() + " AS " + IGroupUser.COLUMN_USER + " ";
+
+        boolean isFirst = true;
+        for (GroupUsers gr : groupUsers)
+        {
+            if(isFirst)
+            {
+                isFirst = false;
+                continue;
+            }
+
+            query += "union all select " + groupUsers.get(0).getIdGroup() + ", " +
+                    gr.getIdUser() + " ";
+        }
+
+        Log.i(TAG, "groupUser query:\n" + query);
+        super.rawQuery(query, null);
     }
 }
