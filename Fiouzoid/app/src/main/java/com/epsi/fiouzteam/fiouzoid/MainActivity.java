@@ -186,17 +186,17 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     private void TestHttp()
     {
-        //String url = "http://jsonplaceholder.typicode.com/posts/1";
-        String url = "http://posttestserver.com/post.php";
+        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=1";
+        //String url = "http://posttestserver.com/post.php";
         HttpHelper help = new HttpHelper(url, null);
-        String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
-            result = help.Post(data);
+        //String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
+          //  result = help.Post(data);
             //result = help.Get();
 
-        Log.i(TAG, "\tTEST HTTP: result = " + result);
+        //Log.i(TAG, "\tTEST HTTP: result = " + result);
 //        User u = UserService.getUserById(3);
         //User u = Database.mUserDao.fetchById(1);
-        //Group u = GroupService.getTestGroupById(1);
+        List<Group> u = GroupService.getAllGroups(1);
 
         //Log.i(TAG, "helper's response: " + u.toJson());
 
@@ -208,6 +208,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         if(!res)
             Log.i(TAG, "User wasn't added");
         */
+
+        String msg = "";
+        for (Group g :
+                u) {
+            msg += g.toString() + '\n';
+        }
+        Log.i(TAG, msg);
     }
 
     @Override
