@@ -1,6 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
@@ -65,8 +66,9 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
         Log.i(TAG, msg);
 
         // TODO: ask for dest user iu dialog
-        // AlertDialog popup = Utils.CreateAlertDialog(_contexts, msg);
-        // popup.show();
+        //Dialog popup = Utils.CreateAlertDialog(_contexts, msg);
+        Dialog popup = Utils.CreateStockPopup(_contexts, "TITLE", msg, null, null);
+        popup.show();
     }
 
 
