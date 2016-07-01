@@ -100,7 +100,7 @@ public class Utils {
         return str.toString();
     }
 
-    public static Dialog CreateStockPopup(Context context, String title, String msg, String okMsg, String cancelMsg)
+    public static Dialog CreateStockPopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)
     {
         if(okMsg == null || okMsg.isEmpty())
             okMsg = " OK ";
@@ -127,10 +127,12 @@ public class Utils {
             @Override
             public void onClick(View v) { // Cick on ok button
                 EditText et = (EditText)dialog.findViewById(R.id.targetEdit);
+                String userName = et.getText().toString();
 
-                Log.i(TAG, "\tView class: " + v.getClass().getName().toString());
-                Log.i(TAG, et.getText().toString());
-                dialog.dismiss();
+                if(userName != null && !userName.isEmpty())
+                {
+                    dialog.dismiss();
+                }
             }
         });
         dialogButton.setText(okMsg);

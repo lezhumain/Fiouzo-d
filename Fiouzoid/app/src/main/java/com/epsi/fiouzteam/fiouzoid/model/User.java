@@ -8,8 +8,9 @@ import java.util.List;
 
 public class User extends Entity
 {
+    private String firstName;
+    private String lastName;
     private String nickName;
-    private String email;
     private List<Group> groups = new ArrayList<>();
 
 
@@ -21,7 +22,6 @@ public class User extends Entity
     public User(int id, String nickName, String email) {
         super(id);
         this.nickName = nickName;
-        this.email = email;
     }
 
     public String getNickName() {
@@ -32,24 +32,6 @@ public class User extends Entity
         this.nickName = nickName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "nickName='" + nickName + '\'' +
-                ", email='" + email + '\'' +
-                ", id=" + id +
-                '}';
-
-    }
-
     @Override
     public User fromJson(String json)
     {
@@ -58,7 +40,6 @@ public class User extends Entity
 
         this.id = user.id;
         this.nickName = user.nickName;
-        this.email = user.email;
 
         if(this.groups == null)
             this.groups = new ArrayList<>();
@@ -74,7 +55,6 @@ public class User extends Entity
     public String toJson()
     {
         Gson gson = new GsonBuilder().create();
-
         String str = gson.toJson(this, this.getClass());
 
         return str;

@@ -263,4 +263,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void SetStock(String typeRessourceName, int stock) {
         mCurrentGroup.SetStockAt(typeRessourceName, stock);
     }
+
+    public int GetGroupeId() {
+        return mCurrentGroup.getId();
+    }
 }
