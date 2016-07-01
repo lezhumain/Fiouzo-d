@@ -2,7 +2,6 @@ package com.epsi.fiouzteam.fiouzoid.dao.user;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -11,11 +10,10 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.*;
 
-import cz.msebera.android.httpclient.client.entity.EntityBuilder;
-
 public class UserDao extends DbContentProvider
         implements IUserSchema, IUserDao {
 
+    private static final String TAG = "UserDao";
     private Cursor cursor;
     private ContentValues initialValues;
     public UserDao(SQLiteDatabase db) {
@@ -97,31 +95,72 @@ public class UserDao extends DbContentProvider
         return ret;
     }
 
+    public boolean addUsersToGroupe(List<User> users, int idGroup) {
+        boolean ret = true, isFirst = true;
+
+        String query = "insert into UserGroup select " +
+                users.get(0).getId() + " as idUser, " +
+                idGroup + " as idGroup ";
+
+        for (User u : users)
+        {
+            if(isFirst)
+            {
+                isFirst = false;
+                continue;
+            }
+            query += "union all select " + u.getId() + ", " + idGroup + ' ';
+            //ret = ret != false && addUser(u);
+        }
+
+        Log.i(TAG, query);
+        //super.rawQuery(query, null);
+        String log = "\tinserts in UserGroup went ";
+        if( super.execSql(query) )
+            log += "good";
+        else
+            log += "wrong";
+        Log.i(TAG, log);
+
+        return ret;
+    }
+
     @Override
     public boolean deleteAllUsers() {
-        return false;
+        super.delete(USER_TABLE, null, null);
+        return true;
     }
 
     protected User cursorToEntity(Cursor cursor) {
 
         User user = new User();
 
-        int idIndex, nickNameIndex, emailIndex;
+        int idIndex, nickNameIndex, firstNameIndex, lastNameIndex, isAdminIndex;
 
         if (cursor != null) {
             if (cursor.getColumnIndex(COLUMN_ID) != -1) {
                 idIndex = cursor.getColumnIndexOrThrow(COLUMN_ID);
                 user.setId(cursor.getInt(idIndex));
             }
-            if (cursor.getColumnIndex(COLUMN_NICK_NAME) != -1) {
+            if (cursor.getColumnIndex(COLUMN_USERNAME) != -1) {
                 nickNameIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_NICK_NAME);
-                user.setNickName(cursor.getString(nickNameIndex));
+                        COLUMN_USERNAME);
+                user.setUsername(cursor.getString(nickNameIndex));
             }
-            if (cursor.getColumnIndex(COLUMN_EMAIL) != -1) {
-                emailIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_EMAIL);
-                user.setEmail(cursor.getString(emailIndex));
+            if (cursor.getColumnIndex(COLUMN_FIRST_NAME) != -1) {
+                firstNameIndex = cursor.getColumnIndexOrThrow(
+                        COLUMN_FIRST_NAME);
+                user.setFirstName(cursor.getString(firstNameIndex));
+            }
+            if (cursor.getColumnIndex(COLUMN_LAST_NAME) != -1) {
+                lastNameIndex = cursor.getColumnIndexOrThrow(
+                        COLUMN_LAST_NAME);
+                user.setFirstName(cursor.getString(lastNameIndex));
+            }
+            if (cursor.getColumnIndex(COLUMN_IS_ADMIN) != -1) {
+                isAdminIndex = cursor.getColumnIndexOrThrow(
+                        COLUMN_IS_ADMIN);
+                user.setAdmin(cursor.getInt(isAdminIndex) == 1 ? true : false);
             }
 
         }
@@ -132,8 +171,10 @@ public class UserDao extends DbContentProvider
         initialValues = new ContentValues();
         if(user.getId() > 0)
             initialValues.put(COLUMN_ID, user.getId());
-        initialValues.put(COLUMN_NICK_NAME, user.getNickName());
-        initialValues.put(COLUMN_EMAIL, user.getEmail());
+        initialValues.put(COLUMN_USERNAME, user.getUsername());
+        initialValues.put(COLUMN_FIRST_NAME, user.getFirstName());
+        initialValues.put(COLUMN_LAST_NAME, user.getLastName());
+        initialValues.put(COLUMN_IS_ADMIN, user.isAdmin());
     }
 
     private ContentValues getContentValue() {

@@ -92,6 +92,20 @@ public class GroupService {
         //Log.i(TAG, "json url:\n\t" + url);
         //Log.i(TAG, "json response:\n\t" + resp);
 
+        // TODO remove
+        /*
+        resp = "[\n" +
+                "  {\n" +
+                "    \"$id\": \"1\",\n" +
+                "    \"id\": 1,\n" +
+                "    \"name\": \"groupeBdd1\",\n" +
+                "    \"description\": \"un groupe de la bdd maggle\"\n" +
+                "  }\n" +
+                "]";
+        */
+        //
+
+
         List<Group> lg = Group.FromJson(resp);
         Log.i(TAG, "group toString:\n\t" + lg.get(0).toString());
         return lg;

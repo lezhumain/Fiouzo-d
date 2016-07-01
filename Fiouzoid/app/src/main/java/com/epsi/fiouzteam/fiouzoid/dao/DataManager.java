@@ -14,19 +14,34 @@ import java.util.List;
  */
 public class DataManager
 {
-    public static void SaveUsers()
+    private static void SaveUsers(int groupId)
     {
         UserDao helper = Database.mUserDao;
-        List<User> users = UserService.getAllUsers();
+        //List<User> users = UserService.getAllUsers();
+        List<User> users = UserService.getUsersByGroup(groupId);
 
+        helper.deleteAllUsers();
         helper.addUsers(users);
     }
 
-    public static void SaveGroups()
+    private static void SaveGroups(int userId)
     {
         GroupDao helper = Database.mGroupDao;
+        //List<Group> groups = GroupService.getAllGroups(1);
         List<Group> groups = GroupService.getAllGroups(1);
 
         helper.addGroups(groups);
+    }
+
+    public static void SaveData(int groupId, int appUserId) {
+        DataManager.SaveUsers(1);
+        DataManager.SaveGroups(appUserId);
+        DataManager.SaveGroupUsers(appUserId);
+    }
+
+    private static void SaveGroupUsers(int idGroup) {
+
+        List<User> users = Database.mUserDao.fetchAllUsers();
+        Database.mUserDao.addUsersToGroupe(users, idGroup);
     }
 }

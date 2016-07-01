@@ -1,5 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid.model;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -13,8 +15,8 @@ import java.util.Set;
 
 public class Group extends Entity
 {
-
-
+    private static final String TAG = "Group";
+    // id in Entity base class
     private String name;
     private String description;
     private List<User> users;
@@ -24,6 +26,7 @@ public class Group extends Entity
     public Group() {
         super();
         // test
+        /*
         String[] categories = new String[]{"Fiouz", "Binouz", "Pepouz"};
         for(int i = 0; i < categories.length; ++i)
         {
@@ -31,9 +34,10 @@ public class Group extends Entity
             int rValue = r.nextInt(20);
             stock.put(categories[i], rValue);
         }
+        */
         // end test
 
-        //stock = new Hashtable<>();
+        stock = new Hashtable<>();
         users = new ArrayList<>();
     }
 
@@ -54,24 +58,12 @@ public class Group extends Entity
     }
 
 
-    @Override
-    public Group fromJson(String json)
+    public static Group fromJson(String json)
     {
         Gson gson = new GsonBuilder().create();
         Group group = gson.fromJson(json, Group.class);
 
-        this.id = group.id;
-        this.name = group.name;
-        this.description = group.description;
-
-        if(this.users == null)
-            this.users = new ArrayList<>();
-        for (User u :
-                group.users) {
-            this.users.add(u);
-        }
-
-        return this;
+        return group;
     }
 
     @Override
@@ -87,18 +79,10 @@ public class Group extends Entity
     {
         Gson gson = new GsonBuilder().create();
         Type listType = new TypeToken<List<Group>>(){}.getType();
-        List<Group> groups = (List<Group>) gson.fromJson(json, listType);
 
-//        this.id = group.id;
-//        this.name = group.name;
-//        this.description = group.description;
-//
-//        if(this.users == null)
-//            this.users = new ArrayList<>();
-//        for (User u :
-//                group.users) {
-//            this.users.add(u);
-//        }
+        Log.d(TAG, json);
+
+        List<Group> groups = (List<Group>) gson.fromJson(json, listType);
 
         return groups;
     }
