@@ -118,11 +118,6 @@ public class UserDao extends DbContentProvider
                         COLUMN_NICK_NAME);
                 user.setNickName(cursor.getString(nickNameIndex));
             }
-            if (cursor.getColumnIndex(COLUMN_EMAIL) != -1) {
-                emailIndex = cursor.getColumnIndexOrThrow(
-                        COLUMN_EMAIL);
-                user.setEmail(cursor.getString(emailIndex));
-            }
 
         }
         return user;
@@ -133,7 +128,6 @@ public class UserDao extends DbContentProvider
         if(user.getId() > 0)
             initialValues.put(COLUMN_ID, user.getId());
         initialValues.put(COLUMN_NICK_NAME, user.getNickName());
-        initialValues.put(COLUMN_EMAIL, user.getEmail());
     }
 
     private ContentValues getContentValue() {
