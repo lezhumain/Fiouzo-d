@@ -25,7 +25,7 @@ public class DataManager
     public static void SaveGroups()
     {
         GroupDao helper = Database.mGroupDao;
-        List<Group> groups = GroupService.getAllGroups(0);
+        List<Group> groups = GroupService.getAllGroups(1);
 
         helper.addGroups(groups);
     }

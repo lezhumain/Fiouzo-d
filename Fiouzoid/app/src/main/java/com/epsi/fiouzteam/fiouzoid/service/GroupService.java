@@ -84,11 +84,16 @@ public class GroupService {
 //    }
 
     public static List<Group> getAllGroups(int idUser) {
-        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=" + String.valueOf(idUser);
+        idUser = 1;
+        String url = "http://api.davanture.fr/api/repo/getByUser?idUser=" + String.valueOf(idUser);
         HttpHelper helper = new HttpHelper(url, null);
         String resp = helper.Get();
 
-        Log.i(TAG, "json response:\n\t" + resp);
-        return Group.FromJson(resp);
+        //Log.i(TAG, "json url:\n\t" + url);
+        //Log.i(TAG, "json response:\n\t" + resp);
+
+        List<Group> lg = Group.FromJson(resp);
+        Log.i(TAG, "group toString:\n\t" + lg.get(0).toString());
+        return lg;
     }
 }
