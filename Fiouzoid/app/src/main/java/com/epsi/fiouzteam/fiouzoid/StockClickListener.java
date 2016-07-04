@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.epsi.fiouzteam.fiouzoid.http.Utils;
-
 /**
  * Created by Dju on 23/06/2016.
  */
@@ -36,15 +34,7 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
             String charStr = lol[1],
                     newName;
             int stock = Integer.parseInt(charStr);
-
-            if(stock == 0)
-                return;
-
             stock -= 1;
-
-            String typeRessourceName = (lol[0].split(" "))[1];
-            _contexts.SetStock(typeRessourceName, stock);
-            Log.i(TAG, "_contexts.SetStock(\"" + typeRessourceName + "\", \"" + String.valueOf(stock) + "\")" );
 
             newName = lol[0] + '\t' + stock;
             tv.setText(newName);
@@ -60,14 +50,37 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
 
 
         // TODO: dec stock after
-        decStockOnClick(tv);
+        //decStockOnClick(tv);
 
         Log.i(TAG, msg);
 
         // TODO: ask for dest user iu dialog
-        // AlertDialog popup = Utils.CreateAlertDialog(_contexts, msg);
-        // popup.show();
+        AlertDialog popup = CreateAlertDialog(msg);
+
+        popup.show();
     }
 
+    private AlertDialog CreateAlertDialog(String msg) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(_contexts);
+        builder1.setMessage(msg);
+        builder1.setCancelable(true);
 
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        return builder1.create();
+    }
 }

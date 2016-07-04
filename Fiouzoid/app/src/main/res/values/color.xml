@@ -4,12 +4,6 @@
 
     <color name="black">#000</color>
     <color name="orange">#FA0</color>
-    <color name="darkOrange">#F70</color>
     <color name="white">#FFF</color>
-    <color name="accent">#FF0000</color>
 
-    <!--
-    <color name="colorPrimary0">#3F51B5</color>
-    <color name="colorPrimaryDark0">#303F9F</color>
-    -->
 </resources>
