@@ -1,5 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid.model;
 
+import java.util.List;
+
 public abstract class Entity
 {
     protected int id;
@@ -22,5 +24,4 @@ public abstract class Entity
 
     public abstract String toJson();
 
-    public abstract Entity fromJson(String json);
 }

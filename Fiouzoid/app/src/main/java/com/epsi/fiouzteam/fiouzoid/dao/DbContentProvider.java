@@ -3,6 +3,7 @@ package com.epsi.fiouzteam.fiouzoid.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 
 public abstract class DbContentProvider {
@@ -57,4 +58,18 @@ public abstract class DbContentProvider {
     public Cursor rawQuery(String sql, String[] selectionArgs) {
         return mDb.rawQuery(sql, selectionArgs);
     }
+
+    public boolean execSql(String query)
+    {
+        try
+        {
+            mDb.execSQL(query);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.e("ERROR", e.toString());
+            return false;
+        }
+    };
 }
