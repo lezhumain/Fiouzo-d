@@ -19,11 +19,9 @@ import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -34,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
+    private int appUserId = 1;
 
     private Database mDb;
     private List<Group> mGroups = new ArrayList<>();
@@ -65,10 +64,11 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDb = new Database(this);
         mDb.open();
 
-        DataManager.SaveUsers();
-        DataManager.SaveGroups();
+        int groupId = 1;
+        DataManager.SaveData(groupId, appUserId);
+
         mGroups = Database.mGroupDao.fetchAllGroups();
-        LoadGroup(1);
+        LoadGroup(mGroups.get(0).getName());
 
         /**
          * Put groups navigation items
@@ -175,39 +175,53 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void LoadGroup(String groupName)
     {
         mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+
+        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(mCurrentGroup.getId());
+        mCurrentGroup.setStock( stocks );
+
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
 
+    /*
     public void LoadGroup(int groupId)
     {
         mCurrentGroup = Database.mGroupDao.fetchById(groupId);
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
+    */
 
     private void TestHttp()
     {
-        //String url = "http://jsonplaceholder.typicode.com/posts/1";
-        String url = "http://posttestserver.com/post.php";
+        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=1";
+        //String url = "http://posttestserver.com/post.php";
         HttpHelper help = new HttpHelper(url, null);
-        String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
-            result = help.Post(data);
+        //String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
+          //  result = help.Post(data);
             //result = help.Get();
 
-        Log.i(TAG, "\tTEST HTTP: result = " + result);
+        //Log.i(TAG, "\tTEST HTTP: result = " + result);
 //        User u = UserService.getUserById(3);
         //User u = Database.mUserDao.fetchById(1);
-        //Group u = GroupService.getTestGroupById(1);
+        //List<Group> u = GroupService.getAllGroups(1);
+        List<User> u = UserService.getUsersByGroup(1);
 
         //Log.i(TAG, "helper's response: " + u.toJson());
 
 
-//        u.setEmail(u.getEmail() + 1);
-//        u.setNickName(u.getNickName() + 1);
+//        u.setLastName(u.getLastName() + 1);
+//        u.setUsername(u.getUsername() + 1);
         /*
         boolean res = Database.mUserDao.addUser(u);
         if(!res)
             Log.i(TAG, "User wasn't added");
         */
+
+        String msg = "";
+        for (User g :
+                u) {
+            msg += g.toString() + '\n';
+        }
+        Log.i(TAG, msg);
     }
 
     @Override
@@ -235,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         for (User user : users)
         {
-            String nick = user.getNickName();
+            String nick = user.getUsername();
 
             if(nick == null)
                 continue;
@@ -256,11 +270,33 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
 //        List<String> keys = actualStock.keys();
 
+        Hashtable<String, Integer> currentStock = mCurrentGroup.getStock();
         for (String key :
-                actualStock.keySet()) {
+                currentStock.keySet()) {
             stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
         }
 
         return stock;
+    }
+
+    public int getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(int appUserId) {
+        this.appUserId = appUserId;
+    }
+
+    public int GetGroupeId() {
+        return mCurrentGroup.getId();
+    }
+
+    public void SetStock(String typeRessourceName, int stock) {
+        Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
+
+        actualStock.remove(typeRessourceName);
+        actualStock.put(typeRessourceName, stock);
+
+        mCurrentGroup.setStock(actualStock);
     }
 }

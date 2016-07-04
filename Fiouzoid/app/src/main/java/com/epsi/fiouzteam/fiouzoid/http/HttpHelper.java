@@ -1,7 +1,6 @@
 package com.epsi.fiouzteam.fiouzoid.http;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.concurrent.ExecutionException;
 

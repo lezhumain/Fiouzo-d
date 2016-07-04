@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.model.Group;
+
 /**
  * Created by Ratan on 7/27/2015.
  */
@@ -21,7 +24,7 @@ public class TabFragment extends Fragment {
     public static ViewPager viewPager;
     public static int int_items = 3 ;
 
-
+    private Group mGroup = null;
 
     public TabFragment()
     {

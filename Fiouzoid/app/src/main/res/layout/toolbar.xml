@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/orange"
     android:id="@+id/toolbar"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:title="Fiouzoid" >
+    <!-- android:background="@color/orange"> -->
 
 </android.support.v7.widget.Toolbar>

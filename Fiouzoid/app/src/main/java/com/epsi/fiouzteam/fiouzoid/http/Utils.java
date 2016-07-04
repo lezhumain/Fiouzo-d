@@ -1,7 +1,17 @@
 package com.epsi.fiouzteam.fiouzoid.http;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.epsi.fiouzteam.fiouzoid.R;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -87,5 +97,80 @@ public class Utils {
             }
         }
         return str.toString();
+    }
+
+    public static Dialog CreateStockPopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)
+    {
+        if(okMsg == null || okMsg.isEmpty())
+            okMsg = " OK ";
+        if(cancelMsg == null || cancelMsg.isEmpty())
+            cancelMsg  = " CANCEL ";
+
+
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_popup);
+        dialog.setTitle(title);
+
+
+
+        // set the custom dialog components - text, image and button
+        //TextView text = (TextView) dialog.findViewById(R.id.popup_text);
+        //text.setText(msg);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.dbz);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { // Cick on ok button
+                EditText et = (EditText)dialog.findViewById(R.id.targetEdit);
+                String userName = et.getText().toString();
+
+                if(userName != null && !userName.isEmpty())
+                {
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialogButton.setText(okMsg);
+
+        dialogButton = (Button) dialog.findViewById(R.id.dialogButtonNOK);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialogButton.setText(cancelMsg);
+
+        //dialog.show();
+        return dialog;
+    }
+
+    public static AlertDialog CreateAlertDialog(Context contexts, String msg)
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(contexts);
+        builder1.setMessage(msg);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        return builder1.create();
     }
 }

@@ -2,14 +2,19 @@ package com.epsi.fiouzteam.fiouzoid.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Entity
 {
-    private String nickName;
-    private String email;
+    // id in Entity base class
+    private String username;
+    private String firstName;
+    private String lastName;
+    private boolean isAdmin;
     private List<Group> groups = new ArrayList<>();
 
 
@@ -18,56 +23,27 @@ public class User extends Entity
         super();
     }
 
-    public User(int id, String nickName, String email) {
+    public User(int id, String username, String lastName, String firstName, boolean isAdmin) {
         super(id);
-        this.nickName = nickName;
-        this.email = email;
+        this.username = username;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.isAdmin = isAdmin;
     }
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     @Override
     public String toString() {
-        return "User{" +
-                "nickName='" + nickName + '\'' +
-                ", email='" + email + '\'' +
-                ", id=" + id +
-                '}';
-
+        return toJson();
     }
 
-    @Override
-    public User fromJson(String json)
+
+    public static User fromJson(String json)
     {
         Gson gson = new GsonBuilder().create();
         User user = gson.fromJson(json, User.class);
 
-        this.id = user.id;
-        this.nickName = user.nickName;
-        this.email = user.email;
-
-        if(this.groups == null)
-            this.groups = new ArrayList<>();
-        for (Group g :
-                user.getGroups()) {
-            this.groups.add(g);
-        }
-
-        return this;
+        return user;
     }
 
     @Override
@@ -78,6 +54,56 @@ public class User extends Entity
         String str = gson.toJson(this, this.getClass());
 
         return str;
+    }
+
+    public static List<User> FromJson(String json) {
+        Gson gson = new GsonBuilder().create();
+        Type listType = new TypeToken<List<User>>(){}.getType();
+        List<User> Users = gson.fromJson(json, listType);
+
+        return Users;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public List<Group> getGroups() {

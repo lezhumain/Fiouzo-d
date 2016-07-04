@@ -22,5 +22,4 @@ public abstract class Entity
 
     public abstract String toJson();
 
-    public abstract Entity fromJson(String json);
 }
