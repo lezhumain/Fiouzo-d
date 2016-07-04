@@ -14,9 +14,10 @@ import java.util.List;
  */
 public class GroupRessource extends Entity {
     private static final String TAG = "GroupRessource";
-    String repo;
-    String resource;
-    int quantity;
+    private String repo;
+    private String resource;
+    private int quantity;
+    private int idRessource;
 
     @Override
     public String toJson() {
@@ -66,6 +67,14 @@ public class GroupRessource extends Entity {
                 ", resource='" + resource + '\'' +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public int getIdRessource() {
+        return id;
+    }
+
+    public void setIdRessource(int idRessource) {
+        this.id = idRessource;
     }
 
     /*

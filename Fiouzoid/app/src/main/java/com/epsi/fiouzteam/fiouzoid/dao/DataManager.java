@@ -3,6 +3,7 @@ package com.epsi.fiouzteam.fiouzoid.dao;
 import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
@@ -41,7 +42,8 @@ public class DataManager
     }
 
     private static void SaveGroupRessource(int idGroup) {
-        Hashtable<String, Integer> stocks = GroupService.getStocksForGroup(1);
+        //Hashtable<String, Integer> stocks = GroupService.getStocksForGroup(1);
+        List<GroupRessource> stocks = GroupService.getStocksForGroup(1);
         //GroupService.getStocksForGroup(1);
 
         Database.mGroupDao.deleteGroupStocks();

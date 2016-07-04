@@ -75,6 +75,7 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
                 {
                     // TODO: post stock, idGroup, idFrom, idTo
                     // itemName, groupName, fromName, toName
+                    int ressourceId, qte, groupId, fromId, toId;
                     decStockOnClick();
                 }
             }
