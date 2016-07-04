@@ -287,4 +287,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void setAppUserId(int appUserId) {
         this.appUserId = appUserId;
     }
+
+    public int GetGroupeId() {
+        return mCurrentGroup.getId();
+    }
 }

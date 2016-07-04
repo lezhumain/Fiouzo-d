@@ -47,13 +47,16 @@ public class Group extends Entity
         this.description = description;
 
         // test
+        /*
         String[] categories = new String[]{"Fiouz", "Binouz", "Pepouz"};
         for(int i = 0; i < categories.length; ++i)
         {
             Random r = new Random();
-            int rValue = r.nextInt();
+            int rValue = r.nextInt(20);
             stock.put(categories[i], rValue);
         }
+        */
+        LoadStock();
         // end test
     }
 
