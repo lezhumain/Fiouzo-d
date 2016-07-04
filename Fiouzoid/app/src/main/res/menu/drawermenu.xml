@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="User Name"
+          android:id="@+id/nav_item_inbox"
+          android:layout_marginTop="50dp"/>
+
+
+    <!--<item android:title="Groupes"-->
+        <!--android:id="@+id/nav_item_groups">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:title="Groupe1"-->
+                <!--android:icon="@drawable/sent"/>-->
+            <!--<item-->
+                <!--android:title="Groupe2"-->
+                <!--android:icon="@drawable/sent"/>-->
+        <!--</menu>-->
+    <!--</item>-->
+
+
+    <!--<group android:id="@+id/group_settings_id">
+
+        <item android:title="Settings"
+              android:icon="@drawable/settings"/>
+        <item android:title="Help"
+             android:icon="@drawable/help"/>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="Groupe1"
+            android:id="@+id/nav_item_sent"
+            android:icon="@drawable/sent"
+            android:layout_marginTop="500px"/>
+
+        <item android:title="Groupe2"
+            android:id="@+id/nav_item_draft"
+            android:icon="@drawable/sent"/>
+    </group> -->
+</menu>

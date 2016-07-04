@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:id="@+id/textView2"
+        android:textColor="@android:color/holo_blue_dark"
+        android:text="@string/move_date"
+        android:layout_marginStart="26dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:textSize="15sp"
+        android:text="@string/userName"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textStyle="italic"
+        android:id="@+id/textView3"
+        android:layout_marginLeft="21dp"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:textSize="15sp"
+        android:text="Objet"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textStyle="italic"
+        android:id="@+id/textView4"
+        android:layout_marginLeft="21dp"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="26dp" />
+</RelativeLayout>

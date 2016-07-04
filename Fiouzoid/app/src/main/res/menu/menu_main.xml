@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context="com.epsi.fiouzteam.MainActivity">
+
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_test" android:title="@string/action_test"
+        android:orderInCategory="200" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/miCompose"
+        android:icon="@drawable/bell"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+        
+
+
+</menu>
+
+

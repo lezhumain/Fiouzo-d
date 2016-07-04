@@ -1,0 +1,10 @@
+*.zip
+test*
+*.orig
+*build*
+*local.properties
+*/.idea/*
+*/.gradle/*
+*.sqlite
+*.mcd
+*.sql
