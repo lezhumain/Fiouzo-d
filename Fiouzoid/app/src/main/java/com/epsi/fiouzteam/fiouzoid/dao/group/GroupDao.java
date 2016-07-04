@@ -12,7 +12,9 @@ import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 public class GroupDao extends DbContentProvider
         implements IGroupSchema, IGroupDao {
@@ -164,6 +166,40 @@ public class GroupDao extends DbContentProvider
 
         }
         return group;
+    }
+
+    public void addStocksToGroup(Hashtable<String, Integer> stocks, int groupId)
+    {
+        boolean isFirst = true;
+        Object[] keys = stocks.keySet().toArray();
+        int cpt = 0,
+            stock = stocks.get(keys[cpt]);
+        String stockQuery = "",
+                query = "insert into GroupRessource select " +
+                        groupId + " as idGroup, '" +
+                        keys[cpt] + "' as ressource, " +
+                        String.valueOf( stock ) + " as quantite ";
+
+        // TODO do without foreach
+        for (Object key : keys)
+        {
+            if(keys.length < 2)
+                break;
+
+            cpt += 1;
+            stock = stocks.get(keys[cpt]);
+            String keyStr = (String)key;
+
+            if(keyStr == null) {
+                cpt -= 1;
+                continue;
+            }
+
+            query += "union all select " + groupId + ", '" + keys[cpt] + "', " + String.valueOf( stock ) + ' ';
+        }
+
+        Log.i(TAG, "query:\n\t" + query);
+        execSql(query);
     }
 
     private void setContentValue(Group group) {

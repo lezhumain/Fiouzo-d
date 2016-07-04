@@ -4,12 +4,14 @@ import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -109,5 +111,25 @@ public class GroupService {
         List<Group> lg = Group.FromJson(resp);
         Log.i(TAG, "group toString:\n\t" + lg.get(0).toString());
         return lg;
+    }
+
+    public static Hashtable<String, Integer> getStocksForGroup(int idGroup) {
+    //public static void getStocksForGroup(int idGroup) {
+        Hashtable<String, Integer> values = new Hashtable<>();
+        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=" + String.valueOf(idGroup);
+        HttpHelper helper = new HttpHelper(url, null);
+        String resp = helper.Get();
+
+        List<GroupRessource> lst = GroupRessource.FromJson(resp);
+        Log.i(TAG, "json response:\n\t" + resp);
+        for (GroupRessource gr : lst)
+        {
+            String key = gr.getResource();
+            Log.i(TAG, "GroupRessource:\n\t" + gr.toString());
+            if(!values.containsKey(key))
+                values.put(key, gr.getQuantity());
+        }
+
+        return values;
     }
 }

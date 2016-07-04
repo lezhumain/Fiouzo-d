@@ -7,6 +7,7 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -33,15 +34,23 @@ public class DataManager
         helper.addGroups(groups);
     }
 
-    public static void SaveData(int groupId, int appUserId) {
-        DataManager.SaveUsers(1);
-        DataManager.SaveGroups(appUserId);
-        DataManager.SaveGroupUsers(appUserId);
-    }
-
     private static void SaveGroupUsers(int idGroup) {
 
         List<User> users = Database.mUserDao.fetchAllUsers();
         Database.mUserDao.addUsersToGroupe(users, idGroup);
+    }
+
+    private static void SaveGroupRessource(int idGroup) {
+        Hashtable<String, Integer> stocks = GroupService.getStocksForGroup(1);
+        //GroupService.getStocksForGroup(1);
+
+        Database.mGroupDao.addStocksToGroup(stocks, idGroup);
+    }
+
+    public static void SaveData(int groupId, int appUserId) {
+        DataManager.SaveUsers(1);
+        DataManager.SaveGroups(appUserId);
+        DataManager.SaveGroupUsers(appUserId);
+        SaveGroupRessource(groupId);
     }
 }
