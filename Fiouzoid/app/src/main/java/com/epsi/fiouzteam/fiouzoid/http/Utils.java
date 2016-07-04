@@ -28,6 +28,7 @@ import cz.msebera.android.httpclient.HttpEntity;
  */
 public class Utils {
     private static final String TAG = "Utils";
+    public static final String BASE_URL = "http://api.davanture.fr/api";
 
     public static void Test()
     {

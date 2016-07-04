@@ -310,4 +310,53 @@ public class GroupDao extends DbContentProvider
         execSql(query);
     }
 
+    public GroupRessource fetchRessourceByName(String ressource)
+    {
+        final String selectionArgs[] = { ressource };
+        final String selection = COL_RESSOURCE + " = ?";
+        GroupRessource groupRessource = null;
+        cursor = super.query(GROUP_RESSOURCE_TABLE, GROUP_RESSOURCE_COLUMNS, selection,
+                selectionArgs, COL_ID_RESSOURCE); // TODO check if COL_ID_RESSOURCE ok
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                groupRessource = cursorToGroupRessource(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return groupRessource;
+    }
+
+    private GroupRessource cursorToGroupRessource(Cursor cursor)
+    {
+        GroupRessource groupRessource = new GroupRessource();
+
+        int idRepoIndex, ressourceIndex, qteIndex, ressourceIdIndex;
+
+        if (cursor != null) {
+            if (cursor.getColumnIndex(COL_GROUP) != -1) {
+                idRepoIndex = cursor.getColumnIndexOrThrow(COL_GROUP);
+                groupRessource.setId(cursor.getInt(idRepoIndex));
+            }
+            if (cursor.getColumnIndex(COL_RESSOURCE) != -1) {
+                ressourceIndex = cursor.getColumnIndexOrThrow(
+                        COL_RESSOURCE);
+                groupRessource.setResource(cursor.getString(ressourceIndex));
+            }
+            if (cursor.getColumnIndex(COL_QTE) != -1) {
+                qteIndex = cursor.getColumnIndexOrThrow(
+                        COL_QTE);
+                groupRessource.setQuantity(cursor.getInt(qteIndex));
+            }
+            if (cursor.getColumnIndex(COL_ID_RESSOURCE) != -1) {
+                ressourceIdIndex = cursor.getColumnIndexOrThrow(
+                        COL_ID_RESSOURCE);
+                groupRessource.setQuantity(cursor.getInt(ressourceIdIndex));
+            }
+
+        }
+        return groupRessource;
+    }
 }

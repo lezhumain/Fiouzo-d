@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Hashtable<String, Integer> currentStock = mCurrentGroup.getStock();
         for (String key :
                 currentStock.keySet()) {
-            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
+            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ")\t" + key + '\t' + String.valueOf(actualStock.get(key)));
         }
 
         return stock;

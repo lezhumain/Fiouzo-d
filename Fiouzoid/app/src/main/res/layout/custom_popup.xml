@@ -9,20 +9,19 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp" />
 
-    <!--
-    <TextView
-        android:id="@+id/popup_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:layout_below="@+id/image" />
-    -->
-
     <EditText
         android:id="@+id/targetEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/ex_destUserHint"
         android:layout_below="@+id/image" />
+
+    <EditText
+        android:id="@+id/quantityEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ex_quantity"
+        android:layout_below="@+id/targetEdit" />
 
     <Button
         android:id="@+id/dialogButtonOK"
@@ -30,7 +29,7 @@
         android:layout_height="wrap_content"
         android:text=" Ok "
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/targetEdit" />
+        android:layout_below="@+id/quantityEdit" />
 
     <Button
         android:id="@+id/dialogButtonNOK"

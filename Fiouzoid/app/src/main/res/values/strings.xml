@@ -6,4 +6,6 @@
     <string name="action_test">Test</string>
     <string name="userName">Nom Utilisateur</string>
     <string name="move_date">Date</string>
+    <string name="ex_destUserHint">Nom du destinataire</string>
+    <string name="ex_quantity">Quantité à échanger</string>
 </resources>
