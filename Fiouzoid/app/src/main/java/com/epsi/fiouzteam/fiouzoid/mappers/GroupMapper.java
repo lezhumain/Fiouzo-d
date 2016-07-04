@@ -1,7 +1,5 @@
 package com.epsi.fiouzteam.fiouzoid.mappers;
 
-import android.util.Log;
-
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

@@ -3,7 +3,6 @@ package com.epsi.fiouzteam.fiouzoid.service;
 import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
-import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.ArrayList;

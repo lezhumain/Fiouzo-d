@@ -10,8 +10,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class Group extends Entity
 {
@@ -56,7 +54,7 @@ public class Group extends Entity
             stock.put(categories[i], rValue);
         }
         */
-        LoadStock();
+        //LoadStock();
         // end test
     }
 

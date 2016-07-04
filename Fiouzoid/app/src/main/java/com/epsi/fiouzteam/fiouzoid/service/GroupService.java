@@ -6,11 +6,7 @@ import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 

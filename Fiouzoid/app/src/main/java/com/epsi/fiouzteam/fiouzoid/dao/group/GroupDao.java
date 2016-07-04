@@ -2,7 +2,6 @@ package com.epsi.fiouzteam.fiouzoid.dao.group;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -14,7 +13,6 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
 public class GroupDao extends DbContentProvider
         implements IGroupSchema, IGroupDao {

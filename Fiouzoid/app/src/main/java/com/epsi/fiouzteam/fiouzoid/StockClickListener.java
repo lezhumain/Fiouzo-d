@@ -1,10 +1,8 @@
 package com.epsi.fiouzteam.fiouzoid;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;

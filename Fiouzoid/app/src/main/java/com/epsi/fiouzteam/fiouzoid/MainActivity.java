@@ -19,7 +19,6 @@ import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
@@ -290,5 +289,14 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     public int GetGroupeId() {
         return mCurrentGroup.getId();
+    }
+
+    public void SetStock(String typeRessourceName, int stock) {
+        Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
+
+        actualStock.remove(typeRessourceName);
+        actualStock.put(typeRessourceName, stock);
+
+        mCurrentGroup.setStock(actualStock);
     }
 }

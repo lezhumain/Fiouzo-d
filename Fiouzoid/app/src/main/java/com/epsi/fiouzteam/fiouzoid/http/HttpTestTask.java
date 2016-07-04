@@ -3,9 +3,6 @@ package com.epsi.fiouzteam.fiouzoid.http;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +13,6 @@ import java.util.List;
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.StatusLine;
 import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;

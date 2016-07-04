@@ -1,7 +1,5 @@
 package com.epsi.fiouzteam.fiouzoid.model;
 
-import java.util.List;
-
 public abstract class Entity
 {
     protected int id;
