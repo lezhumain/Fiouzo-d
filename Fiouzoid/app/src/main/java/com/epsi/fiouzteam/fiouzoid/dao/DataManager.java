@@ -44,6 +44,7 @@ public class DataManager
         Hashtable<String, Integer> stocks = GroupService.getStocksForGroup(1);
         //GroupService.getStocksForGroup(1);
 
+        Database.mGroupDao.deleteGroupStocks();
         Database.mGroupDao.addStocksToGroup(stocks, idGroup);
     }
 

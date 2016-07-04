@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         DataManager.SaveData(groupId, appUserId);
 
         mGroups = Database.mGroupDao.fetchAllGroups();
-        LoadGroup(1);
+        LoadGroup(mGroups.get(0).getName());
 
         /**
          * Put groups navigation items
@@ -176,14 +176,20 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void LoadGroup(String groupName)
     {
         mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+
+        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(mCurrentGroup.getId());
+        mCurrentGroup.setStock( stocks );
+
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
 
+    /*
     public void LoadGroup(int groupId)
     {
         mCurrentGroup = Database.mGroupDao.fetchById(groupId);
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
+    */
 
     private void TestHttp()
     {
@@ -265,8 +271,9 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
 //        List<String> keys = actualStock.keys();
 
+        Hashtable<String, Integer> currentStock = mCurrentGroup.getStock();
         for (String key :
-                actualStock.keySet()) {
+                currentStock.keySet()) {
             stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
         }
 
