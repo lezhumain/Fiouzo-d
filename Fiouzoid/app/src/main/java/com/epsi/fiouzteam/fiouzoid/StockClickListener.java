@@ -87,8 +87,8 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
                 // itemName, groupName, fromName, toName
                 final int qte = Integer.parseInt(qteStr);
 
-                StockService.PostExchange(idGroup, toName, idAppUser, itemName, qte);
-                decStockOnClick(qte);
+                if( StockService.PostExchange(idGroup, toName, idAppUser, itemName, qte) )
+                    decStockOnClick(qte);
             }
         });
     }

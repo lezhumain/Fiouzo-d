@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.epsi.fiouzteam.fiouzoid.GroupPopupClickListener;
+import com.epsi.fiouzteam.fiouzoid.MainActivity;
+import com.epsi.fiouzteam.fiouzoid.NewGroupDialog;
 import com.epsi.fiouzteam.fiouzoid.R;
 
 import java.io.BufferedInputStream;
@@ -98,6 +101,22 @@ public class Utils {
             }
         }
         return str.toString();
+    }
+
+    public static Dialog CreateNewGroupPopup(String title, Context appContext)
+    {
+        // custom dialog
+        final NewGroupDialog dialog = new NewGroupDialog(appContext);
+        dialog.setContentView(R.layout.add_group_popup);
+        dialog.setTitle(title);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new GroupPopupClickListener(dialog));
+
+        dialogButton = (Button) dialog.findViewById(R.id.dialogButtonNOK);
+        dialogButton.setOnClickListener(new GroupPopupClickListener(dialog));
+
+        return dialog;
     }
 
     public static Dialog CreateStockPopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)

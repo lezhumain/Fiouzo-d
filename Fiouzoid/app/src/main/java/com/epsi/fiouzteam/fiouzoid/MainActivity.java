@@ -1,5 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -15,8 +17,10 @@ import android.view.SubMenu;
 
 import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
+import com.epsi.fiouzteam.fiouzoid.http.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
@@ -87,31 +91,61 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
 
                 if (menuItem.getItemId() == R.id.nav_item_inbox) {
-                    // TODO: create & use a user fragment
-
                     Log.i(TAG, "\tClick on 'User Name'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
                 }
-//                else if (menuItem.getItemId() == R.id.nav_item_groups)
-//                {
-//                    // TODO: use correct fragment
-//
-//                    Log.i(TAG, "\tClick on 'Groupes'");
-//                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
-//                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
-//                }
+                else if (menuItem.getItemId() == R.id.nav_item_create_grp)
+                {
+                    // TODO: create gruop popup
+
+                    Log.i(TAG, "\tClick on 'create Groupe'");
+                    Dialog popup = Utils.CreateNewGroupPopup("TITLE", MainActivity.this);
+                    popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            NewGroupDialog ngd = (NewGroupDialog)dialog;
+
+                            if (ngd == null)
+                            {
+                                Log.i(TAG, "dialog is not NewGroupDialog");
+                                return;
+                            }
+
+                            String groupName = ngd.get_groupName()
+//                                    ,description = ngd.get_descr()
+                                            ;
+                            int idUser = MainActivity.this.getAppUserId();
+
+                            // post groupName and descr
+                            String params = "idUser=" + String.valueOf(idUser) + "&name=" + groupName + "&description=";
+                            final String url = Utils.BASE_URL + "/repo/addRepo";
+                            String jsonGroup = (new HttpHelper(url, null)).Post(params);
+                            jsonGroup = '[' + jsonGroup.split("\n")[1] + ']';
+                            Log.i(TAG, "jsonGroup" + jsonGroup);
+
+
+                            // TODO store in sqlite
+                            // store the group
+
+                            Group newGroup = (Group.FromJson(jsonGroup)).get(0);
+                            Database.mGroupDao.addGroup(newGroup);
+
+                            // store groupUsers (the creator)
+                            User user = Database.mUserDao.fetchById(appUserId);
+                            List<User> lst = new ArrayList<User>();
+                            lst.add(user);
+                            Database.mUserDao.addUsersToGroupe(lst, newGroup.getId());
+                        }
+                    });
+                    popup.show();
+                }
                 else
                 {
                     Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
 
 
-                    // TODO: find out what item and pass params to fragment
-
                     TabFragment fragment = new TabFragment();
-//                    Bundle args = new Bundle();
-//                    args.putString("groupName", menuItem.getTitle().toString());
-//                    fragment.setArguments(args);
                     LoadGroup(menuItem.getTitle().toString());
 
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();

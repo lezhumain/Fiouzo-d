@@ -60,14 +60,19 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
                 result = requestContent(realUrl);
                 break;
             case "post":
-                String data = params[1];
-                result = postContent(realUrl, data);
+//                String data = params[1];
+//                result = postContent(realUrl, data);
+                String data = params[1],
+                        fullUrl = realUrl + '?' + data;
+                Log.i(TAG, "fullUrl:\n\t" + fullUrl);
+                result = postContent(fullUrl, null);
                 break;
             default:
                 Log.d(TAG, "ERROR: in default case...");
         }
 
         //return requestContent(realUrl);
+        Log.i(TAG, "HTTP RESPONSE:\n\t" + result);
         return result;
     }
 
