@@ -15,43 +15,22 @@ import java.util.List;
 public class GroupService {
     private static final String TAG = "GroupService";
 
-    private static String fillWithUsers(List<User> users, String jsonStr) {
-        jsonStr += "'users': [";
-
-        if (users != null)
-        {
-            for (User u : users) {
-                jsonStr += u.toJson() + ',';
-            }
-            jsonStr = jsonStr.substring(0,jsonStr.length() - 1);
-        }
-
-        return  jsonStr + ']';
-    }
-
-    /*
-    public static String getGroupByIdTest(int id)
-    {
-        String url = "http://jsonplaceholder.typicode.com/posts/" + id;
-        HttpHelper helper = new HttpHelper(url, null);
-        String resp = helper.Get();
-
-        return resp;
-    }
-    */
-
-//    public static List<Group> getAllGroups(int idUser) {
-//        List<Group> u = new ArrayList<>();
-//        final int nbTestGroups = 5;
+//    private static String fillWithUsers(List<User> users, String jsonStr) {
+//        jsonStr += "'users': [";
 //
-//        for(int i = 1; i < nbTestGroups; ++i)
-//            u.add(getTestGroupById(i));
+//        if (users != null)
+//        {
+//            for (User u : users) {
+//                jsonStr += u.toJson() + ',';
+//            }
+//            jsonStr = jsonStr.substring(0,jsonStr.length() - 1);
+//        }
 //
-//        return u;
+//        return  jsonStr + ']';
 //    }
 
     public static List<Group> getAllGroups(int idUser) {
-        idUser = 1;
+        idUser = idUser != 0 ? idUser : 1;
         String url = "http://api.davanture.fr/api/repo/getByUser?idUser=" + String.valueOf(idUser);
         HttpHelper helper = new HttpHelper(url, null);
         String resp = helper.Get();
@@ -65,9 +44,6 @@ public class GroupService {
     }
 
     public static List<GroupRessource> getStocksForGroup(int idGroup) {
-    //public static void getStocksForGroup(int idGroup) {
-        //Hashtable<String, Integer> values = new Hashtable<>();
-        //List<GroupRessource> values = new ArrayList<>();
         String url = "http://api.davanture.fr/api/repo/getallstock?idUser=" + String.valueOf(idGroup);
         HttpHelper helper = new HttpHelper(url, null);
         String resp = helper.Get();
@@ -76,16 +52,6 @@ public class GroupService {
         Log.i(TAG, "json response:\n\t" + resp);
 
         return lst;
-        /*
-        for (GroupRessource gr : lst)
-        {
-            String key = gr.getResource();
-            Log.i(TAG, "GroupRessource:\n\t" + gr.toString());
-            if(!values.containsKey(key))
-                values.put(key, gr.getQuantity());
-        }
 
-        return values;
-        */
     }
 }

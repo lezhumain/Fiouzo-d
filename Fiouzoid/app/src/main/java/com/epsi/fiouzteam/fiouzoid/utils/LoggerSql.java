@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.component.popup;
 
 import android.app.Dialog;
 import android.content.Context;

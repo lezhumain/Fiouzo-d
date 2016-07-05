@@ -1,9 +1,12 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.listener;
 
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewGroupDialog;
 
 /**
  * Created by ThaZalman on 05/07/2016.

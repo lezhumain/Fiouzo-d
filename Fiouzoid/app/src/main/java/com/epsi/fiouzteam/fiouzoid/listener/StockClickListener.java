@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.listener;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +9,9 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.epsi.fiouzteam.fiouzoid.http.Utils;
+import com.epsi.fiouzteam.fiouzoid.MainActivity;
+import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.service.StockService;
 
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid.http;
+package com.epsi.fiouzteam.fiouzoid.utils;
 
 
 import android.app.AlertDialog;
@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.epsi.fiouzteam.fiouzoid.GroupPopupClickListener;
-import com.epsi.fiouzteam.fiouzoid.NewGroupDialog;
+import com.epsi.fiouzteam.fiouzoid.listener.GroupPopupClickListener;
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewGroupDialog;
 import com.epsi.fiouzteam.fiouzoid.R;
 
 import java.io.BufferedInputStream;

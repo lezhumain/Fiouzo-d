@@ -1,8 +1,9 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.epsi.fiouzteam.fiouzoid.MainActivity;
+import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.listener.StockClickListener;
 
 import java.util.ArrayList;
 
@@ -51,11 +56,24 @@ public class StockFragment extends Fragment
             handleListView();
         }
 
+        // add button click listener
+        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.add_stock_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleNewStock();
+            }
+        });
 
         return view;
     }
 
-    protected void handleListView()
+    private void handleNewStock() {
+        // TODO: popup stock + post + sqlite
+
+    }
+
+    private void handleListView()
     {
         ArrayList<String> stockList = ((MainActivity)getContext()).GetStockGroupe();
 
