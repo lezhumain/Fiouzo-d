@@ -121,8 +121,10 @@ public class UserDao extends DbContentProvider
         String log = "\tinserts in UserGroup went ";
         if( super.execSql(query) )
             log += "good";
-        else
+        else {
+            ret = false;
             log += "wrong";
+        }
         Log.i(TAG, log);
 
         return ret;

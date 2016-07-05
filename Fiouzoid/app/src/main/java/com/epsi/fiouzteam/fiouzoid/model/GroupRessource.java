@@ -55,7 +55,7 @@ public class GroupRessource extends Entity {
 
         Log.d(TAG, json);
 
-        List<GroupRessource> groups = (List<GroupRessource>) gson.fromJson(json, listType);
+        List<GroupRessource> groups = gson.fromJson(json, listType);
 
         return groups;
     }

@@ -1,6 +1,5 @@
 package com.epsi.fiouzteam.fiouzoid;
 
-import android.app.Dialog;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
@@ -59,10 +58,8 @@ public class GroupPopupClickListener implements View.OnClickListener {
         _parent.set_groupName(groupName);
         _parent.set_descr(descriptionEdit.getText().toString());
 
-        if( groupName == null || groupName.length() == 0)
-            return false;
+        return groupName.length() > 0;
 
-        return true;
     }
 
 

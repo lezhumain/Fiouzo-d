@@ -17,7 +17,6 @@ import android.view.SubMenu;
 
 import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
-import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.http.Utils;

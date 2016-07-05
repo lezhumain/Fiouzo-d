@@ -81,7 +81,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         HttpClient httpclient = new DefaultHttpClient();
         String result = null;
         HttpGet httpget = new HttpGet(url);
-        HttpResponse response = null;
+        HttpResponse response;
         InputStream instream = null;
 
         try {
@@ -137,7 +137,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
     public static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
-        String line = null;
+        String line;
 
         try {
             while ((line = reader.readLine()) != null) {

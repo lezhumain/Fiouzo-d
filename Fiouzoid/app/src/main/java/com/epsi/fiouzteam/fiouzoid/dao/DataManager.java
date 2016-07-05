@@ -8,7 +8,6 @@ import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
-import java.util.Hashtable;
 import java.util.List;
 
 /**

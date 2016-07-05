@@ -183,8 +183,8 @@ public class GroupDao extends DbContentProvider
         cursor = super.rawQuery(query, null);
         Log.i(TAG, "query:\n\t" + query);
 
-        int nameIndex = 0, qteIndex = 0, qte = 0;
-        String name = "";
+        int nameIndex, qteIndex, qte;
+        String name;
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {

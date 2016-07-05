@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.epsi.fiouzteam.fiouzoid.http.Utils;
-import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.service.StockService;
 
 import java.util.regex.Pattern;

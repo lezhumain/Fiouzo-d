@@ -37,7 +37,7 @@ public class UserService {
 
         Log.i(TAG, resp);
         User user = new User();
-        return user.fromJson(resp);
+        return User.fromJson(resp);
     }
 
     public static User getTestUserById(int id)
@@ -67,7 +67,7 @@ public class UserService {
 
         Log.i(TAG, resp);
         User user = new User();
-        return user.fromJson(resp);
+        return User.fromJson(resp);
     }
 
     public static List<User> getUsersByGroup(int idGroup)

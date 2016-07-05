@@ -83,7 +83,7 @@ public class Group extends Entity
 
         Log.d(TAG, json);
 
-        List<Group> groups = (List<Group>) gson.fromJson(json, listType);
+        List<Group> groups = gson.fromJson(json, listType);
 
         return groups;
     }

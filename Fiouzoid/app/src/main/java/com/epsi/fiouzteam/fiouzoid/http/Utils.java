@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.epsi.fiouzteam.fiouzoid.GroupPopupClickListener;
-import com.epsi.fiouzteam.fiouzoid.MainActivity;
 import com.epsi.fiouzteam.fiouzoid.NewGroupDialog;
 import com.epsi.fiouzteam.fiouzoid.R;
 
@@ -63,7 +62,7 @@ public class Utils {
 
     public static String readStream(InputStream in) {
         byte[] b = new byte[1024];
-        String ret = "";
+        String ret;
 
         try {
             int count = in.read(b);
@@ -77,7 +76,7 @@ public class Utils {
     }
 
     public static String entityToString(HttpEntity entity) {
-        InputStream is = null;
+        InputStream is;
         try {
             is = entity.getContent();
         } catch (IOException e) {
@@ -86,7 +85,7 @@ public class Utils {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
         StringBuilder str = new StringBuilder();
 
-        String line = null;
+        String line;
         try {
             while ((line = bufferedReader.readLine()) != null) {
                 str.append(line + "\n");
