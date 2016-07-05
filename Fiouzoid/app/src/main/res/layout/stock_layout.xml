@@ -6,24 +6,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:layout_marginTop="40dp"
+        android:textSize="20sp"
         android:gravity="center"
-        android:id="@+id/pri_date_tb"
+        android:id="@+id/stock_group_title"
+        android:textColor="@android:color/holo_blue_dark"
+        android:text="Stock du groupe"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/holo_red_light"
-        android:text="Updates\nFragment"/>
+        android:layout_marginTop="5dp" />
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:textSize="15sp"
+        android:id="@+id/stock_list"
         android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:text="androidbelieve.com"
-        android:textColor="#000"
-        android:layout_below="@+id/pri_date_tb"
-        android:textStyle="italic"/>
+        android:layout_marginBottom="10dp"></ListView>
 
 </RelativeLayout>

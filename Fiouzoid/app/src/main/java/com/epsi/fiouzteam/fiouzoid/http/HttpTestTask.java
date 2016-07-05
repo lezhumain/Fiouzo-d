@@ -3,19 +3,23 @@ package com.epsi.fiouzteam.fiouzoid.http;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 /**
  * Created by Dju on 23/05/2016.
@@ -43,9 +47,28 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
 
     @Override
     protected String doInBackground(String... params) {
-        String realUrl = _url.replace("$QUERY$", "Android");
+        String realUrl = _url.replace("$QUERY$", "Android"),
+            method = "", result = "";
         Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
-        return requestContent(realUrl);
+
+        if (params.length > 0)
+            method = params[0];
+
+        switch (method)
+        {
+            case "get":
+                result = requestContent(realUrl);
+                break;
+            case "post":
+                String data = params[1];
+                result = postContent(realUrl, data);
+                break;
+            default:
+                Log.d(TAG, "ERROR: in default case...");
+        }
+
+        //return requestContent(realUrl);
+        return result;
     }
 
     public static String requestContent(String url)
@@ -81,6 +104,31 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         return result;
     }
 
+/*
+    public static void PostContent(String  url, String data)
+    {
+        HttpClient httpclient = new DefaultHttpClient();
+        String result = null;
+        //HttpGet httpget = new HttpGet(url);
+        HttpPost httppost = new HttpPost(url);
+        HttpResponse response = null;
+        //InputStream instream = null;
+
+        try
+        {
+            response = httpclient.execute(httppost);
+            StatusLine sl = response.getStatusLine();
+
+            int code = sl.getStatusCode();
+            Log.i(TAG, "\t post executed: code " + String.valueOf(code));
+        } catch (Exception e)
+        {
+            Log.i(TAG, "\t post error:");
+            Log.i(TAG, "\t\t" + e.getMessage());
+        }
+        //finally {}
+    }
+*/
     public static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -101,8 +149,39 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         return sb.toString();
     }
 
+    private String postContent(String  url, String data)
+    {
+        HttpClient httpclient = new DefaultHttpClient();
+        String result;
+        HttpPost httppost = new HttpPost(url);
 
+        HttpResponse response;
 
+        try {
+            // Add your data
+            List<NameValuePair> nameValuePairs = new ArrayList<>(2);
+            nameValuePairs.add(new BasicNameValuePair("id", "12345"));
+            nameValuePairs.add(new BasicNameValuePair("stringdata", "Hi"));
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+            // Execute HTTP Post Request
+            response = httpclient.execute(httppost);
+
+            result = String.valueOf(response.getStatusLine().getStatusCode()) + "\n" +
+                    Utils.entityToString( response.getEntity() );
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            result = "";
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            result = "";
+        }
+
+        return result;
+    }
+
+/*
     private static String handleJson(String data)
     {
         String msg = "";
@@ -124,7 +203,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         return msg;
     }
 
-    /*
+
     @Override
     protected void onPostExecute(String res)
     {

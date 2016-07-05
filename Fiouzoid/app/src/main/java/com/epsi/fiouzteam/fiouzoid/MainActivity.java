@@ -1,6 +1,5 @@
 package com.epsi.fiouzteam.fiouzoid;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,21 +11,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 
+import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
-import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
-import com.epsi.fiouzteam.fiouzoid.http.HttpTestTask;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
-import com.epsi.fiouzteam.fiouzoid.model.Test;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskDelegate{
     private static final String TAG = "MainActivity";
@@ -35,8 +32,12 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
-    private Database mDb;
+    private int appUserId = 1;
 
+    private Database mDb;
+    private List<Group> mGroups = new ArrayList<>();
+
+    private Group mCurrentGroup = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,24 +59,65 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
          mFragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
 
         /**
-         * Setup click events on the Navigation View Items.
+         * Handle data and bdd
+         */
+        mDb = new Database(this);
+        mDb.open();
+
+        int groupId = 1;
+        DataManager.SaveData(groupId, appUserId);
+
+        mGroups = Database.mGroupDao.fetchAllGroups();
+        LoadGroup(mGroups.get(0).getName());
+
+        /**
+         * Put groups navigation items
+         */
+        this.handleGroupItems();
+
+        /**
+         * Setup click events on the Navigation View Items. (NavigationDrawer)
          */
          mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
          {
              @Override
-             public boolean onNavigationItemSelected(MenuItem menuItem) {
+             public boolean onNavigationItemSelected(MenuItem menuItem)
+             {
                 mDrawerLayout.closeDrawers();
 
-                // if (menuItem.getItemId() == R.id.nav_item_sent) {
-                //     FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                 //    fragmentTransaction.replace(R.id.containerView,new SentFragment()).commit();
 
-                // }
-                //Section non utilise dans le drawer navigator
                 if (menuItem.getItemId() == R.id.nav_item_inbox) {
+                    // TODO: create & use a user fragment
+
+                    Log.i(TAG, "\tClick on 'User Name'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
                 }
+//                else if (menuItem.getItemId() == R.id.nav_item_groups)
+//                {
+//                    // TODO: use correct fragment
+//
+//                    Log.i(TAG, "\tClick on 'Groupes'");
+//                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
+//                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
+//                }
+                else
+                {
+                    Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
+
+
+                    // TODO: find out what item and pass params to fragment
+
+                    TabFragment fragment = new TabFragment();
+//                    Bundle args = new Bundle();
+//                    args.putString("groupName", menuItem.getTitle().toString());
+//                    fragment.setArguments(args);
+                    LoadGroup(menuItem.getTitle().toString());
+
+                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
+                    xfragmentTransaction.replace(R.id.containerView,fragment).commit();
+                }
+
 
                  return false;
             }
@@ -87,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
          */
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
+
+        // click sur un item du menu parametres
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -107,27 +151,77 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
-
-        mDb = new Database(this);
-        mDb.open();
     }
+
+    private void handleGroupItems() {
+//        navView = (NavigationView) findViewById(R.id.navView);
+
+        Menu m = mNavigationView.getMenu();
+        SubMenu topChannelMenu = m.addSubMenu("Groupes");
+//        MenuItem groupsItem = m.getItem(R.id.nav_item_groups);
+//        SubMenu topChannelMenu = groupsItem.getSubMenu();
+//        topChannelMenu.clear();
+
+
+        //topChannelMenu.add("test");
+        for (Group group : mGroups)
+            topChannelMenu.add(group.getName());
+
+        // hack
+        MenuItem mi = m.getItem(m.size()-1);
+        mi.setTitle(mi.getTitle());
+    }
+
+    public void LoadGroup(String groupName)
+    {
+        mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+
+        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(mCurrentGroup.getId());
+        mCurrentGroup.setStock( stocks );
+
+        Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
+    }
+
+    /*
+    public void LoadGroup(int groupId)
+    {
+        mCurrentGroup = Database.mGroupDao.fetchById(groupId);
+        Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
+    }
+    */
 
     private void TestHttp()
     {
-        String url = "http://jsonplaceholder.typicode.com/posts/1";
-        //User u = UserService.getTestUserById(1);
-        User u = Database.mUserDao.fetchById(1);
-        //Group u = GroupService.getTestGroupById(1);
+        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=1";
+        //String url = "http://posttestserver.com/post.php";
+        HttpHelper help = new HttpHelper(url, null);
+        //String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
+          //  result = help.Post(data);
+            //result = help.Get();
 
-        Log.i(TAG, "helper's response: " + u.toJson());
+        //Log.i(TAG, "\tTEST HTTP: result = " + result);
+//        User u = UserService.getUserById(3);
+        //User u = Database.mUserDao.fetchById(1);
+        //List<Group> u = GroupService.getAllGroups(1);
+        List<User> u = UserService.getUsersByGroup(1);
+
+        //Log.i(TAG, "helper's response: " + u.toJson());
 
 
-        u.setEmail(u.getEmail() + 1);
-        u.setNickName(u.getNickName() + 1);
+//        u.setLastName(u.getLastName() + 1);
+//        u.setUsername(u.getUsername() + 1);
+        /*
         boolean res = Database.mUserDao.addUser(u);
-
         if(!res)
             Log.i(TAG, "User wasn't added");
+        */
+
+        String msg = "";
+        for (User g :
+                u) {
+            msg += g.toString() + '\n';
+        }
+        Log.i(TAG, msg);
     }
 
     @Override
@@ -146,6 +240,63 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     @Override
     public void taskCompletionResult(String result) {
-        Log.i(TAG, '\t' + result);
+        Log.i(TAG, "\ttaskCompletionResult" + result);
+    }
+
+    public ArrayList<String> GetMembresGroupe() {
+        ArrayList<String> userNames = new ArrayList<>();
+        List<User> users = mCurrentGroup.getUsers();
+
+        for (User user : users)
+        {
+            String nick = user.getUsername();
+
+            if(nick == null)
+                continue;
+
+            userNames.add(nick);
+        }
+
+
+        return userNames;
+    }
+
+    public String GetGroupeName() {
+        return mCurrentGroup != null ? mCurrentGroup.getName() : "-";
+    }
+
+    public ArrayList<String> GetStockGroupe() {
+        ArrayList<String> stock = new ArrayList<>();
+        Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
+//        List<String> keys = actualStock.keys();
+
+        Hashtable<String, Integer> currentStock = mCurrentGroup.getStock();
+        for (String key :
+                currentStock.keySet()) {
+            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
+        }
+
+        return stock;
+    }
+
+    public int getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(int appUserId) {
+        this.appUserId = appUserId;
+    }
+
+    public int GetGroupeId() {
+        return mCurrentGroup.getId();
+    }
+
+    public void SetStock(String typeRessourceName, int stock) {
+        Hashtable<String, Integer> actualStock = mCurrentGroup.getStock();
+
+        actualStock.remove(typeRessourceName);
+        actualStock.put(typeRessourceName, stock);
+
+        mCurrentGroup.setStock(actualStock);
     }
 }
