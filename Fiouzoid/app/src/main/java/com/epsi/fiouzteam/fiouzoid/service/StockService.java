@@ -43,7 +43,7 @@ public class StockService {
                 "idresource=" + idRessource + "&" +
                 "iduserfrom=" + idFrom + "&" +
                 "iduserto=" + idTo + "&" +
-                "quantity=" + qte;
+                "quantite=" + qte;
         
         Log.i(TAG, "post params:\n\t" + posParams );
         HttpHelper http = new HttpHelper(url, null);
