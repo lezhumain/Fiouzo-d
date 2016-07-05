@@ -28,7 +28,7 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
         _contexts = (MainActivity)a;
     }
 
-    private void decStockOnClick()
+    private void decStockOnClick(final int qte)
     {
         String groupName = _tv.getText().toString();
         String[] lol = groupName.split("\t");
@@ -46,7 +46,7 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
             if(stock == 0)
                 return;
 
-            stock -= 1;
+            stock = qte < stock ? stock - qte : 0;
 
             String typeRessourceName = lol[1];
             _contexts.SetStock(typeRessourceName, stock);
@@ -85,10 +85,10 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
                 }
                 // TODO: post stock, idGroup, idFrom, idTo
                 // itemName, groupName, fromName, toName
-                int qte = Integer.parseInt(qteStr);
+                final int qte = Integer.parseInt(qteStr);
 
                 StockService.PostExchange(idGroup, toName, idAppUser, itemName, qte);
-                decStockOnClick();
+                decStockOnClick(qte);
             }
         });
     }
