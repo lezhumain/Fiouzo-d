@@ -21,7 +21,7 @@ public class StockService {
         int idTo = -1, idRessource = -1;
         User to = Database.mUserDao.fetchByName(userTo);
         String ressource = (itemName.split("\t"))[1],
-            url = Utils.BASE_URL + "/exchange/addExchange",
+            url = Utils.BASE_URL + "/exchange/addexchange",
             posParams = "";
         GroupRessource gr = Database.mGroupDao.fetchRessourceByName(ressource);
 
@@ -39,19 +39,22 @@ public class StockService {
         idTo = to.getId();
         idRessource = gr.getIdRessource();
         
-        posParams = "{" +
-                "\"idRepo\" : " + idGroup + "," +
-                "\"idResource\" : " + idRessource + "," +
-                "\"idUserFrom\" : " + idFrom + "," +
-                "\"idUserTo\" : " + idTo + "," +
-                "\"quantity\" : " + qte +
-                "}";
+        posParams = "idrepo=" + idGroup + "&" +
+                "idresource=" + idRessource + "&" +
+                "iduserfrom=" + idFrom + "&" +
+                "iduserto=" + idTo + "&" +
+                "quantity=" + qte;
         
         Log.i(TAG, "post params:\n\t" + posParams );
         HttpHelper http = new HttpHelper(url, null);
         String ret = http.Post(posParams);
 
         Log.i(TAG, "post response:\n\t" + ret );
+        String httpCode = ret.split("\n")[0];
+
+        if(httpCode.contains("404"))
+            return false;
+
         return true;
     }
 }
