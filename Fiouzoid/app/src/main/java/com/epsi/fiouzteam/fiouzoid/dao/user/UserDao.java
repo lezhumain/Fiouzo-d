@@ -8,7 +8,8 @@ import android.util.Log;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao extends DbContentProvider
         implements IUserSchema, IUserDao {

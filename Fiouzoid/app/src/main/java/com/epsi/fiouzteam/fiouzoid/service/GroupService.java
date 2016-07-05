@@ -17,40 +17,6 @@ import java.util.List;
 public class GroupService {
     private static final String TAG = "GroupService";
 
-    /*
-    public static Group getGroupById(int id)
-    {
-        String name = "nomGroupe" + id,
-                description = "description" + id;
-
-        return new Group(id, name, description);
-    }
-
-    public static Group getTestGroupById(int id)
-    {
-        String name = "groupName" + id,
-                description = "super description " + id,
-                jsonStr = "{'name': '" +
-                        name + "', " +
-                        "'description': '" +
-                        description + "', " +
-                        "'id': " + id + ", ";
-
-        List<User> users = null;
-        if(id == 0) {
-            users = UserService.getAllUsers();
-        }
-        jsonStr = fillWithUsers(users, jsonStr) + '}';
-
-
-        Log.i(TAG, "jsonStr: " + jsonStr);
-
-        Group group = new Group();
-        return group.fromJson(jsonStr);
-//        return (new GsonBuilder().create()).fromJson(jsonStr, Group.class);
-    }
-    */
-
     private static String fillWithUsers(List<User> users, String jsonStr) {
         jsonStr += "'users': [";
 
