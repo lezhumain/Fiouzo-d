@@ -3,11 +3,12 @@ package com.epsi.fiouzteam.fiouzoid.dao;
 import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
+import com.epsi.fiouzteam.fiouzoid.utils.LoggerSql;
 
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -41,17 +42,18 @@ public class DataManager
     }
 
     private static void SaveGroupRessource(int idGroup) {
-        Hashtable<String, Integer> stocks = GroupService.getStocksForGroup(1);
-        //GroupService.getStocksForGroup(1);
+        List<GroupRessource> stocks = GroupService.getStocksForGroup(1);
 
         Database.mGroupDao.deleteGroupStocks();
         Database.mGroupDao.addStocksToGroup(stocks, idGroup);
+
+        LoggerSql.Log("Groups saved", null, true);
     }
 
     public static void SaveData(int groupId, int appUserId) {
         DataManager.SaveUsers(1);
         DataManager.SaveGroups(appUserId);
         DataManager.SaveGroupUsers(appUserId);
-        SaveGroupRessource(groupId);
+        DataManager.SaveGroupRessource(groupId);
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/ressourceNameEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ex_ressNameHint"/>
+
+    <EditText
+        android:id="@+id/uniteEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ex_ressUnitHint"/>
+
+    <EditText
+        android:id="@+id/priceEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ex_ressPriceHint"
+        android:inputType="numberDecimal" />
+
+
+
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Valider "
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/dialogButtonNOK"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" Annuler "/>
+
+</LinearLayout>

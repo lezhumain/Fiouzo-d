@@ -39,7 +39,7 @@ public class UserService {
 
         Log.i(TAG, resp);
         User user = new User();
-        return user.fromJson(resp);
+        return User.fromJson(resp);
     }
 
     public static User getTestUserById(int id)
@@ -69,7 +69,7 @@ public class UserService {
 
         Log.i(TAG, resp);
         User user = new User();
-        return user.fromJson(resp);
+        return User.fromJson(resp);
     }
 
     public static List<User> getUsersByGroup(int idGroup)
@@ -80,48 +80,7 @@ public class UserService {
         String resp = helper.Get();
 
         //Log.i(TAG, "json url:\n\t" + url);
-        //Log.i(TAG, "json response:\n\t" + resp);
-
-
-        // TODO remove here
-        /*
-        resp = "  [\n" +
-                "  {\n" +
-                "    \"$id\": \"1\",\n" +
-                "    \"id\": 1,\n" +
-                "    \"username\": \"lucdef\",\n" +
-                "    \"firstName\": \"lucas\",\n" +
-                "    \"lastName\": \"defrance\",\n" +
-                "    \"isAdmin\": false\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"$id\": \"2\",\n" +
-                "    \"id\": 1,\n" +
-                "    \"username\": \"lucdef\",\n" +
-                "    \"firstName\": \"lucas\",\n" +
-                "    \"lastName\": \"defrance\",\n" +
-                "    \"isAdmin\": true\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"$id\": \"3\",\n" +
-                "    \"id\": 2,\n" +
-                "    \"username\": \"conan_edogawa\",\n" +
-                "    \"firstName\": \"henri\",\n" +
-                "    \"lastName\": \"davanture\",\n" +
-                "    \"isAdmin\": true\n" +
-                "  }\n" +
-                "]";
-        */
-        //
-
-
-
-
-
-
-
-
-
+        Log.i(TAG, "json response:\n\t" + resp);
 
         List<User> lg = User.FromJson(resp);
         Log.i(TAG, "user toString:\n\t" + lg.get(0).toString());

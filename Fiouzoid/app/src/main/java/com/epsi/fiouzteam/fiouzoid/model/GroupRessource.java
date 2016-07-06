@@ -14,9 +14,24 @@ import java.util.List;
  */
 public class GroupRessource extends Entity {
     private static final String TAG = "GroupRessource";
-    String repo;
-    String resource;
-    int quantity;
+    private String repo;
+    private String resource;
+    private int quantity;
+    private int idRessource;
+
+    public GroupRessource()
+    {
+        super();
+    }
+
+    public GroupRessource(int id, String group, String ress, int qte, int idRess)
+    {
+        super(id);
+        repo = group;
+        resource = ress;
+        quantity = qte;
+        idRessource = idRess;
+    }
 
     @Override
     public String toJson() {
@@ -54,7 +69,7 @@ public class GroupRessource extends Entity {
 
         Log.d(TAG, json);
 
-        List<GroupRessource> groups = (List<GroupRessource>) gson.fromJson(json, listType);
+        List<GroupRessource> groups = gson.fromJson(json, listType);
 
         return groups;
     }
@@ -66,6 +81,14 @@ public class GroupRessource extends Entity {
                 ", resource='" + resource + '\'' +
                 ", quantity=" + quantity +
                 '}';
+    }
+
+    public int getIdRessource() {
+        return id;
+    }
+
+    public void setIdRessource(int idRessource) {
+        this.id = idRessource;
     }
 
     /*
