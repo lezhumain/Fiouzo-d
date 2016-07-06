@@ -314,11 +314,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         return stock;
     }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
+    
     public int GetGroupeId() {
         return mCurrentGroup.getId();
     }

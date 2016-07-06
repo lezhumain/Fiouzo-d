@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
-import com.epsi.fiouzteam.fiouzoid.http.Utils;
+import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import android.content.CursorLoader;
@@ -186,13 +186,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }*/
 
-        String url = Utils.BASE_URL + "api/user/connexion?";
-        String posParams = "username=" + email + "&" +
+        String url = Utils.BASE_URL + "/user/connexion";
+        final String posParams = "username=" + email + "&" +
                            "password=" + password;
-        url = url + posParams;
+
+
 
         HttpHelper http = new HttpHelper(url, null);
-        String resp = http.Post(null);
+        String resp = http.Post(posParams);
         Log.i(TAG, "post ret:\n\t" + resp);
         if(resp == "error")
         {
@@ -209,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Log.i(TAG, "In OnLoadFinished!!!" + mErrorLogin + mErrorPassword);
         }
         resp = '[' + resp.split("\n")[1] + ']';
+        Log.i(TAG, '\t' + resp);
         List<User> lg = User.FromJson(resp);
         MainActivity.APPUSERID = lg.get(0).getId();
     }

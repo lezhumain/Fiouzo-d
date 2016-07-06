@@ -4,8 +4,7 @@ import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.epsi.fiouzteam.fiouzoid.http.Utils;
-import com.epsi.fiouzteam.fiouzoid.http.Utils;
+import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
