@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
-    private int appUserId = 1;
+    public static int APPUSERID = 1;
 
     private Database mDb;
     private List<Group> mGroups = new ArrayList<>();
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDb.open();
 
         int groupId = 1;
-        DataManager.SaveData(groupId, appUserId);
+        DataManager.SaveData(groupId, APPUSERID);
 
         mGroups = Database.mGroupDao.fetchAllGroups();
         LoadGroup(mGroups.get(0).getName());
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                             String groupName = ngd.get_groupName()
 //                                    ,description = ngd.get_descr()
                                             ;
-                            int idUser = MainActivity.this.GetAppUserId();
+                            int idUser = MainActivity.APPUSERID;
 
                             // post groupName and descr
                             String params = "idUser=" + String.valueOf(idUser) + "&name=" + groupName + "&description=";
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                             Database.mGroupDao.addGroup(newGroup);
 
                             // store groupUsers (the creator)
-                            User user = Database.mUserDao.fetchById(appUserId);
+                            User user = Database.mUserDao.fetchById(APPUSERID);
                             List<User> lst = new ArrayList<User>();
                             lst.add(user);
                             Database.mUserDao.addUsersToGroupe(lst, newGroup.getId());
@@ -315,13 +315,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         return stock;
     }
 
-    public int GetAppUserId() {
-        return appUserId;
-    }
-
-    public void setAppUserId(int appUserId) {
-        this.appUserId = appUserId;
-    }
 
     public int GetGroupeId() {
         return mCurrentGroup.getId();

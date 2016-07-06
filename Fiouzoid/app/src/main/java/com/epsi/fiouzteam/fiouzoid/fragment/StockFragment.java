@@ -54,7 +54,7 @@ public class StockFragment extends Fragment
         String groupName = ((MainActivity)getContext()).GetGroupeName();
 
         _idRepo = ((MainActivity) getContext()).GetGroupeId();
-        _idUser = ((MainActivity) getContext()).GetAppUserId();
+        _idUser = MainActivity.APPUSERID;
 
 
         TextView titleView = (TextView)view.findViewById(R.id.stock_group_title);

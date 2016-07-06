@@ -70,7 +70,7 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
         // TODO: ask for dest user iu dialog
         //Dialog popup = Utils.CreateAlertDialog(_contexts, msg);
         final int idGroup = _contexts.GetGroupeId(),
-                idAppUser = _contexts.GetAppUserId();
+                idAppUser = MainActivity.APPUSERID;
         final Dialog popup = Utils.CreateExchangePopup(_contexts, "TITLE", msg, idGroup, null, null);
         popup.show();
         popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
