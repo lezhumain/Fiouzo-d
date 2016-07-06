@@ -162,68 +162,71 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mLoginView.getText().toString();
+        String username = mLoginView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
+        // Check if an username was entered.
+        if (TextUtils.isEmpty(username)) {
+            mLoginView.setError(getString(R.string.error_field_required));
+            focusView = mLoginView;
+            cancel = true;
+        }
+        // Check if a password was entered
+        else if(TextUtils.isEmpty(password))
+        {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+            cancel = true;
+        }
         // Check for a valid password, if the user entered one.
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        else if (!isPasswordValid(password))
+        {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mLoginView.setError(getString(R.string.error_field_required));
-            focusView = mLoginView;
-            cancel = true;
-        } /*else if (!isEmailValid(email)) {
-            mLoginView.setError(getString(R.string.error_invalid_email));
-            focusView = mLoginView;
-            cancel = true;
-        }*/
-
+        //  Creation of the URL based on the BASE_URL
         String url = Utils.BASE_URL + "/user/connexion";
-        final String posParams = "username=" + email + "&" +
+
+        //  We create the post message for the POST REQUEST
+        final String posParams = "username=" + username + "&" +
                            "password=" + password;
 
         HttpHelper http = new HttpHelper(url, null);
+
+        //  We post the message for the Database and we get the response
         final String resp = http.Post(posParams);
-        Log.i(TAG, "post ret:\n\t" + resp);
-        Log.i(TAG, "post ret:\n\t" + resp);
+
+
+        //  if the response contain the word "error", ,we quit the login program
         if(resp.toLowerCase().contains("error"))
         {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             if(focusView != null)
                 focusView.requestFocus();
-
             return;
-        } /* else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+        }
 
-            Log.i(TAG, "In OnLoadFinished!!!");
-        }*/
-
+        //  We split the response with \n into an array of string
         final String tab[] = resp.split("\n");
+/*
         if(tab[1].contains("error"))
         {
             Log.i(TAG, "tab contains error\n\t");
             return;
         }
+        */
 
         String resp1 = '[' + tab[1] + ']';
-
         Log.i(TAG, '\t' + resp1);
+
+        // Get user ID from the post response
         List<User> lg = User.FromJson(resp1);
+
+        //  We register tee user id into the app
         MainActivity.APPUSERID = lg.get(0).getId();
     }
 
@@ -234,7 +237,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 1;
     }
 
     /**
