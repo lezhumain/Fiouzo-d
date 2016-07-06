@@ -333,12 +333,14 @@ public class GroupDao extends DbContentProvider
     {
         GroupRessource groupRessource = new GroupRessource();
 
-        int idRepoIndex, ressourceIndex, qteIndex, ressourceIdIndex;
+        int repoIndex, ressourceIndex, qteIndex, ressourceIdIndex;
 
         if (cursor != null) {
             if (cursor.getColumnIndex(COL_GROUP) != -1) {
-                idRepoIndex = cursor.getColumnIndexOrThrow(COL_GROUP);
-                groupRessource.setId(cursor.getInt(idRepoIndex));
+                repoIndex = cursor.getColumnIndexOrThrow(COL_GROUP);
+                int repoId = cursor.getInt(repoIndex);
+                String groupName = (this.fetchById(repoId)).getName();
+                groupRessource.setRepo(groupName);
             }
             if (cursor.getColumnIndex(COL_RESSOURCE) != -1) {
                 ressourceIndex = cursor.getColumnIndexOrThrow(
@@ -353,7 +355,7 @@ public class GroupDao extends DbContentProvider
             if (cursor.getColumnIndex(COL_ID_RESSOURCE) != -1) {
                 ressourceIdIndex = cursor.getColumnIndexOrThrow(
                         COL_ID_RESSOURCE);
-                groupRessource.setQuantity(cursor.getInt(ressourceIdIndex));
+                groupRessource.setIdRessource(cursor.getInt(ressourceIdIndex));
             }
 
         }

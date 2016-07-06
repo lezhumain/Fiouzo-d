@@ -13,14 +13,21 @@ import java.util.Calendar;
 public class LoggerSql {
     private static final String TAG = "LoggerSql";
 
-    public static void Log(String msg, String criticity)
+    public static void Log(String msg, String criticity, Boolean debug)
     {
+        if(debug == null)
+            debug = false;
+
         // YYYY-MM-DD HH:MM:SS
         String dateNow = "now", dateParam = "localtime",
             query = "insert into Log (date, criticite, message) values (" +
                     "datetime('now', 'localtime'), '" + (criticity == null ? "INFO" : criticity) + "', '" + msg + "')";
 
-        Log.i(TAG, "log query: " + query);
+
+        //Log.i(TAG, "log query: " + query);
+        if(debug)
+            Log.i(TAG, '[' + criticity + "]\tlog query:\n\t" + msg);
+
         Database.Log(query);
     }
 }

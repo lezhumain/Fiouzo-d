@@ -3,12 +3,14 @@ package com.epsi.fiouzteam.fiouzoid.http;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.utils.LoggerSql;
 import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +52,10 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... params) {
         String realUrl = _url.replace("$QUERY$", "Android"),
-            method = "", result = "";
-        Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
+            method = "", result = "", logMsg = "", criticity = "INFO";
+        ;
+        //Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
+        // TODO log size data
 
         if (params.length > 0)
             method = params[0];
@@ -60,6 +64,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         {
             case "get":
                 result = requestContent(realUrl);
+                logMsg = "GET call to \"" + realUrl + "\"";
                 break;
             case "post":
 //                String data = params[1];
@@ -68,12 +73,22 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
                         fullUrl = realUrl + '?' + data;
                 Log.i(TAG, "fullUrl:\n\t" + fullUrl);
                 result = postContent(fullUrl, null);
+                logMsg = "POST call to \"" + fullUrl + "\"";
                 break;
             default:
-                Log.d(TAG, "ERROR: in default case...");
+                logMsg = "Default case for \"" + realUrl + "\", method was \"" + method + "\"";
+                criticity = "ERROR";
         }
 
         //return requestContent(realUrl);
+        LoggerSql.Log(logMsg, criticity, true);
+        int sizeData = 0;
+
+        try {
+            sizeData = (result.getBytes("UTF-8")).length;
+        } catch (UnsupportedEncodingException e) {
+            sizeData = 0;
+        }
         Log.i(TAG, "HTTP RESPONSE:\n\t" + result);
         return result;
     }
