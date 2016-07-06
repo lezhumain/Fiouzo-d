@@ -35,7 +35,7 @@ public class HttpHelper
         return null;
     }
 
-    public String Post(String data)
+    public String Post(final String data)
     {
         _result = "";
         //postTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "post", data);

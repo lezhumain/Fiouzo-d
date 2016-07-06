@@ -314,8 +314,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
         return stock;
     }
-
-
+    
     public int GetGroupeId() {
         return mCurrentGroup.getId();
     }

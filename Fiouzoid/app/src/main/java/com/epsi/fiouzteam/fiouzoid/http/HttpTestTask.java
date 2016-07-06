@@ -81,7 +81,13 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         }
 
         //return requestContent(realUrl);
-        LoggerSql.Log(logMsg, criticity, true);
+        try {
+            LoggerSql.Log(logMsg, criticity, true);
+        }
+        catch (Exception e)
+        {
+            Log.i(TAG, e.getMessage());
+        }
         int sizeData = 0;
 
         try {
