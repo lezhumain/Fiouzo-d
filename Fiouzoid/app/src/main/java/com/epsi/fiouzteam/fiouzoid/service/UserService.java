@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.User;
+import com.epsi.fiouzteam.fiouzoid.http.Utils;
+import com.epsi.fiouzteam.fiouzoid.http.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
  * Created by Dju on 21/05/2016.
  */
 public class UserService {
-    private static final String BASE_URL = "http://davanture.fr:8000/";
+
     private static final String TAG = "UserService";
 
     public static List<User> getAllUsers()
@@ -30,7 +32,7 @@ public class UserService {
 
     public static User getUserById(int id)
     {
-        String url = BASE_URL + "getUserById/" + id;
+        String url = Utils.BASE_URL + "getUserById/" + id;
         HttpHelper helper = new HttpHelper(url, null);
         String resp = helper.Get();
         resp = resp.substring(1, resp.length() - 2);
@@ -60,7 +62,7 @@ public class UserService {
     public static User getUserByIdTest(int id)
     {
         //String url = "http://jsonplaceholder.typicode.com/posts/" + id;
-        String url = BASE_URL + "getUserById/" + id;
+        String url = Utils.BASE_URL + "getUserById/" + id;
         HttpHelper helper = new HttpHelper(url, null);
         String resp = helper.Get();
         resp = resp.substring(1, resp.length() - 2);

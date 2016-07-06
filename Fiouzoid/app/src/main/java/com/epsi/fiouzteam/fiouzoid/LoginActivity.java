@@ -10,6 +10,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
+import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
+import com.epsi.fiouzteam.fiouzoid.http.Utils;
+import com.epsi.fiouzteam.fiouzoid.model.User;
+
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -182,7 +186,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }*/
 
-        if (cancel) {
+        String url = Utils.BASE_URL + "api/user/connexion?";
+        String posParams = "username=" + email + "&" +
+                           "password=" + password;
+        url = url + posParams;
+
+        HttpHelper http = new HttpHelper(url, null);
+        String resp = http.Post(null);
+        Log.i(TAG, "post ret:\n\t" + resp);
+        if(resp == "error")
+        {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
@@ -195,6 +208,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             Log.i(TAG, "In OnLoadFinished!!!" + mErrorLogin + mErrorPassword);
         }
+        resp = '[' + resp.split("\n")[1] + ']';
+        List<User> lg = User.FromJson(resp);
+        MainActivity.APPUSERID = lg.get(0).getId();
     }
 
     private boolean isEmailValid(String email) {
@@ -303,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(mErrorPassword);
         mLoginView.setError(mErrorLogin);
 
-        if(mErrorPassword == null && mErrorLogin == null) {
+        if (mErrorPassword == null && mErrorLogin == null) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -327,22 +343,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            String fakeLogin = "fiouz",  fakePassword = "123lol";
+            String fakeLogin = "lucdef", fakePassword = "test";
             try {
-                if(!mLogin.equals(fakeLogin)) {
+                if (!mLogin.equals(fakeLogin)) {
                     mErrorLogin = "Bad Login";
                     Log.i(TAG, "Bad Login !!!");
                     return false;
-                }
-                else if (!mPassword.equals(fakePassword)) {
+                } else if (!mPassword.equals(fakePassword)) {
                     mErrorPassword = "Bad Password";
                     Log.i(TAG, "Bad Password !!!");
                     return false;
                 }
-
-
-
-
+                else
 
                 // Simulate network access.
                 Thread.sleep(2000);

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
-    private int appUserId = 1;
+    public static int APPUSERID = 1;
 
     private Database mDb;
     private List<Group> mGroups = new ArrayList<>();
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDb.open();
 
         int groupId = 1;
-        DataManager.SaveData(groupId, appUserId);
+        DataManager.SaveData(groupId, APPUSERID);
 
         mGroups = Database.mGroupDao.fetchAllGroups();
         LoadGroup(mGroups.get(0).getName());
@@ -277,14 +277,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         }
 
         return stock;
-    }
-
-    public int getAppUserId() {
-        return appUserId;
-    }
-
-    public void setAppUserId(int appUserId) {
-        this.appUserId = appUserId;
     }
 
     public int GetGroupeId() {
