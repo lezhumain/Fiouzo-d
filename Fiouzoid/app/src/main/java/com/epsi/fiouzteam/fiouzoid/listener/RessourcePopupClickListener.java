@@ -6,16 +6,17 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.epsi.fiouzteam.fiouzoid.R;
-import com.epsi.fiouzteam.fiouzoid.component.popup.NewGroupDialog;
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewRessourceDialog;
 
 /**
- * Created by ThaZalman on 05/07/2016.
+ * Created by ThaZalman on 06/07/2016.
  */
-public class GroupPopupClickListener implements View.OnClickListener {
-    private static final String TAG = "GroupPopupClickListener";
-    private NewGroupDialog _parent;
+public class RessourcePopupClickListener implements View.OnClickListener
+{
+    private static final String TAG = "RessPopupClickListener";
+    private NewRessourceDialog _parent;
 
-    public GroupPopupClickListener(NewGroupDialog parent)
+    public RessourcePopupClickListener(NewRessourceDialog parent)
     {
         if(parent == null)
             Log.i(TAG, "/!\\ ERROR: parent was null");
@@ -55,19 +56,23 @@ public class GroupPopupClickListener implements View.OnClickListener {
     }
 
     private boolean validateForm() {
-        EditText groupNameEdit = (EditText)_parent.findViewById(R.id.groupNameEdit),
-                descriptionEdit = (EditText)_parent.findViewById(R.id.descriptionEdit);
+        EditText nameEdit = (EditText)_parent.findViewById(R.id.ressourceNameEdit),
+            unitEdit = (EditText)_parent.findViewById(R.id.uniteEdit),
+            priceEdit = (EditText)_parent.findViewById(R.id.priceEdit);
 
-        if(groupNameEdit == null || descriptionEdit == null)
+        if(nameEdit == null || unitEdit == null || priceEdit == null )
             return false;
 
-        String groupName = groupNameEdit.getText().toString();
-        _parent.set_groupName(groupName);
-        _parent.set_descr(descriptionEdit.getText().toString());
+        String name = nameEdit.getText().toString(),
+            unit = unitEdit.getText().toString(),
+            price = priceEdit.getText().toString();
 
-        return groupName.length() > 0;
+        price = price.length() == 0 ? "0" : price;
 
+        _parent.set_ressourceName(name);
+        _parent.set_ressourceUnite(unit);
+        _parent.set_ressourcePrice(Integer.valueOf(price));
+
+        return name.length() > 0 && unit.length() > 0 && price.length() > 0; // TODO check price maybe
     }
-
-
 }

@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                             String groupName = ngd.get_groupName()
 //                                    ,description = ngd.get_descr()
                                             ;
-                            int idUser = MainActivity.this.getAppUserId();
+                            int idUser = MainActivity.this.GetAppUserId();
 
                             // post groupName and descr
                             String params = "idUser=" + String.valueOf(idUser) + "&name=" + groupName + "&description=";
@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                             Database.mUserDao.addUsersToGroupe(lst, newGroup.getId());
                         }
                     });
+
                     popup.show();
                 }
                 else
@@ -314,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         return stock;
     }
 
-    public int getAppUserId() {
+    public int GetAppUserId() {
         return appUserId;
     }
 

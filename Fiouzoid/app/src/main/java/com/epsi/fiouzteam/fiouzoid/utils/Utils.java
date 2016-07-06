@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewRessourceDialog;
 import com.epsi.fiouzteam.fiouzoid.listener.GroupPopupClickListener;
 import com.epsi.fiouzteam.fiouzoid.component.popup.NewGroupDialog;
 import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.listener.RessourcePopupClickListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -118,7 +120,29 @@ public class Utils {
         return dialog;
     }
 
-    public static Dialog CreateStockPopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)
+    public static NewRessourceDialog CreateRessourcePopup(Context context, String title)
+    {
+        // custom dialog
+        final NewRessourceDialog dialog = new NewRessourceDialog(context);
+        dialog.setContentView(R.layout.new_ressource_popup);
+        dialog.setTitle(title);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new RessourcePopupClickListener(dialog));
+
+        dialogButton = (Button) dialog.findViewById(R.id.dialogButtonNOK);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        //dialog.show();
+        return dialog;
+    }
+
+    public static Dialog CreateExchangePopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)
     {
         if(okMsg == null || okMsg.isEmpty())
             okMsg = " OK ";

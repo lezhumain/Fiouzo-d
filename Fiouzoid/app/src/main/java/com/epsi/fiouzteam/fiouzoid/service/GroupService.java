@@ -5,7 +5,6 @@ import android.util.Log;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
-import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.List;
 

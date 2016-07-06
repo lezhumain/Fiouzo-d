@@ -19,6 +19,20 @@ public class GroupRessource extends Entity {
     private int quantity;
     private int idRessource;
 
+    public GroupRessource()
+    {
+        super();
+    }
+
+    public GroupRessource(int id, String group, String ress, int qte, int idRess)
+    {
+        super(id);
+        repo = group;
+        resource = ress;
+        quantity = qte;
+        idRessource = idRess;
+    }
+
     @Override
     public String toJson() {
         return null;
