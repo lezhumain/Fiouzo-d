@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
+        // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
@@ -190,28 +191,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final String posParams = "username=" + email + "&" +
                            "password=" + password;
 
-
-
         HttpHelper http = new HttpHelper(url, null);
-        String resp = http.Post(posParams);
+        final String resp = http.Post(posParams);
         Log.i(TAG, "post ret:\n\t" + resp);
-        if(resp == "error")
+        Log.i(TAG, "post ret:\n\t" + resp);
+        if(resp.toLowerCase().contains("error"))
         {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView.requestFocus();
-        } else {
+            if(focusView != null)
+                focusView.requestFocus();
+
+            return;
+        } /* else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
 
-            Log.i(TAG, "In OnLoadFinished!!!" + mErrorLogin + mErrorPassword);
+            Log.i(TAG, "In OnLoadFinished!!!");
+        }*/
+
+        final String tab[] = resp.split("\n");
+        if(tab[1].contains("error"))
+        {
+            Log.i(TAG, "tab contains error\n\t");
+            return;
         }
-        resp = '[' + resp.split("\n")[1] + ']';
-        Log.i(TAG, '\t' + resp);
-        List<User> lg = User.FromJson(resp);
+
+        String resp1 = '[' + tab[1] + ']';
+
+        Log.i(TAG, '\t' + resp1);
+        List<User> lg = User.FromJson(resp1);
         MainActivity.APPUSERID = lg.get(0).getId();
     }
 
@@ -341,8 +353,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mPassword = password;
         }
 
+
         @Override
         protected Boolean doInBackground(Void... params) {
+            /*
             // TODO: attempt authentication against a network service.
 
             String fakeLogin = "lucdef", fakePassword = "test";
@@ -371,7 +385,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return pieces[1].equals(mPassword);
                 }
             }
-
+*/
             // TODO: register the new account here.
             return true;
         }
