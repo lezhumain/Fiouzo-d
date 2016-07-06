@@ -22,6 +22,7 @@ public class Database
    private final Context mContext;
    public static UserDao mUserDao;
    public static GroupDao mGroupDao;
+   private static LogDao mLogDao;
     //private static String database_path = "";
     private static final String database_path = "/mnt/sdcard/fiouzoid/";
 
@@ -33,6 +34,7 @@ public class Database
 
        mUserDao = new UserDao(mDb);
        mGroupDao = new GroupDao(mDb);
+       mLogDao = new LogDao(mDb);
        return this;
    }
 
@@ -44,6 +46,13 @@ public class Database
        this.mContext = context;
    }
 
+
+    public static void Log(String logQuery)
+    {
+        //Log.i(TAG, "class ontext: " + mContext.getClass().getName().toString());
+        //mDbHelper.
+        mLogDao.Log(logQuery);
+    }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
        DatabaseHelper(Context context) {

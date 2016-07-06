@@ -14,19 +14,6 @@ import java.util.List;
 public class GroupService {
     private static final String TAG = "GroupService";
 
-//    private static String fillWithUsers(List<User> users, String jsonStr) {
-//        jsonStr += "'users': [";
-//
-//        if (users != null)
-//        {
-//            for (User u : users) {
-//                jsonStr += u.toJson() + ',';
-//            }
-//            jsonStr = jsonStr.substring(0,jsonStr.length() - 1);
-//        }
-//
-//        return  jsonStr + ']';
-//    }
 
     public static List<Group> getAllGroups(int idUser) {
         idUser = idUser != 0 ? idUser : 1;

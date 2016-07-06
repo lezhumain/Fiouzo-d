@@ -1,5 +1,9 @@
 package com.epsi.fiouzteam.fiouzoid.utils;
 
+import android.util.Log;
+
+import com.epsi.fiouzteam.fiouzoid.dao.Database;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -7,12 +11,16 @@ import java.util.Calendar;
  * Created by Dju on 05/07/2016.
  */
 public class LoggerSql {
+    private static final String TAG = "LoggerSql";
+
     public static void Log(String msg, String criticity)
     {
-        // %V,%G,%Y
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss a");
-        String strDate = sdf.format(c.getTime()),
-                line = strDate + "\t[" + (criticity != null ? criticity : "INFO") + '\t' + msg;
+        // YYYY-MM-DD HH:MM:SS
+        String dateNow = "now", dateParam = "localtime",
+            query = "insert into Log (date, criticite, message) values (" +
+                    "datetime('now', 'localtime'), '" + (criticity == null ? "INFO" : criticity) + "', '" + msg + "')";
+
+        Log.i(TAG, "log query: " + query);
+        Database.Log(query);
     }
 }

@@ -51,6 +51,7 @@ public class StockService {
         String httpCode = ret.split("\n")[0];
 
         // TODO: do this server side
+        /*
         if(qte > 0)
         {
             url = new String(Utils.BASE_URL + "/repo/createorupdatestock");
@@ -60,6 +61,7 @@ public class StockService {
             jsonRessource = '[' + jsonRessource.split("\n")[1] + ']';
             Log.i(TAG, "jsonRessource1" + jsonRessource); // TODO server side: return full quantity
         }
+        */
 
 
         return !httpCode.contains("404");
