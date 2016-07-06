@@ -35,7 +35,7 @@ public class StockService {
         }
 
         idTo = to.getId();
-        idRessource = gr.getIdRessource();
+        idRessource = gr.getIdRessource(); // TODO: get correct idRessource value
         
         posParams = "idrepo=" + idGroup + "&" +
                 "idresource=" + idRessource + "&" +
@@ -49,6 +49,18 @@ public class StockService {
 
         Log.i(TAG, "post response:\n\t" + ret );
         String httpCode = ret.split("\n")[0];
+
+        // TODO: do this server side
+        if(qte > 0)
+        {
+            url = new String(Utils.BASE_URL + "/repo/createorupdatestock");
+            String params = new String("idRepo=" + idGroup + "&idResource=" + idRessource + "&idUser=" + idFrom + "&quantity=" + String.valueOf(-1 * qte)),
+                jsonRessource = new String(new HttpHelper(url, null).Post(params));
+
+            jsonRessource = '[' + jsonRessource.split("\n")[1] + ']';
+            Log.i(TAG, "jsonRessource1" + jsonRessource); // TODO server side: return full quantity
+        }
+
 
         return !httpCode.contains("404");
 

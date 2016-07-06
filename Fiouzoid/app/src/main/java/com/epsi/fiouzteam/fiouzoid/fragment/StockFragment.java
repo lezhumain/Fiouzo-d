@@ -89,7 +89,6 @@ public class StockFragment extends Fragment
     }
 
     private void handleNewStock() {
-        // TODO: popup stock + post + sqlite
         newStockPopup = Utils.CreateRessourcePopup(getContext(), "Nouvelle ressource");
         newStockPopup.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -107,7 +106,7 @@ public class StockFragment extends Fragment
                 // post ressource
                 String params = "name=" + name + "&unite=" + unit + "&price=" + price + "&idrepo=" + _idRepo;
                 String url = Utils.BASE_URL + "/repo/addResourceToRepo";
-                // TODO uncomment
+
                 String jsonRessource = (new HttpHelper(url, null)).Post(params);
                 jsonRessource = '[' + jsonRessource.split("\n")[1] + ']';
                 Log.i(TAG, "jsonRessource" + jsonRessource);
