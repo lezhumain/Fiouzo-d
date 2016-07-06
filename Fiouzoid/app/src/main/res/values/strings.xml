@@ -6,4 +6,13 @@
     <string name="action_test">Test</string>
     <string name="userName">Nom Utilisateur</string>
     <string name="move_date">Date</string>
+    <string name="ex_destUserHint">Nom du destinataire</string>
+    <string name="ex_quantity">Quantité à échanger</string>
+    <string name="create_group">Créer un groupe</string>
+    <string name="ex_grpNameHint">Nom du groupe</string>
+    <string name="ex_description">Description du groupe</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="ex_ressNameHint">Nom de la ressource</string>
+    <string name="ex_ressUnitHint">unité de la ressource</string>
+    <string name="ex_ressPriceHint">Prix de la ressource</string>
 </resources>

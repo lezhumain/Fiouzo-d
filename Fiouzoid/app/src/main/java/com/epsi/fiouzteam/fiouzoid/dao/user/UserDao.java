@@ -8,7 +8,8 @@ import android.util.Log;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao extends DbContentProvider
         implements IUserSchema, IUserDao {
@@ -27,9 +28,11 @@ public class UserDao extends DbContentProvider
         User user = new User();
         cursor = super.query(USER_TABLE, USER_COLUMNS, selection,
                 selectionArgs, COLUMN_ID);
-        if (cursor != null) {
+        if (cursor != null)
+        {
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            if (!cursor.isAfterLast())
+            {
                 user = cursorToEntity(cursor);
                 cursor.moveToNext();
             }
@@ -118,8 +121,10 @@ public class UserDao extends DbContentProvider
         String log = "\tinserts in UserGroup went ";
         if( super.execSql(query) )
             log += "good";
-        else
+        else {
+            ret = false;
             log += "wrong";
+        }
         Log.i(TAG, log);
 
         return ret;
@@ -181,4 +186,21 @@ public class UserDao extends DbContentProvider
         return initialValues;
     }
 
+    public User fetchByName(String userId) {
+        final String selectionArgs[] = { userId };
+        final String selection = COLUMN_USERNAME + " = ?";
+        User user = null;
+        cursor = super.query(USER_TABLE, USER_COLUMNS, selection,
+                selectionArgs, COLUMN_ID); // TODO: check if need COLUMN_USERNAME instead
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                user = cursorToEntity(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return user;
+    }
 }

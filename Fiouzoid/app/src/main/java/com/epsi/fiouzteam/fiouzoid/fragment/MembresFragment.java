@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.epsi.fiouzteam.fiouzoid.MainActivity;
+import com.epsi.fiouzteam.fiouzoid.R;
 
 import java.util.ArrayList;
 
