@@ -13,15 +13,16 @@ import java.util.Calendar;
 public class LoggerSql {
     private static final String TAG = "LoggerSql";
 
-    public static void Log(String msg, String criticity, Boolean debug)
+    public static void Log(String msg, String criticity, Boolean debug, Double bytesData)
     {
         if(debug == null)
             debug = false;
 
         // YYYY-MM-DD HH:MM:SS
         String dateNow = "now", dateParam = "localtime",
-            query = "insert into Log (date, criticite, message) values (" +
-                    "datetime('now', 'localtime'), '" + (criticity == null ? "INFO" : criticity) + "', '" + msg + "')";
+            query = "insert into Log (date, criticite, message, bytesUsed) values (" +
+                    "datetime('now', 'localtime'), '" + (criticity == null ? "INFO" : criticity) + "', '" + msg + "', " +
+                    bytesData + ")";
 
 
         //Log.i(TAG, "log query: " + query);
