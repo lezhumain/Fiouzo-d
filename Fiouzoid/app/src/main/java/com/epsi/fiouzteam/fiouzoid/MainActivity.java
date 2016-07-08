@@ -21,6 +21,8 @@ import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.fragment.TabFragment;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
+import com.epsi.fiouzteam.fiouzoid.model.Ressource;
 import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         /**
          * Put groups navigation items
          */
-        this.handleGroupItems();
+        this.updateGroupItems();
 
         /**
          * Setup click events on the Navigation View Items. (NavigationDrawer)
@@ -98,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                 }
                 else if (menuItem.getItemId() == R.id.nav_item_create_grp)
                 {
-                    // TODO: create gruop popup
-
                     Log.i(TAG, "\tClick on 'create Groupe'");
                     Dialog popup = Utils.CreateNewGroupPopup("TITLE", MainActivity.this);
                     popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -126,9 +126,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                             Log.i(TAG, "jsonGroup" + jsonGroup);
 
 
-                            // TODO store in sqlite
                             // store the group
-
                             Group newGroup = (Group.FromJson(jsonGroup)).get(0);
                             Database.mGroupDao.addGroup(newGroup);
 
@@ -137,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
                             List<User> lst = new ArrayList<User>();
                             lst.add(user);
                             Database.mUserDao.addUsersToGroupe(lst, newGroup.getId());
+
+                            // update groups in drawermenu
+                            mGroups.add(newGroup);
+                            updateGroupItems();
                         }
                     });
 
@@ -189,17 +191,10 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDrawerToggle.syncState();
     }
 
-    private void handleGroupItems() {
-//        navView = (NavigationView) findViewById(R.id.navView);
-
+    private void updateGroupItems() {
         Menu m = mNavigationView.getMenu();
         SubMenu topChannelMenu = m.addSubMenu("Groupes");
-//        MenuItem groupsItem = m.getItem(R.id.nav_item_groups);
-//        SubMenu topChannelMenu = groupsItem.getSubMenu();
-//        topChannelMenu.clear();
 
-
-        //topChannelMenu.add("test");
         for (Group group : mGroups)
             topChannelMenu.add(group.getName());
 
@@ -326,5 +321,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         actualStock.put(typeRessourceName, stock);
 
         mCurrentGroup.setStock(actualStock);
+    }
+
+    public void AddRessource(String ressourceName, int qte)
+    {
+        Hashtable<String, Integer> stock = mCurrentGroup.getStock();
+        stock.put(ressourceName, qte);
+
+        mCurrentGroup.setStock(stock);
     }
 }

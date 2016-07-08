@@ -44,6 +44,9 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+    private String username, password;
+    private View focusView;
+    private boolean _connected = false;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -162,57 +165,37 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mLoginView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        username = mLoginView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         boolean cancel = false;
-        View focusView = null;
 
+
+        // Check if an username was entered.
+        if (TextUtils.isEmpty(username)) {
+            mLoginView.setError(getString(R.string.error_field_required));
+            focusView = mLoginView;
+            cancel = true;
+        }
+        // Check if a password was entered
+        else if(TextUtils.isEmpty(password))
+        {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+            cancel = true;
+        }
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        else if (!isPasswordValid(password))
+        {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mLoginView.setError(getString(R.string.error_field_required));
-            focusView = mLoginView;
-            cancel = true;
-        } /*else if (!isEmailValid(email)) {
-            mLoginView.setError(getString(R.string.error_invalid_email));
-            focusView = mLoginView;
-            cancel = true;
-        }*/
-
-        String url = Utils.BASE_URL + "/user/connexion";
-        final String posParams = "username=" + email + "&" +
-                           "password=" + password;
-
-
-
-        HttpHelper http = new HttpHelper(url, null);
-        String resp = http.Post(posParams);
-        Log.i(TAG, "post ret:\n\t" + resp);
-        if(resp == "error")
-        {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+        else {
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
-
-            Log.i(TAG, "In OnLoadFinished!!!" + mErrorLogin + mErrorPassword);
         }
-        resp = '[' + resp.split("\n")[1] + ']';
-        Log.i(TAG, '\t' + resp);
-        List<User> lg = User.FromJson(resp);
-        MainActivity.APPUSERID = lg.get(0).getId();
     }
 
     private boolean isEmailValid(String email) {
@@ -222,7 +205,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 1;
     }
 
     /**
@@ -280,6 +263,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        Log.i(TAG, "\tonLoadFinished");
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -317,11 +301,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void finish() {
-
+        //Log.i(TAG, "\tfinish");
         mPasswordView.setError(mErrorPassword);
         mLoginView.setError(mErrorLogin);
 
-        if (mErrorPassword == null && mErrorLogin == null) {
+        //if (mErrorPassword == null && mErrorLogin == null) {
+        if (_connected) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -341,38 +326,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mPassword = password;
         }
 
+
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            //  Creation of the URL based on the BASE_URL
+            String url = Utils.BASE_URL + "/user/connexion";
 
-            String fakeLogin = "lucdef", fakePassword = "test";
-            try {
-                if (!mLogin.equals(fakeLogin)) {
-                    mErrorLogin = "Bad Login";
-                    Log.i(TAG, "Bad Login !!!");
-                    return false;
-                } else if (!mPassword.equals(fakePassword)) {
-                    mErrorPassword = "Bad Password";
-                    Log.i(TAG, "Bad Password !!!");
-                    return false;
-                }
-                else
+            //  We create the post message for the POST REQUEST
+            final String posParams = "username=" + username + "&" +
+                    "password=" + password;
 
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+            HttpHelper http = new HttpHelper(url, null);
+
+            //  We post the message for the Database and we get the response
+            final String resp = http.Post(posParams);
+
+
+            //  if the response contain the word "error", ,we quit the login program
+            _connected = true;
+            if(resp.toLowerCase().contains("error"))
+            {
+                _connected = false;
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mLogin)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            //  We split the response with \n into an array of string
+            final String tab[] = resp.split("\n");
 
-            // TODO: register the new account here.
+
+            String resp1 = '[' + tab[1] + ']';
+            Log.i(TAG, '\t' + resp1);
+
+            // Get user ID from the post response
+            List<User> lg = User.FromJson(resp1);
+
+            //  We register tee user id into the app
+            MainActivity.APPUSERID = lg.get(0).getId();
+
+
             return true;
         }
 
@@ -381,14 +372,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            /*
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-            */
             finish();
         }
 

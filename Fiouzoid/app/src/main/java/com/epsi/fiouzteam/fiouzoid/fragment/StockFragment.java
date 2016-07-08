@@ -73,7 +73,7 @@ public class StockFragment extends Fragment
         else
         {
             Log.d(TAG, "OKOK (context is of type " + getContext().getClass().getName() + ')');
-            handleListView();
+            updateListView();
         }
 
         // add button click listener
@@ -126,13 +126,17 @@ public class StockFragment extends Fragment
 
                 List<GroupRessource> lgr = GroupRessource.FromJson(jsonRessource);
                 Database.mGroupDao.addStocksToGroup(lgr, _idRepo);
+
+                // update list
+                ((MainActivity)getContext()).AddRessource(lgr.get(0).getResource(), lgr.get(0).getQuantity());
+                updateListView();
             }
         });
-        newStockPopup.show();
 
+        newStockPopup.show();
     }
 
-    private void handleListView()
+    private void updateListView()
     {
         ArrayList<String> stockList = ((MainActivity)getContext()).GetStockGroupe();
 
