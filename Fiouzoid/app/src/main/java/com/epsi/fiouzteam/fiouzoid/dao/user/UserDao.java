@@ -45,10 +45,10 @@ public class UserDao extends DbContentProvider
     public List<User> fetchAllByGroup(int groupId)
     {
         List<User> userList = new ArrayList<User>();
-        String  url = "select u.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = ?";
-        String[] args = { String.valueOf(groupId) };
+        String  query = "select u.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = " + String.valueOf(groupId);
+        //String[] args = { String.valueOf(groupId) };
 
-        cursor = super.rawQuery(url, args);
+        cursor = super.rawQuery(query, null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -101,6 +101,9 @@ public class UserDao extends DbContentProvider
     public boolean addUsersToGroupe(List<User> users, int idGroup) {
         boolean ret = true, isFirst = true;
 
+        if(users.size() == 0)
+            return true;
+
         String query = "insert into UserGroup select " +
                 users.get(0).getId() + " as idUser, " +
                 idGroup + " as idGroup ";
@@ -132,8 +135,7 @@ public class UserDao extends DbContentProvider
 
     @Override
     public boolean deleteAllUsers() {
-        super.delete(USER_TABLE, null, null);
-        return true;
+        return super.delete(USER_TABLE, null, null) > 0;
     }
 
     protected User cursorToEntity(Cursor cursor) {
@@ -202,5 +204,10 @@ public class UserDao extends DbContentProvider
         }
 
         return user;
+    }
+
+    public void deleteGroupUsers() {
+        String query = "delete from UserGroup";
+        super.execSql(query);
     }
 }

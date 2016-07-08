@@ -26,23 +26,29 @@ public class DataManager
         helper.addUsers(users);
     }
 
-    private static void SaveGroups(int userId)
+    public static void SaveGroups(int userId)
     {
         GroupDao helper = Database.mGroupDao;
         //List<Group> groups = GroupService.getAllGroups(1);
-        List<Group> groups = GroupService.getAllGroups(1);
+        List<Group> groups = GroupService.getAllGroups(userId);
 
+        helper.deleteAllGroups();
         helper.addGroups(groups);
     }
 
-    private static void SaveGroupUsers(int idGroup) {
+    private static void SaveGroupUsers(int idGroup)
+    {
+        List<User> users = UserService.getUsersByGroup(idGroup);
 
-        List<User> users = Database.mUserDao.fetchAllUsers();
+        Database.mUserDao.deleteGroupUsers();
+
+        // save users to, if some new ones
+        Database.mUserDao.addUsers(users);
         Database.mUserDao.addUsersToGroupe(users, idGroup);
     }
 
     private static void SaveGroupRessource(int idGroup) {
-        List<GroupRessource> stocks = GroupService.getStocksForGroup(1);
+        List<GroupRessource> stocks = GroupService.getStocksForGroup(idGroup);
 
         Database.mGroupDao.deleteGroupStocks();
         Database.mGroupDao.addStocksToGroup(stocks, idGroup);
@@ -51,9 +57,9 @@ public class DataManager
     }
 
     public static void SaveData(int groupId, int appUserId) {
-        DataManager.SaveUsers(1);
-        DataManager.SaveGroups(appUserId);
-        DataManager.SaveGroupUsers(appUserId);
+        DataManager.SaveUsers(groupId);
+        //DataManager.SaveGroups(appUserId);
+        DataManager.SaveGroupUsers(groupId);
         DataManager.SaveGroupRessource(groupId);
     }
 }

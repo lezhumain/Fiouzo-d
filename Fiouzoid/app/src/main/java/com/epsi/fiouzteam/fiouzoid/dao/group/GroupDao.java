@@ -92,7 +92,7 @@ public class GroupDao extends DbContentProvider
                 break;
             */
 
-            g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
+            //g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
         }
 
         return groupList;
@@ -141,7 +141,7 @@ public class GroupDao extends DbContentProvider
 
     @Override
     public boolean deleteAllGroups() {
-        return false;
+        return super.delete(GROUP_TABLE, null, null) > 0;
     }
 
     protected Group cursorToEntity(Cursor cursor) {
@@ -244,6 +244,7 @@ public class GroupDao extends DbContentProvider
 
     private void setContentValue(Group group) {
         initialValues = new ContentValues();
+        // TODO check id
         if(group.getId() > 0)
             initialValues.put(COLUMN_ID, group.getId());
 
@@ -257,7 +258,6 @@ public class GroupDao extends DbContentProvider
 
     public Group fetchByName(String groupName) {
         //TODO: correct here
-        final int id = 0;
         final String selectionArgs[] = { String.valueOf(groupName) };
         final String selection = COLUMN_NAME + " = ?";
         Group group = new Group();

@@ -18,6 +18,7 @@ public class StockService {
     public static boolean PostExchange(int idGroup, String userTo, int idFrom, String itemName, int qte)
     {
         int idTo, idRessource;
+        // TODO: route get user by name and use it
         User to = Database.mUserDao.fetchByName(userTo);
         String ressource = (itemName.split("\t"))[1],
             url = Utils.BASE_URL + "/exchange/addexchange",
@@ -36,7 +37,7 @@ public class StockService {
         }
 
         idTo = to.getId();
-        idRessource = gr.getIdRessource(); // TODO: get correct idRessource value
+        idRessource = gr.getIdRessource();
         
         posParams = "idrepo=" + idGroup + "&" +
                 "idresource=" + idRessource + "&" +

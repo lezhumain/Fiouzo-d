@@ -2,6 +2,7 @@ package com.epsi.fiouzteam.fiouzoid.service;
 
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.MainActivity;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
@@ -30,7 +31,8 @@ public class GroupService {
     }
 
     public static List<GroupRessource> getStocksForGroup(int idGroup) {
-        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=" + String.valueOf(idGroup);
+        //String url = "http://api.davanture.fr/api/repo/getallstock?idUser=" + String.valueOf(idGroup);
+        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=" + String.valueOf(MainActivity.APPUSERID);
         HttpHelper helper = new HttpHelper(url, null);
         String resp = helper.Get();
 

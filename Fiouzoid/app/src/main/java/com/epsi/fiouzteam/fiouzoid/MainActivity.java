@@ -71,11 +71,14 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDb = new Database(this);
         mDb.open();
 
-        int groupId = 1;
+        DataManager.SaveGroups(APPUSERID);
+        mGroups = Database.mGroupDao.fetchAllGroups();
+        int groupId = mGroups.get(0).getId();
         DataManager.SaveData(groupId, APPUSERID);
 
-        mGroups = Database.mGroupDao.fetchAllGroups();
         LoadGroup(mGroups.get(0).getName());
+
+
 
         /**
          * Put groups navigation items
@@ -206,9 +209,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void LoadGroup(String groupName)
     {
         mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+        int groupId = mCurrentGroup.getId();
 
-        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(mCurrentGroup.getId());
+        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(groupId);
         mCurrentGroup.setStock( stocks );
+
+        List<User> users = Database.mUserDao.fetchAllByGroup(groupId);
+        mCurrentGroup.setUsers(users);
 
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }

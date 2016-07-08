@@ -79,7 +79,10 @@ public class UserService {
         String resp = helper.Get();
 
         //Log.i(TAG, "json url:\n\t" + url);
-        Log.i(TAG, "json response:\n\t" + resp);
+        Log.i(TAG, "json response: (" +String.valueOf(resp.length()) + ")\n\t" + resp);
+
+        if(resp.contains("[]"))
+            return new ArrayList<>();
 
         List<User> lg = User.FromJson(resp);
         Log.i(TAG, "user toString:\n\t" + lg.get(0).toString());
