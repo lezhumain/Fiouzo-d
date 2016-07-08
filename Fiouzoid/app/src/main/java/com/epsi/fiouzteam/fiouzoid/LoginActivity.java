@@ -191,12 +191,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mPasswordView;
             cancel = true;
         }
-
-        showProgress(true);
-        mAuthTask = new UserLoginTask(username, password);
-        mAuthTask.execute((Void) null);
-
-
+        else {
+            showProgress(true);
+            mAuthTask = new UserLoginTask(username, password);
+            mAuthTask.execute((Void) null);
+        }
     }
 
     private boolean isEmailValid(String email) {
