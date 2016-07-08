@@ -47,7 +47,7 @@ public class DataManager
         Database.mGroupDao.deleteGroupStocks();
         Database.mGroupDao.addStocksToGroup(stocks, idGroup);
 
-        LoggerSql.Log("Groups saved", null, true);
+        LoggerSql.Log("Groups saved", null, true, null);
     }
 
     public static void SaveData(int groupId, int appUserId) {

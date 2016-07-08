@@ -82,7 +82,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
 
         //return requestContent(realUrl);
         try {
-            LoggerSql.Log(logMsg, criticity, true);
+            LoggerSql.Log(logMsg, criticity, true, null);
         }
         catch (Exception e)
         {
