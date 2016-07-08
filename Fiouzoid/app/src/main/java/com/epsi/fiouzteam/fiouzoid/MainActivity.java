@@ -21,6 +21,8 @@ import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.fragment.TabFragment;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
+import com.epsi.fiouzteam.fiouzoid.model.Ressource;
 import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
@@ -327,5 +329,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         actualStock.put(typeRessourceName, stock);
 
         mCurrentGroup.setStock(actualStock);
+    }
+
+    public void AddRessource(String ressourceName, int qte)
+    {
+        Hashtable<String, Integer> stock = mCurrentGroup.getStock();
+        stock.put(ressourceName, qte);
+
+        mCurrentGroup.setStock(stock);
     }
 }
