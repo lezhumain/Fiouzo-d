@@ -109,6 +109,17 @@ public class Database
                 ");\n";
 
         db.execSQL(query);
+
+        Log.i(TAG, "Now adding UserGroup table");
+        final String query1 = "CREATE TABLE IF NOT EXISTS UserGroup(\n" +
+                "\tidUser   INTEGER NOT NULL ,\n" +
+                "\tidGroup  INTEGER NOT NULL ,\n" +
+                "\tPRIMARY KEY (idUser,idGroup) ,\n" +
+                "\t\n" +
+                "\tFOREIGN KEY (idUser) REFERENCES User(id),\n" +
+                "\tFOREIGN KEY (idGroup) REFERENCES \"Group\"(id)\n" +
+                ");";
+        db.execSQL(query1);
         //db.execSQL(IUserSchema.USER_TABLE_CREATE);
         //db.execSQL(IGroupSchema.GROUP_TABLE_CREATE);
     }
