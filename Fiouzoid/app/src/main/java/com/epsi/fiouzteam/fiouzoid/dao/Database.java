@@ -107,7 +107,6 @@ public class Database
                 "\tFOREIGN KEY (idRessource) REFERENCES TypeRessource(id),\n" +
                 "\tFOREIGN KEY (idGroup) REFERENCES \"Group\"(id)\n" +
                 ");\n";
-
         db.execSQL(query);
 
         Log.i(TAG, "Now adding UserGroup table");

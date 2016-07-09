@@ -29,4 +29,5 @@
     <string name="ex_ressNameHint">Nom de la ressource</string>
     <string name="ex_ressUnitHint">unité de la ressource</string>
     <string name="ex_ressPriceHint">Prix de la ressource</string>
+    <string name="nav_groups_header">Groupes</string>
 </resources>

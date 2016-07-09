@@ -196,7 +196,14 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
     private void updateGroupItems() {
         Menu m = mNavigationView.getMenu();
-        SubMenu topChannelMenu = m.addSubMenu("Groupes");
+//        SubMenu topChannelMenu = (SubMenu)m.findItem(R.id.nav_groups_menu);
+        SubMenu topChannelMenu = (m.findItem(R.id.nav_groups)).getSubMenu();
+
+//        if(topChannelMenu == null) {
+//            Log.i(TAG, "menu was null...");
+//            topChannelMenu = m.addSubMenu("Groupes");
+//        }
+        topChannelMenu.clear();
 
         for (Group group : mGroups)
             topChannelMenu.add(group.getName());
