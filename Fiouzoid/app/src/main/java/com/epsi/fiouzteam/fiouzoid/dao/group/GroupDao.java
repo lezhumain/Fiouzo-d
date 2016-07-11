@@ -93,7 +93,7 @@ public class GroupDao extends DbContentProvider
         setContentValue(group);
 
         List<User> users = group.getUsers();
-        if(users != null && !users.isEmpty()) // TODO test
+        if(users != null && !users.isEmpty())
         {
             String query = "insert into UserGroup select ";
             boolean isFirst = true;
@@ -233,6 +233,9 @@ public class GroupDao extends DbContentProvider
 
     public void addStocksToGroup(List<GroupRessource> stocks, int groupId)
     {
+        if(stocks == null || stocks.size() == 0)
+            return;
+
         boolean isFirst = true;
         int cpt = 0;//, stock = stocks.get(keys[cpt]);
         String stockQuery = "",

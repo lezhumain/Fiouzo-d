@@ -24,7 +24,6 @@ import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
 import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
-import com.epsi.fiouzteam.fiouzoid.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -179,9 +178,10 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
             public boolean onMenuItemClick(MenuItem item) {
                 Log.i(TAG, "\tmenu item clicked");
 
-                if(item.getItemId() == R.id.action_test)
+                if(item.getItemId() == R.id.action_quit)
                 {
-                    TestHttp();
+                    // close the app
+                    finish();
                 }
 
                 return true;
@@ -236,40 +236,6 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
     */
-
-    private void TestHttp()
-    {
-        String url = "http://api.davanture.fr/api/repo/getallstock?idUser=1";
-        //String url = "http://posttestserver.com/post.php";
-        HttpHelper help = new HttpHelper(url, null);
-        //String data = "{\"player\":\"player1\",\"badge\":\"yeah\"}",
-          //  result = help.Post(data);
-            //result = help.Get();
-
-        //Log.i(TAG, "\tTEST HTTP: result = " + result);
-//        User u = UserService.getUserById(3);
-        //User u = Database.mUserDao.fetchById(1);
-        //List<Group> u = GroupService.getAllGroups(1);
-        List<User> u = UserService.getUsersByGroup(1);
-
-        //Log.i(TAG, "helper's response: " + u.toJson());
-
-
-//        u.setLastName(u.getLastName() + 1);
-//        u.setUsername(u.getUsername() + 1);
-        /*
-        boolean res = Database.mUserDao.addUser(u);
-        if(!res)
-            Log.i(TAG, "User wasn't added");
-        */
-
-        String msg = "";
-        for (User g :
-                u) {
-            msg += g.toString() + '\n';
-        }
-        Log.i(TAG, msg);
-    }
 
     @Override
     protected void onStop() {
