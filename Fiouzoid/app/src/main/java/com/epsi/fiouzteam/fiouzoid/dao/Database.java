@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
-import com.epsi.fiouzteam.fiouzoid.dao.group.IGroupSchema;
-import com.epsi.fiouzteam.fiouzoid.dao.user.IUserSchema;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 
 
@@ -23,7 +21,6 @@ public class Database
    public static UserDao mUserDao;
    public static GroupDao mGroupDao;
    private static LogDao mLogDao;
-    //private static String database_path = "";
     private static final String database_path = "/mnt/sdcard/fiouzoid/";
 
 
@@ -51,13 +48,14 @@ public class Database
 
     public static void Log(String logQuery)
     {
-        //Log.i(TAG, "class ontext: " + mContext.getClass().getName().toString());
-        //mDbHelper.
         mLogDao.Log(logQuery);
     }
 
+    // Ne fonctionne pas, incomprehensible
     public static void CreateDb(SQLiteDatabase db)
     {
+        Log.i(TAG, "\tCreateDb started");
+
         final String query = "CREATE TABLE IF NOT EXISTS User(\n" +
                 "\tid \t\t\tINTEGER NOT NULL ,\n" +
                 "\tusername\tVARCHAR NOT NULL ,\n" +
@@ -119,11 +117,12 @@ public class Database
                 "\tFOREIGN KEY (idGroup) REFERENCES \"Group\"(id)\n" +
                 ");";
         db.execSQL(query1);
-        //db.execSQL(IUserSchema.USER_TABLE_CREATE);
-        //db.execSQL(IGroupSchema.GROUP_TABLE_CREATE);
+
+        Log.i(TAG, "\tCreateDb done");
     }
 
     public static void UpgradeDb(SQLiteDatabase db) {
+        Log.i(TAG, "\tUpgradeDb started");
         final String query = "drop table if exists UserGroup;\n" +
                 "drop table if exists GroupRessource;\n" +
                 "drop table if exists TypeRessource;\n" +
@@ -131,14 +130,9 @@ public class Database
                 "drop table if exists Log;\n" +
                 "drop table if exists \"Group\";";
 
-           /*
-           db.execSQL("drop table if exists IF EXISTS "
-                + IUserSchema.USER_TABLE);
-           db.execSQL("drop table if exists IF EXISTS "
-                   + IGroupSchema.GROUP_TABLE);
-           */
-
         db.execSQL(query);
+        Log.i(TAG, "\tUpgradeDb done");
+
         CreateDb(db);
     }
 

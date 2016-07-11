@@ -53,13 +53,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     private static final String TAG = "LoginActivity";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -95,6 +88,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+
+        if(mEmailSignInButton == null)
+            return;
+
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,21 +172,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (TextUtils.isEmpty(username)) {
             mLoginView.setError(getString(R.string.error_field_required));
             focusView = mLoginView;
-            cancel = true;
         }
         // Check if a password was entered
         else if(TextUtils.isEmpty(password))
         {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
-            cancel = true;
         }
         // Check for a valid password, if the user entered one.
         else if (!isPasswordValid(password))
         {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
         }
         else {
             showProgress(true);

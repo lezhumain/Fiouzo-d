@@ -53,7 +53,6 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
     protected String doInBackground(String... params) {
         String realUrl = _url.replace("$QUERY$", "Android"),
             method = "", result = "", logMsg = "", criticity = "INFO";
-        ;
         //Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
         // TODO log size data
 
@@ -93,7 +92,6 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         try {
             sizeData = (result.getBytes("UTF-8")).length;
         } catch (UnsupportedEncodingException e) {
-            sizeData = 0;
         }
         Log.i(TAG, "HTTP RESPONSE:\n\t" + result);
         return result;
@@ -128,35 +126,9 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
             }
         }
 
-        //result = handleJson(result);
         return result;
     }
 
-/*
-    public static void PostContent(String  url, String data)
-    {
-        HttpClient httpclient = new DefaultHttpClient();
-        String result = null;
-        //HttpGet httpget = new HttpGet(url);
-        HttpPost httppost = new HttpPost(url);
-        HttpResponse response = null;
-        //InputStream instream = null;
-
-        try
-        {
-            response = httpclient.execute(httppost);
-            StatusLine sl = response.getStatusLine();
-
-            int code = sl.getStatusCode();
-            Log.i(TAG, "\t post executed: code " + String.valueOf(code));
-        } catch (Exception e)
-        {
-            Log.i(TAG, "\t post error:");
-            Log.i(TAG, "\t\t" + e.getMessage());
-        }
-        //finally {}
-    }
-*/
     public static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();

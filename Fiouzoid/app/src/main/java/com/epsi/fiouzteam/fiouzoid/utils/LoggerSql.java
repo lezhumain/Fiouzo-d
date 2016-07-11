@@ -4,9 +4,6 @@ import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 /**
  * Created by Dju on 05/07/2016.
  */

@@ -14,10 +14,6 @@ public class NewRessourceDialog extends Dialog {
         super(context);
     }
 
-    public NewRessourceDialog(Context context, int themeResId) {
-        super(context, themeResId);
-    }
-
     protected NewRessourceDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }

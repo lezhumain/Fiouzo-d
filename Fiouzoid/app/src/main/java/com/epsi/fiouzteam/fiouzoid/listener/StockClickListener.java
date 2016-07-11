@@ -34,8 +34,6 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
         String groupName = _tv.getText().toString();
         String[] lol = groupName.split("\t");
 
-        //msg += '\n' + lol.length;
-
         if(lol.length != 3)
             Log.i(TAG, "Split error");
         else
@@ -67,8 +65,8 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
 
         Log.i(TAG, msg);
 
-        // TODO: ask for dest user iu dialog
-        //Dialog popup = Utils.CreateAlertDialog(_contexts, msg);
+
+
         final int idGroup = _contexts.GetGroupeId(),
                 idAppUser = MainActivity.APPUSERID;
         final Dialog popup = Utils.CreateExchangePopup(_contexts, "TITLE", msg, idGroup, null, null);
@@ -84,7 +82,7 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
                     Log.i(TAG, "form not valid...");
                     return;
                 }
-                // TODO: post stock, idGroup, idFrom, idTo
+
                 // itemName, groupName, fromName, toName
                 final int qte = Integer.parseInt(qteStr);
 
@@ -95,11 +93,6 @@ public class StockClickListener implements AdapterView.OnItemClickListener{
     }
 
     private boolean formValid(String qteStr, String toName) {
-        Boolean bool1 = _numberPattern.matcher(qteStr).matches(),
-                bool2 = toName != null,
-                bool3 = !toName.isEmpty();
-
-        Log.i(TAG, "valid: " + bool1.toString() + " " + bool2.toString() + " " + bool3.toString());
-        return bool1 && bool2 && bool3 ;
+        return (_numberPattern.matcher(qteStr).matches()) && (toName != null) && (!toName.isEmpty()) ;
     }
 }

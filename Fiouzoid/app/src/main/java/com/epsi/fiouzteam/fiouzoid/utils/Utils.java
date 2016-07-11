@@ -138,7 +138,7 @@ public class Utils {
             }
         });
 
-        //dialog.show();
+
         return dialog;
     }
 
@@ -154,15 +154,6 @@ public class Utils {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_popup);
         dialog.setTitle(title);
-
-
-
-        // set the custom dialog components - text, image and button
-        //TextView text = (TextView) dialog.findViewById(R.id.popup_text);
-        //text.setText(msg);
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.dbz);
-
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         dialogButton.setOnClickListener(new View.OnClickListener() {

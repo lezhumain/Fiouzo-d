@@ -1,7 +1,5 @@
 package com.epsi.fiouzteam.fiouzoid.utils;
 
-import com.google.gson.internal.bind.DateTypeAdapter;
-
 import java.sql.Date;
 
 /**

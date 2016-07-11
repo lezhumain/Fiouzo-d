@@ -85,16 +85,6 @@ public class GroupDao extends DbContentProvider
         }
 
 
-        for (Group g : groupList)
-        {
-            /*
-            if(g.getId() > 2)
-                break;
-            */
-
-            //g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
-        }
-
         return groupList;
     }
 
@@ -174,10 +164,6 @@ public class GroupDao extends DbContentProvider
     {
         String query = "SELECT quantite, ressource FROM GroupRessource where idGroup = " + String.valueOf(idGroup);
         Hashtable<String, Integer> stocks = new Hashtable<>();
-        String[] args = { String.valueOf(idGroup) };
-        String[] columns = {"quantite", "ressource"};
-        final String selectionArgs[] = { String.valueOf(idGroup) };
-        final String selection = "idGroup = ?";
 
         //cursor = super.query("GroupRessource", columns, selection, selectionArgs, null);
         cursor = super.rawQuery(query, null);
@@ -202,45 +188,6 @@ public class GroupDao extends DbContentProvider
 
         return stocks;
     }
-
-    /*
-    public void addStocksToGroup(Hashtable<String, Integer> stocks, int groupId)
-    {
-        boolean isFirst = true;
-        Object[] keys = stocks.keySet().toArray();
-        int cpt = 0,
-            stock = stocks.get(keys[cpt]);
-        String stockQuery = "",
-                query = "insert into GroupRessource select " +
-                        String.valueOf( stock ) + " as quantite, '" +
-                        keys[cpt] + "' as ressource, " +
-                        groupId + " as idGroup ";
-
-        // TODO do without foreach
-        cpt++;
-        for (; cpt < keys.length; ++cpt)
-        {
-
-            //if(keys.length < 2)
-            //    break;
-
-            String keyStr = (String)keys[cpt];
-            stock = stocks.get(keyStr);
-            //String keyStr = (String)key;
-
-
-            if(keyStr == null) {
-                cpt -= 1;
-                continue;
-            }
-
-            query += "union all select " + String.valueOf( stock ) + ", '" + keys[cpt] + "', " + groupId + ' ';
-        }
-
-        Log.i(TAG, "query:\n\t" + query);
-        execSql(query);
-    }
-    */
 
     private void setContentValue(Group group) {
         initialValues = new ContentValues();
@@ -316,7 +263,7 @@ public class GroupDao extends DbContentProvider
         final String selection = COL_RESSOURCE + " = ?";
         GroupRessource groupRessource = null;
         cursor = super.query(GROUP_RESSOURCE_TABLE, GROUP_RESSOURCE_COLUMNS, selection,
-                selectionArgs, COL_ID_RESSOURCE); // TODO check if COL_ID_RESSOURCE ok
+                selectionArgs, COL_ID_RESSOURCE);
         if (cursor != null) {
             cursor.moveToFirst();
             if (!cursor.isAfterLast()) {

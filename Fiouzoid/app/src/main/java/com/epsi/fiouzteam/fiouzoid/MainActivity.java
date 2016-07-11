@@ -21,8 +21,6 @@ import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.fragment.TabFragment;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
-import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
-import com.epsi.fiouzteam.fiouzoid.model.Ressource;
 import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
@@ -169,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
          * Setup Drawer Toggle of the Toolbar
          */
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+
+        if(toolbar == null)
+            return;
+
         toolbar.inflateMenu(R.menu.menu_main);
 
         // click sur un item du menu parametres
