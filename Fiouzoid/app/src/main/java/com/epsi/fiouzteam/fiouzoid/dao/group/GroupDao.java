@@ -7,7 +7,9 @@ import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
+import com.epsi.fiouzteam.fiouzoid.dao.joints.IGroupRessourceSchema;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class GroupDao extends DbContentProvider
-        implements IGroupSchema, IGroupDao {
+        implements IGroupSchema, IGroupDao, IGroupRessourceSchema {
 
     private static final String TAG = "GroupDao";
     private Cursor cursor;
@@ -83,16 +85,6 @@ public class GroupDao extends DbContentProvider
         }
 
 
-        for (Group g : groupList)
-        {
-            /*
-            if(g.getId() > 2)
-                break;
-            */
-
-            g.setUsers(Database.mUserDao.fetchAllByGroup(g.getId()));
-        }
-
         return groupList;
     }
 
@@ -103,7 +95,7 @@ public class GroupDao extends DbContentProvider
         List<User> users = group.getUsers();
         if(users != null && !users.isEmpty()) // TODO test
         {
-            String query = "insert into UserGroup" + " select ";
+            String query = "insert into UserGroup select ";
             boolean isFirst = true;
             for (User u :
                     users) {
@@ -139,7 +131,7 @@ public class GroupDao extends DbContentProvider
 
     @Override
     public boolean deleteAllGroups() {
-        return false;
+        return super.delete(GROUP_TABLE, null, null) > 0;
     }
 
     protected Group cursorToEntity(Cursor cursor) {
@@ -172,17 +164,13 @@ public class GroupDao extends DbContentProvider
     {
         String query = "SELECT quantite, ressource FROM GroupRessource where idGroup = " + String.valueOf(idGroup);
         Hashtable<String, Integer> stocks = new Hashtable<>();
-        String[] args = { String.valueOf(idGroup) };
-        String[] columns = {"quantite", "ressource"};
-        final String selectionArgs[] = { String.valueOf(idGroup) };
-        final String selection = "idGroup = ?";
 
         //cursor = super.query("GroupRessource", columns, selection, selectionArgs, null);
         cursor = super.rawQuery(query, null);
         Log.i(TAG, "query:\n\t" + query);
 
-        int nameIndex = 0, qteIndex = 0, qte = 0;
-        String name = "";
+        int nameIndex, qteIndex, qte;
+        String name;
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -201,45 +189,9 @@ public class GroupDao extends DbContentProvider
         return stocks;
     }
 
-    public void addStocksToGroup(Hashtable<String, Integer> stocks, int groupId)
-    {
-        boolean isFirst = true;
-        Object[] keys = stocks.keySet().toArray();
-        int cpt = 0,
-            stock = stocks.get(keys[cpt]);
-        String stockQuery = "",
-                query = "insert into GroupRessource select " +
-                        String.valueOf( stock ) + " as quantite, '" +
-                        keys[cpt] + "' as ressource, " +
-                        groupId + " as idGroup ";
-
-        // TODO do without foreach
-        cpt++;
-        for (; cpt < keys.length; ++cpt)
-        {
-            /*
-            if(keys.length < 2)
-                break;
-            */
-            String keyStr = (String)keys[cpt];
-            stock = stocks.get(keyStr);
-            //String keyStr = (String)key;
-
-
-            if(keyStr == null) {
-                cpt -= 1;
-                continue;
-            }
-
-            query += "union all select " + String.valueOf( stock ) + ", '" + keys[cpt] + "', " + groupId + ' ';
-        }
-
-        Log.i(TAG, "query:\n\t" + query);
-        execSql(query);
-    }
-
     private void setContentValue(Group group) {
         initialValues = new ContentValues();
+        // TODO check id
         if(group.getId() > 0)
             initialValues.put(COLUMN_ID, group.getId());
 
@@ -253,7 +205,6 @@ public class GroupDao extends DbContentProvider
 
     public Group fetchByName(String groupName) {
         //TODO: correct here
-        final int id = 0;
         final String selectionArgs[] = { String.valueOf(groupName) };
         final String selection = COLUMN_NAME + " = ?";
         Group group = new Group();
@@ -278,5 +229,83 @@ public class GroupDao extends DbContentProvider
     {
         String query = "delete from GroupRessource";
         execSql(query);
+    }
+
+    public void addStocksToGroup(List<GroupRessource> stocks, int groupId)
+    {
+        boolean isFirst = true;
+        int cpt = 0;//, stock = stocks.get(keys[cpt]);
+        String stockQuery = "",
+                query = "insert into GroupRessource select ";
+
+        // TODO do without foreach
+        cpt++;
+        for ( GroupRessource gr : stocks )
+        {
+            if(isFirst)
+            {
+                isFirst = false;
+                query += gr.getQuantity() + " as " + COL_QTE + ", '" + gr.getResource() + "' as " + COL_RESSOURCE + ", " +
+                        gr.getIdRessource() + " as " + COL_ID_RESSOURCE + ", " + groupId + " as " + COL_GROUP + ' ';
+            }
+            else
+                query += "union all select " + gr.getQuantity() + ", '" + gr.getResource() + "', " + gr.getIdRessource() + ", " +
+                       groupId + " ";
+        }
+
+        Log.i(TAG, "query:\n\t" + query);
+        execSql(query);
+    }
+
+    public GroupRessource fetchRessourceByName(String ressource)
+    {
+        final String selectionArgs[] = { ressource };
+        final String selection = COL_RESSOURCE + " = ?";
+        GroupRessource groupRessource = null;
+        cursor = super.query(GROUP_RESSOURCE_TABLE, GROUP_RESSOURCE_COLUMNS, selection,
+                selectionArgs, COL_ID_RESSOURCE);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                groupRessource = cursorToGroupRessource(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return groupRessource;
+    }
+
+    private GroupRessource cursorToGroupRessource(Cursor cursor)
+    {
+        GroupRessource groupRessource = new GroupRessource();
+
+        int repoIndex, ressourceIndex, qteIndex, ressourceIdIndex;
+
+        if (cursor != null) {
+            if (cursor.getColumnIndex(COL_GROUP) != -1) {
+                repoIndex = cursor.getColumnIndexOrThrow(COL_GROUP);
+                int repoId = cursor.getInt(repoIndex);
+                String groupName = (this.fetchById(repoId)).getName();
+                groupRessource.setRepo(groupName);
+            }
+            if (cursor.getColumnIndex(COL_RESSOURCE) != -1) {
+                ressourceIndex = cursor.getColumnIndexOrThrow(
+                        COL_RESSOURCE);
+                groupRessource.setResource(cursor.getString(ressourceIndex));
+            }
+            if (cursor.getColumnIndex(COL_QTE) != -1) {
+                qteIndex = cursor.getColumnIndexOrThrow(
+                        COL_QTE);
+                groupRessource.setQuantity(cursor.getInt(qteIndex));
+            }
+            if (cursor.getColumnIndex(COL_ID_RESSOURCE) != -1) {
+                ressourceIdIndex = cursor.getColumnIndexOrThrow(
+                        COL_ID_RESSOURCE);
+                groupRessource.setIdRessource(cursor.getInt(ressourceIdIndex));
+            }
+
+        }
+        return groupRessource;
     }
 }

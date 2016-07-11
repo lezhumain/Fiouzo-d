@@ -5,9 +5,10 @@ package com.epsi.fiouzteam.fiouzoid.dao.joints;
  */
 public interface IGroupRessourceSchema {
     String GROUP_RESSOURCE_TABLE = "GroupRessource";
-    String COLUMN_TYPE = "idTypeRessource";
-    String COLUMN_GROUP = "idGroup";
-    String COLUMN_QTE = "quantite";
+    String COL_ID_RESSOURCE = "idRessource";
+    String COL_RESSOURCE = "ressource";
+    String COL_GROUP = "idGroup";
+    String COL_QTE = "quantite";
 
-    String[] GROUP_COLUMNS = new String[] { COLUMN_TYPE, COLUMN_GROUP, COLUMN_QTE};
+    String[] GROUP_RESSOURCE_COLUMNS = new String[] { COL_QTE, COL_RESSOURCE, COL_ID_RESSOURCE, COL_GROUP};
 }

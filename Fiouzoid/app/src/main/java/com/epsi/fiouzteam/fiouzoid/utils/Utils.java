@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid.http;
+package com.epsi.fiouzteam.fiouzoid.utils;
 
 
 import android.app.AlertDialog;
@@ -11,7 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewRessourceDialog;
+import com.epsi.fiouzteam.fiouzoid.listener.GroupPopupClickListener;
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewGroupDialog;
 import com.epsi.fiouzteam.fiouzoid.R;
+import com.epsi.fiouzteam.fiouzoid.listener.RessourcePopupClickListener;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -28,6 +32,7 @@ import cz.msebera.android.httpclient.HttpEntity;
  */
 public class Utils {
     private static final String TAG = "Utils";
+    public static final String BASE_URL = "http://api.davanture.fr/api";
 
     public static void Test()
     {
@@ -59,7 +64,7 @@ public class Utils {
 
     public static String readStream(InputStream in) {
         byte[] b = new byte[1024];
-        String ret = "";
+        String ret;
 
         try {
             int count = in.read(b);
@@ -73,7 +78,7 @@ public class Utils {
     }
 
     public static String entityToString(HttpEntity entity) {
-        InputStream is = null;
+        InputStream is;
         try {
             is = entity.getContent();
         } catch (IOException e) {
@@ -82,7 +87,7 @@ public class Utils {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
         StringBuilder str = new StringBuilder();
 
-        String line = null;
+        String line;
         try {
             while ((line = bufferedReader.readLine()) != null) {
                 str.append(line + "\n");
@@ -99,7 +104,45 @@ public class Utils {
         return str.toString();
     }
 
-    public static Dialog CreateStockPopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)
+    public static Dialog CreateNewGroupPopup(String title, Context appContext)
+    {
+        // custom dialog
+        final NewGroupDialog dialog = new NewGroupDialog(appContext);
+        dialog.setContentView(R.layout.add_group_popup);
+        dialog.setTitle(title);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new GroupPopupClickListener(dialog));
+
+        dialogButton = (Button) dialog.findViewById(R.id.dialogButtonNOK);
+        dialogButton.setOnClickListener(new GroupPopupClickListener(dialog));
+
+        return dialog;
+    }
+
+    public static NewRessourceDialog CreateRessourcePopup(Context context, String title)
+    {
+        // custom dialog
+        final NewRessourceDialog dialog = new NewRessourceDialog(context);
+        dialog.setContentView(R.layout.new_ressource_popup);
+        dialog.setTitle(title);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new RessourcePopupClickListener(dialog));
+
+        dialogButton = (Button) dialog.findViewById(R.id.dialogButtonNOK);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        return dialog;
+    }
+
+    public static Dialog CreateExchangePopup(Context context, String title, String msg, int groupId, String okMsg, String cancelMsg)
     {
         if(okMsg == null || okMsg.isEmpty())
             okMsg = " OK ";
@@ -111,15 +154,6 @@ public class Utils {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.custom_popup);
         dialog.setTitle(title);
-
-
-
-        // set the custom dialog components - text, image and button
-        //TextView text = (TextView) dialog.findViewById(R.id.popup_text);
-        //text.setText(msg);
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.dbz);
-
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         dialogButton.setOnClickListener(new View.OnClickListener() {

@@ -3,38 +3,19 @@
 
     <item android:title="User Name"
           android:id="@+id/nav_item_inbox"
-          android:layout_marginTop="50dp"/>
+          android:layout_marginTop="100dp"/>
 
+    <item android:title="@string/create_group"
+        android:id="@+id/nav_item_create_grp"
+        android:layout_marginTop="75dp"
+        android:layout_marginBottom="10dp"/>
 
-    <!--<item android:title="Groupes"-->
-        <!--android:id="@+id/nav_item_groups">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:title="Groupe1"-->
-                <!--android:icon="@drawable/sent"/>-->
-            <!--<item-->
-                <!--android:title="Groupe2"-->
-                <!--android:icon="@drawable/sent"/>-->
-        <!--</menu>-->
-    <!--</item>-->
+    <item
+        android:id="@+id/nav_groups"
+        android:title="@string/nav_groups_header">
+        <menu
+            android:id="@+id/nav_groups_menu">
+        </menu>
+    </item>
 
-
-    <!--<group android:id="@+id/group_settings_id">
-
-        <item android:title="Settings"
-              android:icon="@drawable/settings"/>
-        <item android:title="Help"
-             android:icon="@drawable/help"/>
-    </group>
-
-    <group android:checkableBehavior="single">
-        <item android:title="Groupe1"
-            android:id="@+id/nav_item_sent"
-            android:icon="@drawable/sent"
-            android:layout_marginTop="500px"/>
-
-        <item android:title="Groupe2"
-            android:id="@+id/nav_item_draft"
-            android:icon="@drawable/sent"/>
-    </group> -->
 </menu>

@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

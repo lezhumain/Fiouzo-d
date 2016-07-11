@@ -8,7 +8,8 @@ import android.util.Log;
 import com.epsi.fiouzteam.fiouzoid.dao.DbContentProvider;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao extends DbContentProvider
         implements IUserSchema, IUserDao {
@@ -27,9 +28,11 @@ public class UserDao extends DbContentProvider
         User user = new User();
         cursor = super.query(USER_TABLE, USER_COLUMNS, selection,
                 selectionArgs, COLUMN_ID);
-        if (cursor != null) {
+        if (cursor != null)
+        {
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            if (!cursor.isAfterLast())
+            {
                 user = cursorToEntity(cursor);
                 cursor.moveToNext();
             }
@@ -42,10 +45,10 @@ public class UserDao extends DbContentProvider
     public List<User> fetchAllByGroup(int groupId)
     {
         List<User> userList = new ArrayList<User>();
-        String  url = "select u.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = ?";
-        String[] args = { String.valueOf(groupId) };
+        String  query = "select u.* from UserGroup ug, \"Group\" g, User u where g.id = ug.idGroup and u.id = ug.idUser and g.id = " + String.valueOf(groupId);
+        //String[] args = { String.valueOf(groupId) };
 
-        cursor = super.rawQuery(url, args);
+        cursor = super.rawQuery(query, null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
@@ -98,6 +101,9 @@ public class UserDao extends DbContentProvider
     public boolean addUsersToGroupe(List<User> users, int idGroup) {
         boolean ret = true, isFirst = true;
 
+        if(users.size() == 0)
+            return true;
+
         String query = "insert into UserGroup select " +
                 users.get(0).getId() + " as idUser, " +
                 idGroup + " as idGroup ";
@@ -118,8 +124,10 @@ public class UserDao extends DbContentProvider
         String log = "\tinserts in UserGroup went ";
         if( super.execSql(query) )
             log += "good";
-        else
+        else {
+            ret = false;
             log += "wrong";
+        }
         Log.i(TAG, log);
 
         return ret;
@@ -127,8 +135,7 @@ public class UserDao extends DbContentProvider
 
     @Override
     public boolean deleteAllUsers() {
-        super.delete(USER_TABLE, null, null);
-        return true;
+        return super.delete(USER_TABLE, null, null) > 0;
     }
 
     protected User cursorToEntity(Cursor cursor) {
@@ -181,4 +188,26 @@ public class UserDao extends DbContentProvider
         return initialValues;
     }
 
+    public User fetchByName(String userId) {
+        final String selectionArgs[] = { userId };
+        final String selection = COLUMN_USERNAME + " = ?";
+        User user = null;
+        cursor = super.query(USER_TABLE, USER_COLUMNS, selection,
+                selectionArgs, COLUMN_ID); // TODO: check if need COLUMN_USERNAME instead
+        if (cursor != null) {
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                user = cursorToEntity(cursor);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+
+        return user;
+    }
+
+    public void deleteGroupUsers() {
+        String query = "delete from UserGroup";
+        super.execSql(query);
+    }
 }

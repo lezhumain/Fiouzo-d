@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
-import com.epsi.fiouzteam.fiouzoid.dao.group.IGroupSchema;
-import com.epsi.fiouzteam.fiouzoid.dao.user.IUserSchema;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 
 
@@ -22,17 +20,20 @@ public class Database
    private final Context mContext;
    public static UserDao mUserDao;
    public static GroupDao mGroupDao;
-    //private static String database_path = "";
+   private static LogDao mLogDao;
     private static final String database_path = "/mnt/sdcard/fiouzoid/";
 
 
 
    public Database open() throws SQLException {
        mDbHelper = new DatabaseHelper(mContext);
-       SQLiteDatabase mDb = mDbHelper.getWritableDatabase();
+       SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-       mUserDao = new UserDao(mDb);
-       mGroupDao = new GroupDao(mDb);
+       UpgradeDb(db);
+
+       mUserDao = new UserDao(db);
+       mGroupDao = new GroupDao(db);
+       mLogDao = new LogDao(db);
        return this;
    }
 
@@ -45,16 +46,107 @@ public class Database
    }
 
 
+    public static void Log(String logQuery)
+    {
+        mLogDao.Log(logQuery);
+    }
+
+    // Ne fonctionne pas, incomprehensible
+    public static void CreateDb(SQLiteDatabase db)
+    {
+        Log.i(TAG, "\tCreateDb started");
+
+        final String query = "CREATE TABLE IF NOT EXISTS User(\n" +
+                "\tid \t\t\tINTEGER NOT NULL ,\n" +
+                "\tusername\tVARCHAR NOT NULL ,\n" +
+                "\tfirstName\tVARCHAR NOT NULL ,\n" +
+                "\tlastName\tVARCHAR NOT NULL ,\n" +
+                "\tisAdmin \tBOOLEAN NOT NULL ,\n" +
+                "\tPRIMARY KEY (id)\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE IF NOT EXISTS \"Group\"(\n" +
+                "\tid           INTEGER NOT NULL ,\n" +
+                "\tname         VARCHAR NOT NULL ,\n" +
+                "\tdescription  TEXT ,\n" +
+                "\tPRIMARY KEY (id)\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE IF NOT EXISTS TypeRessource(\n" +
+                "\tid    INTEGER NOT NULL ,\n" +
+                "\tname  VARCHAR NOT NULL ,\n" +
+                "\tPRIMARY KEY (id)\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE IF NOT EXISTS UserGroup(\n" +
+                "\tidUser   INTEGER NOT NULL ,\n" +
+                "\tidGroup  INTEGER NOT NULL ,\n" +
+                "\tPRIMARY KEY (idUser,idGroup) ,\n" +
+                "\t\n" +
+                "\tFOREIGN KEY (idUser) REFERENCES User(id),\n" +
+                "\tFOREIGN KEY (idGroup) REFERENCES \"Group\"(id)\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE IF NOT EXISTS Log(\n" +
+                "\t\"id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL,\n" +
+                "\t\"date\" DATETIME NOT NULL,\n" +
+                "\t\"criticite\" VARCHAR NOT NULL  DEFAULT 'INFO',\n" +
+                "\t\"message\" TEXT NOT NULL,\n" +
+                "\t\"bytesUsed\" DOUBLE\n" +
+                ");\n" +
+                "\n" +
+                "CREATE TABLE IF NOT EXISTS GroupRessource(\n" +
+                "\tquantite  INTEGER NOT NULL ,\n" +
+                "\tressource VARCHAR NOT NULL ,\n" +
+                "\tidRessource INTEGER NOT NULL ,\n" +
+                "\tidGroup  INTEGER NOT NULL ,\n" +
+                "\tPRIMARY KEY (idRessource,idGroup) ,\n" +
+                "\t\n" +
+                "\tFOREIGN KEY (idRessource) REFERENCES TypeRessource(id),\n" +
+                "\tFOREIGN KEY (idGroup) REFERENCES \"Group\"(id)\n" +
+                ");\n";
+        db.execSQL(query);
+
+        Log.i(TAG, "Now adding UserGroup table");
+        final String query1 = "CREATE TABLE IF NOT EXISTS UserGroup(\n" +
+                "\tidUser   INTEGER NOT NULL ,\n" +
+                "\tidGroup  INTEGER NOT NULL ,\n" +
+                "\tPRIMARY KEY (idUser,idGroup) ,\n" +
+                "\t\n" +
+                "\tFOREIGN KEY (idUser) REFERENCES User(id),\n" +
+                "\tFOREIGN KEY (idGroup) REFERENCES \"Group\"(id)\n" +
+                ");";
+        db.execSQL(query1);
+
+        Log.i(TAG, "\tCreateDb done");
+    }
+
+    public static void UpgradeDb(SQLiteDatabase db) {
+        Log.i(TAG, "\tUpgradeDb started");
+        final String query = "drop table if exists UserGroup;\n" +
+                "drop table if exists GroupRessource;\n" +
+                "drop table if exists TypeRessource;\n" +
+                "drop table if exists User;\n" +
+                "drop table if exists Log;\n" +
+                "drop table if exists \"Group\";";
+
+        db.execSQL(query);
+        Log.i(TAG, "\tUpgradeDb done");
+
+        CreateDb(db);
+    }
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
        DatabaseHelper(Context context) {
            super(context, database_path + DATABASE_NAME, null, DATABASE_VERSION);
        }
 
+
+
        @Override
        public void onCreate(SQLiteDatabase db)
        {
-           db.execSQL(IUserSchema.USER_TABLE_CREATE);
-           //db.execSQL(IGroupSchema.GROUP_TABLE_CREATE);
+           CreateDb(db);
        }
 
        @Override
@@ -64,13 +156,10 @@ public class Database
                 + oldVersion + " to "
                 + newVersion + " which destroys all old data");
 
-           db.execSQL("DROP TABLE IF EXISTS " 
-                + IUserSchema.USER_TABLE);
-           db.execSQL("DROP TABLE IF EXISTS "
-                   + IGroupSchema.GROUP_TABLE);
-           onCreate(db);
-
+           UpgradeDb(db);
        }
-   }
+
+
+    }
 
 }

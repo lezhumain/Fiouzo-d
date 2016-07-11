@@ -1,4 +1,4 @@
-package com.epsi.fiouzteam.fiouzoid;
+package com.epsi.fiouzteam.fiouzoid.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.epsi.fiouzteam.fiouzoid.MainActivity;
+import com.epsi.fiouzteam.fiouzoid.R;
 
 import java.util.ArrayList;
 
@@ -43,34 +46,17 @@ public class MembresFragment extends Fragment {
         else
         {
             Log.d(TAG, "OKOK (context is of type " + getContext().getClass().getName() + ')');
-            handleListView();
+            UpdateListView();
         }
 
         return view;
     }
 
-    protected void handleListView()
+    protected void UpdateListView()
     {
-        // Create and populate a List of membre names.
-//        String[] membres = new String[] { "Mercury", "Venus", "Earth", "Mars",
-//                "Jupiter", "Saturn", "Uranus", "Neptune"};
-//        ArrayList<String> membreList = new ArrayList<String>();
-//        membreList.addAll( Arrays.asList(membres) );
-
         ArrayList<String>  membreList = ((MainActivity)getContext()).GetMembresGroupe();
-//        ArrayList<String>  membres = ((MainActivity)getContext()).GetMembresGroupe();
-//        ArrayList<String> membreList = new ArrayList<String>();
-//        membreList.addAll( membres );
-
-                // Create ArrayAdapter using the membre list.
+        // Create ArrayAdapter using the membre list.
         listAdapter = new ArrayAdapter<>(getContext(), R.layout.simplerow, membreList);
-
-        // Add more membres. If you passed a String[] instead of a List<String>
-        // into the ArrayAdapter constructor, you must not add more items.
-        // Otherwise an exception will occur.
-//        listAdapter.add( "Ceres" );
-
-
         // Set the ArrayAdapter as the ListView's adapter.
         mainListView.setAdapter( listAdapter );
     }

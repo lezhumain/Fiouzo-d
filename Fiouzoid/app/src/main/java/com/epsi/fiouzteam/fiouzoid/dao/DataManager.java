@@ -3,11 +3,12 @@ package com.epsi.fiouzteam.fiouzoid.dao;
 import com.epsi.fiouzteam.fiouzoid.dao.group.GroupDao;
 import com.epsi.fiouzteam.fiouzoid.dao.user.UserDao;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
+import com.epsi.fiouzteam.fiouzoid.model.GroupRessource;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.GroupService;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
+import com.epsi.fiouzteam.fiouzoid.utils.LoggerSql;
 
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -25,33 +26,40 @@ public class DataManager
         helper.addUsers(users);
     }
 
-    private static void SaveGroups(int userId)
+    public static void SaveGroups(int userId)
     {
         GroupDao helper = Database.mGroupDao;
         //List<Group> groups = GroupService.getAllGroups(1);
-        List<Group> groups = GroupService.getAllGroups(1);
+        List<Group> groups = GroupService.getAllGroups(userId);
 
+        helper.deleteAllGroups();
         helper.addGroups(groups);
     }
 
-    private static void SaveGroupUsers(int idGroup) {
+    private static void SaveGroupUsers(int idGroup)
+    {
+        List<User> users = UserService.getUsersByGroup(idGroup);
 
-        List<User> users = Database.mUserDao.fetchAllUsers();
+        Database.mUserDao.deleteGroupUsers();
+
+        // save users to, if some new ones
+        Database.mUserDao.addUsers(users);
         Database.mUserDao.addUsersToGroupe(users, idGroup);
     }
 
     private static void SaveGroupRessource(int idGroup) {
-        Hashtable<String, Integer> stocks = GroupService.getStocksForGroup(1);
-        //GroupService.getStocksForGroup(1);
+        List<GroupRessource> stocks = GroupService.getStocksForGroup(idGroup);
 
         Database.mGroupDao.deleteGroupStocks();
         Database.mGroupDao.addStocksToGroup(stocks, idGroup);
+
+        LoggerSql.Log("Groups saved", null, true, null);
     }
 
     public static void SaveData(int groupId, int appUserId) {
-        DataManager.SaveUsers(1);
-        DataManager.SaveGroups(appUserId);
-        DataManager.SaveGroupUsers(appUserId);
-        SaveGroupRessource(groupId);
+        DataManager.SaveUsers(groupId);
+        //DataManager.SaveGroups(appUserId);
+        DataManager.SaveGroupUsers(groupId);
+        DataManager.SaveGroupRessource(groupId);
     }
 }

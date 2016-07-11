@@ -1,5 +1,7 @@
 package com.epsi.fiouzteam.fiouzoid;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -13,10 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 
+import com.epsi.fiouzteam.fiouzoid.component.popup.NewGroupDialog;
 import com.epsi.fiouzteam.fiouzoid.dao.DataManager;
 import com.epsi.fiouzteam.fiouzoid.dao.Database;
+import com.epsi.fiouzteam.fiouzoid.fragment.TabFragment;
 import com.epsi.fiouzteam.fiouzoid.http.HttpHelper;
 import com.epsi.fiouzteam.fiouzoid.http.TaskDelegate;
+import com.epsi.fiouzteam.fiouzoid.utils.Utils;
 import com.epsi.fiouzteam.fiouzoid.model.Group;
 import com.epsi.fiouzteam.fiouzoid.model.User;
 import com.epsi.fiouzteam.fiouzoid.service.UserService;
@@ -32,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     NavigationView mNavigationView;
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
-    private int appUserId = 1;
+    public static int APPUSERID = 1;
 
     private Database mDb;
     private List<Group> mGroups = new ArrayList<>();
@@ -64,16 +69,19 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDb = new Database(this);
         mDb.open();
 
-        int groupId = 1;
-        DataManager.SaveData(groupId, appUserId);
-
+        DataManager.SaveGroups(APPUSERID);
         mGroups = Database.mGroupDao.fetchAllGroups();
+        int groupId = mGroups.get(0).getId();
+        DataManager.SaveData(groupId, APPUSERID);
+
         LoadGroup(mGroups.get(0).getName());
+
+
 
         /**
          * Put groups navigation items
          */
-        this.handleGroupItems();
+        this.updateGroupItems();
 
         /**
          * Setup click events on the Navigation View Items. (NavigationDrawer)
@@ -87,31 +95,62 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
 
 
                 if (menuItem.getItemId() == R.id.nav_item_inbox) {
-                    // TODO: create & use a user fragment
-
                     Log.i(TAG, "\tClick on 'User Name'");
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
                     xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
                 }
-//                else if (menuItem.getItemId() == R.id.nav_item_groups)
-//                {
-//                    // TODO: use correct fragment
-//
-//                    Log.i(TAG, "\tClick on 'Groupes'");
-//                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
-//                    xfragmentTransaction.replace(R.id.containerView,new TabFragment()).commit();
-//                }
+                else if (menuItem.getItemId() == R.id.nav_item_create_grp)
+                {
+                    Log.i(TAG, "\tClick on 'create Groupe'");
+                    Dialog popup = Utils.CreateNewGroupPopup("TITLE", MainActivity.this);
+                    popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            NewGroupDialog ngd = (NewGroupDialog)dialog;
+
+                            if (ngd == null)
+                            {
+                                Log.i(TAG, "dialog is not NewGroupDialog");
+                                return;
+                            }
+
+                            String groupName = ngd.get_groupName()
+//                                    ,description = ngd.get_descr()
+                                            ;
+                            int idUser = MainActivity.APPUSERID;
+
+                            // post groupName and descr
+                            String params = "idUser=" + String.valueOf(idUser) + "&name=" + groupName + "&description=";
+                            final String url = Utils.BASE_URL + "/repo/addRepo";
+                            String jsonGroup = (new HttpHelper(url, null)).Post(params);
+                            jsonGroup = '[' + jsonGroup.split("\n")[1] + ']';
+                            Log.i(TAG, "jsonGroup" + jsonGroup);
+
+
+                            // store the group
+                            Group newGroup = (Group.FromJson(jsonGroup)).get(0);
+                            Database.mGroupDao.addGroup(newGroup);
+
+                            // store groupUsers (the creator)
+                            User user = Database.mUserDao.fetchById(APPUSERID);
+                            List<User> lst = new ArrayList<User>();
+                            lst.add(user);
+                            Database.mUserDao.addUsersToGroupe(lst, newGroup.getId());
+
+                            // update groups in drawermenu
+                            mGroups.add(newGroup);
+                            updateGroupItems();
+                        }
+                    });
+
+                    popup.show();
+                }
                 else
                 {
                     Log.i(TAG, "\tClick on item '" + menuItem.getTitle() + "'");
 
 
-                    // TODO: find out what item and pass params to fragment
-
                     TabFragment fragment = new TabFragment();
-//                    Bundle args = new Bundle();
-//                    args.putString("groupName", menuItem.getTitle().toString());
-//                    fragment.setArguments(args);
                     LoadGroup(menuItem.getTitle().toString());
 
                     FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
@@ -128,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
          * Setup Drawer Toggle of the Toolbar
          */
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+
+        if(toolbar == null)
+            return;
+
         toolbar.inflateMenu(R.menu.menu_main);
 
         // click sur un item du menu parametres
@@ -153,17 +196,17 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         mDrawerToggle.syncState();
     }
 
-    private void handleGroupItems() {
-//        navView = (NavigationView) findViewById(R.id.navView);
-
+    private void updateGroupItems() {
         Menu m = mNavigationView.getMenu();
-        SubMenu topChannelMenu = m.addSubMenu("Groupes");
-//        MenuItem groupsItem = m.getItem(R.id.nav_item_groups);
-//        SubMenu topChannelMenu = groupsItem.getSubMenu();
-//        topChannelMenu.clear();
+//        SubMenu topChannelMenu = (SubMenu)m.findItem(R.id.nav_groups_menu);
+        SubMenu topChannelMenu = (m.findItem(R.id.nav_groups)).getSubMenu();
 
+//        if(topChannelMenu == null) {
+//            Log.i(TAG, "menu was null...");
+//            topChannelMenu = m.addSubMenu("Groupes");
+//        }
+        topChannelMenu.clear();
 
-        //topChannelMenu.add("test");
         for (Group group : mGroups)
             topChannelMenu.add(group.getName());
 
@@ -175,9 +218,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
     public void LoadGroup(String groupName)
     {
         mCurrentGroup = Database.mGroupDao.fetchByName(groupName);
+        int groupId = mCurrentGroup.getId();
 
-        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(mCurrentGroup.getId());
+        Hashtable<String, Integer> stocks = Database.mGroupDao.fetchStocksByGroupe(groupId);
         mCurrentGroup.setStock( stocks );
+
+        List<User> users = Database.mUserDao.fetchAllByGroup(groupId);
+        mCurrentGroup.setUsers(users);
 
         Log.i(TAG, "LoadGroup():\t" + mCurrentGroup.toString());
     }
@@ -273,20 +320,12 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         Hashtable<String, Integer> currentStock = mCurrentGroup.getStock();
         for (String key :
                 currentStock.keySet()) {
-            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ") " + key + '\t' + String.valueOf(actualStock.get(key)));
+            stock.add('(' + String.valueOf(mCurrentGroup.getId()) + ")\t" + key + '\t' + String.valueOf(actualStock.get(key)));
         }
 
         return stock;
     }
-
-    public int getAppUserId() {
-        return appUserId;
-    }
-
-    public void setAppUserId(int appUserId) {
-        this.appUserId = appUserId;
-    }
-
+    
     public int GetGroupeId() {
         return mCurrentGroup.getId();
     }
@@ -298,5 +337,13 @@ public class MainActivity extends AppCompatActivity implements TaskDelegate{
         actualStock.put(typeRessourceName, stock);
 
         mCurrentGroup.setStock(actualStock);
+    }
+
+    public void AddRessource(String ressourceName, int qte)
+    {
+        Hashtable<String, Integer> stock = mCurrentGroup.getStock();
+        stock.put(ressourceName, qte);
+
+        mCurrentGroup.setStock(stock);
     }
 }

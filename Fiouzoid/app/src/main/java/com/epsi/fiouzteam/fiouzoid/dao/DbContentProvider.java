@@ -71,5 +71,5 @@ public abstract class DbContentProvider {
             Log.e("ERROR", e.toString());
             return false;
         }
-    };
+    }
 }

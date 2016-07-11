@@ -3,10 +3,14 @@ package com.epsi.fiouzteam.fiouzoid.http;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.epsi.fiouzteam.fiouzoid.utils.LoggerSql;
+import com.epsi.fiouzteam.fiouzoid.utils.Utils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +52,9 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... params) {
         String realUrl = _url.replace("$QUERY$", "Android"),
-            method = "", result = "";
-        Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
+            method = "", result = "", logMsg = "", criticity = "INFO";
+        //Log.i(TAG, "old: " + _url + "\nreal: " + realUrl); // TODO check replace
+        // TODO log size data
 
         if (params.length > 0)
             method = params[0];
@@ -58,16 +63,37 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         {
             case "get":
                 result = requestContent(realUrl);
+                logMsg = "GET call to \"" + realUrl + "\"";
                 break;
             case "post":
-                String data = params[1];
-                result = postContent(realUrl, data);
+//                String data = params[1];
+//                result = postContent(realUrl, data);
+                String data = params[1],
+                        fullUrl = realUrl + '?' + data;
+                Log.i(TAG, "fullUrl:\n\t" + fullUrl);
+                result = postContent(fullUrl, null);
+                logMsg = "POST call to \"" + fullUrl + "\"";
                 break;
             default:
-                Log.d(TAG, "ERROR: in default case...");
+                logMsg = "Default case for \"" + realUrl + "\", method was \"" + method + "\"";
+                criticity = "ERROR";
         }
 
         //return requestContent(realUrl);
+        try {
+            LoggerSql.Log(logMsg, criticity, true, null);
+        }
+        catch (Exception e)
+        {
+            Log.i(TAG, e.getMessage());
+        }
+        int sizeData = 0;
+
+        try {
+            sizeData = (result.getBytes("UTF-8")).length;
+        } catch (UnsupportedEncodingException e) {
+        }
+        Log.i(TAG, "HTTP RESPONSE:\n\t" + result);
         return result;
     }
 
@@ -76,7 +102,7 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
         HttpClient httpclient = new DefaultHttpClient();
         String result = null;
         HttpGet httpget = new HttpGet(url);
-        HttpResponse response = null;
+        HttpResponse response;
         InputStream instream = null;
 
         try {
@@ -100,39 +126,13 @@ public class HttpTestTask extends AsyncTask<String, Void, String>
             }
         }
 
-        //result = handleJson(result);
         return result;
     }
 
-/*
-    public static void PostContent(String  url, String data)
-    {
-        HttpClient httpclient = new DefaultHttpClient();
-        String result = null;
-        //HttpGet httpget = new HttpGet(url);
-        HttpPost httppost = new HttpPost(url);
-        HttpResponse response = null;
-        //InputStream instream = null;
-
-        try
-        {
-            response = httpclient.execute(httppost);
-            StatusLine sl = response.getStatusLine();
-
-            int code = sl.getStatusCode();
-            Log.i(TAG, "\t post executed: code " + String.valueOf(code));
-        } catch (Exception e)
-        {
-            Log.i(TAG, "\t post error:");
-            Log.i(TAG, "\t\t" + e.getMessage());
-        }
-        //finally {}
-    }
-*/
     public static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
-        String line = null;
+        String line;
 
         try {
             while ((line = reader.readLine()) != null) {
